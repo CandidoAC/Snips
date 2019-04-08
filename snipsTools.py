@@ -32,4 +32,4 @@ class SnipsConfigParser(ConfigParser.SafeConfigParser):
         except (IOError, ConfigParser.Error) as e:
             print(e)
             return False
-
+sadrtfyu
