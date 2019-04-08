@@ -15,6 +15,7 @@ def subscribe_intent_callback(hermes, intentMessage):
     med = message.slots.Medicamento.first().value
     msg = "Okay, añadierdo recordatorio:tomar  " + med + " el "+fecha
     hermes.publish_end_session(message.session_id, msg)
+    hermes.publish_start_session_notification(intent_message.site_id, msg, "Joke_Tuto_APP")
 
 
 
