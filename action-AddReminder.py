@@ -13,7 +13,7 @@ CONFIG_INI = "config.ini"
 def subscribe_intent_callback(hermes, intentMessage):
     fecha = message.slots.Fecha.first().value
     med = message.slots.Medicamento.first().value
-    msg = "Okay, añadierdo recordatorio:tomar  " + med + " el "+fecha
+    msg = "Okay, añadiendo recordatorio:tomar  " + med + " el "+fecha
     hermes.publish_start_session_notification(intent_message.site_id, msg, "Añadir recordatorio")
     hermes.publish_end_session(message.session_id, msg)
 
