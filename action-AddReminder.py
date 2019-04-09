@@ -11,10 +11,10 @@ CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
 def subscribe_intent_callback(hermes, intentMessage):
-    fecha = message.slots.Fecha.first().value
-    med = message.slots.Medicamento.first().value
+    fecha = intentMessage.slots.Fecha.first().value
+    med = intentMessage.slots.Medicamento.first().value
     msg = "Okay, añadiendo recordatorio:tomar  " + med + " el "+fecha
-    hermes.publish_end_session(message.session_id, msg)
+    hermes.publish_end_session(intentMessage.session_id, msg)
 
 
 
