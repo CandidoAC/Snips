@@ -24,4 +24,3 @@ fi
 . $VENV/bin/activate
 
 pip install -r requirements.txt
-sudo chmod +x /var/lib/snips/skills/Snips/action-AddReminder
