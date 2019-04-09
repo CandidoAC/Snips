@@ -14,7 +14,6 @@ def subscribe_intent_callback(hermes, intentMessage):
     fecha = message.slots.Fecha.first().value
     med = message.slots.Medicamento.first().value
     msg = "Okay, añadiendo recordatorio:tomar  " + med + " el "+fecha
-    hermes.publish_start_session_notification(intent_message.site_id, "hola", "Añadir recordatorio")
     hermes.publish_end_session(message.session_id, msg)
 
 
@@ -24,5 +23,5 @@ def subscribe_intent_callback(hermes, intentMessage):
 if __name__ == "__main__":
     mqtt_opts = MqttOptions()
     with Hermes(mqtt_options=mqtt_opts) as h:
-        h.subscribe_intent("caguilary:Anadir", subscribe_intent_callback) \
+        h.subscribe_intent("Anadir", subscribe_intent_callback) \
          .start()
