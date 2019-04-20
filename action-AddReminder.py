@@ -9,6 +9,19 @@ from hermes_python.ffi.utils import MqttOptions
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
+def read_configuration_file(configuration_file):
+    try:
+        with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
+            conf_parser = SnipsConfigParser()
+            conf_parser.readfp(f)
+            return conf_parser.to_dict()
+    except (IOError, configparser.Error) as e:
+        return dict()
+
+def subscribe_intent_callback(hermes, intentMessage):
+    conf = read_configuration_file(CONFIG_INI)
+    action_wrapper(hermes, intentMessage, conf)
+    
 def subscribe_intent_callback(hermes, intentMessage):
     fecha = intentMessage.slots.Fecha.first().value
     med = intentMessage.slots.Medicamento.first().value
