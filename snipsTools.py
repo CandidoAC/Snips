@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import io
-from __future__ import print_function
 import configparser
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
