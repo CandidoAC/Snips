@@ -23,7 +23,7 @@ def subscribe_intent_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper(hermes, intentMessage, conf)
 
-def subscribe_intent_callback(hermes, intentMessage,conf):
+def action_wrapper(hermes, intentMessage,conf):
     fecha = intentMessage.slots.Fecha.first().value
     med = intentMessage.slots.Medicamento.first().value
     #msg = "Okay, añadiendo recordatorio:tomar  " + med  + " el "+fecha
