@@ -28,7 +28,7 @@ def subscribe_intent_callback(hermes, intentMessage):
 def action_wrapper(hermes, intentMessage,conf):
 	fecha=intentMessage.slots.Fecha.first().value
 	print(fecha[:fecha.index('+')])
-    ##fecha = datetime.strptime(fecha,'%y-%m-%d %H:%M:%S')
+    #fecha = datetime.strptime(fecha,'%y-%m-%d %H:%M:%S')
     med = intentMessage.slots.Medicamento.first().value
     msg = "Okay, añadiendo recordatorio:tomar " + med  + " el "+fecha
     ##msg="Hello"
