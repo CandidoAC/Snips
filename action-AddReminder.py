@@ -7,6 +7,7 @@ from hermes_python.hermes import Hermes
 from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
 import io
+from datetime import datetime
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -25,9 +26,10 @@ def subscribe_intent_callback(hermes, intentMessage):
     action_wrapper(hermes, intentMessage, conf)
 
 def action_wrapper(hermes, intentMessage,conf):
-    fecha = intentMessage.slots.Fecha.first().value
+    fecha = datetime.strptime(intentMessage.slots.Fecha.first().value,,'%m/%d/%y %H:%M:%S')
+
     med = intentMessage.slots.Medicamento.first().value
-    msg = "Okay, añadiendo recordatorio:tomar  " + med  + " el "+fecha
+    msg = "Okay, añadiendo recordatorio:tomar " + med  + " el "+fecha
     ##msg="Hello"
     hermes.publish_end_session(intentMessage.session_id, msg)
 
