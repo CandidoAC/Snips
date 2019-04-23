@@ -43,17 +43,6 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     hermes.publish_end_session(intentMessage.session_id, msg)
 
-#Intent cambiar usuario
-def subscribe_user_callback(hermes, intentMessage):
-    conf = read_configuration_file(CONFIG_INI)
-    action_wrapper_user(hermes, intentMessage, conf)
-
-def action_wrapper_user(hermes, intentMessage,conf):
-    user = intentMessage.slots.user.first().value
-   
-    msg="Cambio de usuario a "+user
-    hermes.publish_end_session(intentMessage.session_id, msg)
-
 
 
 if __name__ == "__main__":
@@ -61,5 +50,4 @@ if __name__ == "__main__":
     with Hermes(mqtt_options=mqtt_opts) as h:
         h.subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
          .start()
-        h.subscribe_intent("caguilary:user", subscribe_user_callback) \
-         .start()
+         
