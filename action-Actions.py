@@ -60,7 +60,7 @@ def action_wrapper_user(hermes, intentMessage,conf):
 if __name__ == "__main__":
     mqtt_opts = MqttOptions()
     with Hermes(mqtt_options=mqtt_opts) as h:
-        h.subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
-         .start()
-        h.subscribe_intent("caguilary:user", subscribe_user_callback) \
-         .start()
+        h\
+        .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
+        .subscribe_intent("caguilary:user", subscribe_user_callback) \
+        .start()
