@@ -39,8 +39,7 @@ def action_wrapper(hermes, intentMessage,conf):
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
 
     med = intentMessage.slots.Medicamento.first().value
-    msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar  " + med
-    ##msg="Hello"
+    msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 
