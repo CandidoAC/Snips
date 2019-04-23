@@ -53,6 +53,7 @@ def action_wrapper_user(hermes, intentMessage,conf):
     user = intentMessage.slots.user.first().value
    
     msg="Cambio de usuario a "+user
+    print(msg)
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 
