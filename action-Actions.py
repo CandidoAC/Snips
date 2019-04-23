@@ -13,13 +13,13 @@ CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
 def minutes(i):
-	switcher={
+    switcher={
         0:"",
         15:" y cuarto",
         30:" y media",
         45:" menos cuarto",
-		}
-	return switcher.get(i," y " + str(i))
+        }
+    return switcher.get(i," y " + str(i))
 def read_configuration_file(configuration_file):
     try:
         with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
