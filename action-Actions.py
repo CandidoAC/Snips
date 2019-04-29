@@ -13,8 +13,6 @@ from hermes_python.ontology import *
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-scheduler = BackgroundScheduler()
-scheduler1 = BackgroundScheduler()
 
 def minutes(i):
     switcher={
@@ -94,6 +92,9 @@ def Acept(med):
     
 
 if __name__ == '__main__':
+    
+    scheduler = BackgroundScheduler()
+    scheduler1 = BackgroundScheduler()
     
     mqtt_opts = MqttOptions()
     with Hermes(mqtt_options=mqtt_opts) as h:
