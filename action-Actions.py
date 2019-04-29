@@ -95,5 +95,5 @@ if __name__ == '__main__':
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
         .subscribe_intent("caguilary:event", subscribe_event_callback) \
-        .start()"""
+        .start()
     
