@@ -38,10 +38,9 @@ def subscribe_Anadir_callback(hermes, intentMessage):
 
 def action_wrapper_Anadir(hermes, intentMessage,conf):
     fecha = intentMessage.slots.Fecha.first().value
+    scheduler.add_job(recordatorio, 'date', run_date=fecha,id='job1',args=['med'], max_instances=10000)
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
-    scheduler.add_job(recordatorio, 'date', run_date=fecha,id='job1',args=['med'], max_instances=10000)
-    scheduler.start()
     med = intentMessage.slots.Medicamento.first().value
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     hermes.publish_end_session(intentMessage.session_id, msg)
@@ -73,7 +72,6 @@ def recordatorio(med):
     #Para el recordatorio si no se ha dicho aceptar o algo así7
     i=0
     scheduler1.add_job(Acept, 'interval', minutes=5,id='job2',args=['med'])
-    scheduler1.start()
     while (scheduler1.get_job('job2')!=None):
         time.sleep(360)
         print("Vez "+str(i+1))
@@ -94,8 +92,9 @@ def Acept(med):
 if __name__ == '__main__':
     
     scheduler = BackgroundScheduler()
+    scheduler.start()
     scheduler1 = BackgroundScheduler()
-    
+    scheduler1.start()
     mqtt_opts = MqttOptions()
     with Hermes(mqtt_options=mqtt_opts) as h:
         h\
