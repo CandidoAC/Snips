@@ -38,9 +38,9 @@ def subscribe_Anadir_callback(hermes, intentMessage):
 
 def action_wrapper_Anadir(hermes, intentMessage,conf):
     fecha = intentMessage.slots.Fecha.first().value
-    scheduler.add_job(recordatorio, 'date', run_date=fecha,id='job1',args=['med'], max_instances=10000)
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+    scheduler.add_job(recordatorio, 'date', run_date=fecha,id='job1',args=['med'], max_instances=10000)
     med = intentMessage.slots.Medicamento.first().value
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     hermes.publish_end_session(intentMessage.session_id, msg)
