@@ -40,6 +40,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     fecha = intentMessage.slots.Fecha.first().value
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+    print(str(date))
     scheduler.add_job(recordatorio, 'date', run_date=date,id='job1',args=['med'], max_instances=10000)
     med = intentMessage.slots.Medicamento.first().value
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
