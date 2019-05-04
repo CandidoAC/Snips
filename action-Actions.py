@@ -4,6 +4,7 @@ import time
 import io
 import configparser
 import pytz as tz
+import csv
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from datetime import timedelta
@@ -13,7 +14,7 @@ from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
-CONFIG_INI = "config.ini.default"
+CONFIG_INI = "config.ini"
 
 def minutes(i):
     switcher={
@@ -124,10 +125,14 @@ if __name__ == '__main__':
     scheduler1 = BackgroundScheduler()
     scheduler1.start()
     mqtt_opts = MqttOptions()
+    with open('prueba.csv', 'a') as csvfile:
+            fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
     with Hermes(mqtt_options=mqtt_opts) as h:
-        h\
-        .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
-        .subscribe_intent("caguilary:user", subscribe_user_callback) \
-        .subscribe_intent("caguilary:event", subscribe_event_callback) \
-        .start()
+            h\
+            .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
+            .subscribe_intent("caguilary:user", subscribe_user_callback) \
+            .subscribe_intent("caguilary:event", subscribe_event_callback) \
+            .start()
     
