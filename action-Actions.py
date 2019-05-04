@@ -12,6 +12,8 @@ from hermes_python.hermes import Hermes
 from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
 
+CONFIGURATION_ENCODING_FORMAT = "utf-8"
+CONFIG_INI = "config.ini.default"
 
 def minutes(i):
     switcher={
@@ -21,6 +23,15 @@ def minutes(i):
         45:" menos cuarto",
         }
     return switcher.get(i," y " + str(i))
+def read_configuration_file(configuration_file):
+    try:
+        with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
+            conf_parser = SnipsConfigParser()
+            conf_parser.readfp(f)
+            return conf_parser.to_dict()
+    except (IOError, configparser.Error) as e:
+        Error('Error:Fichero no encontrado')
+        return dict()
 
 #Intent Añadir mdicamento
 def subscribe_Anadir_callback(hermes, intentMessage):
