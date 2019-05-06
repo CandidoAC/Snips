@@ -123,11 +123,11 @@ if __name__ == '__main__':
     scheduler1 = BackgroundScheduler()
     scheduler1.start()
     mqtt_opts = MqttOptions()
-    with Hermes(mqtt_options=mqtt_opts) as h:
-    	with open('prueba.csv', 'a') as csvfile:
-            fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
+    with open('prueba.csv', 'a') as csvfile:
+    	fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+    	with Hermes(mqtt_options=mqtt_opts) as h:
 	        h\
 	        .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
 	        .subscribe_intent("caguilary:user", subscribe_user_callback) \
