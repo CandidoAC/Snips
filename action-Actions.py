@@ -42,8 +42,8 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     fecha = intentMessage.slots.Fecha.first().value
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med'], max_instances=10000)
     med = intentMessage.slots.Medicamento.first().value
+    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med'], max_instances=10000)
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     hermes.publish_end_session(intentMessage.session_id, msg)
 
@@ -127,9 +127,9 @@ if __name__ == '__main__':
     	fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-    	with Hermes(mqtt_options=mqtt_opts) as h:
-	        h\
-	        .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
+        with Hermes(mqtt_options=mqtt_opts) as h:
+        	h\
+        	.subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
 	        .subscribe_intent("caguilary:user", subscribe_user_callback) \
 	        .subscribe_intent("caguilary:event", subscribe_event_callback) \
 	        .start()
