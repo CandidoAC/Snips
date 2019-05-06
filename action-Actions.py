@@ -63,7 +63,7 @@ def read_configuration_file(configuration_file):
             return conf_parser.to_dict()
     except (IOError, configparser.Error) as e:
     	Error('Error:Fichero no encontrado')
-        return dict()
+    	return dict()
 
 #Intent Añadir mdicamento
 def subscribe_Anadir_callback(hermes, intentMessage):
@@ -111,10 +111,10 @@ def recordatorio(med):
     scheduler1.add_job(Acept, 'interval', minutes=5,id='job2',args=['med'])
     while (scheduler1.get_job('job2')!=None):
     	Reminder(med)
-        time.sleep(360)
-        print("Vez "+str(i+1))
-        i+=1
-        if(i==4):
+    	time.sleep(360)
+    	print("Vez "+str(i+1))
+    	i+=1
+    	if(i==4):
             scheduler1.remove_job('job2')
 
     if scheduler1.get_job('job2')!=None:
