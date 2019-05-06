@@ -125,9 +125,9 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     with open('prueba.csv', 'a') as csvfile:
     	fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        with Hermes(mqtt_options=mqtt_opts) as h:
+    	writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    	writer.writeheader()
+    	with Hermes(mqtt_options=mqtt_opts) as h:
         	h\
         	.subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
 	        .subscribe_intent("caguilary:user", subscribe_user_callback) \
