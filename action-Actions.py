@@ -108,6 +108,13 @@ def action_wrapper_event(hermes, intentMessage,conf):
     #AceptedReminder(med)
     hermes.publish_end_session(intentMessage.session_id, msg)
     #scheduler1.remove_job('job2')
+
+def onIntentNotRecognized(client, data, msg):
+   say("Hola",Snips.user)
+
+def say(text,intentMessage):
+    hermes.publish_end_session(intentMessage, text)   
+
     """
     def recordatorio(med):
         print('Evento detectado para : %s' % datetime.now())
