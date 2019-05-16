@@ -12,6 +12,7 @@ from snipsTools import SnipsConfigParser
 from hermes_python.hermes import Hermes
 from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
+from Evento import Event
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -25,7 +26,7 @@ def minutes(i):
         }
     return switcher.get(i," y " + str(i))
 
-
+"""
 def t():
     global idFile
     idFile += 1
@@ -55,6 +56,7 @@ def Error(mensaje):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Error','Medicamento':'','Fecha_Evento':'','Nombre_Usuario':'','Error_output':mensaje})
     t()
+    """
 def read_configuration_file(configuration_file):
     try:
         with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
@@ -62,7 +64,7 @@ def read_configuration_file(configuration_file):
             conf_parser.readfp(f)
             return conf_parser.to_dict()
     except (IOError, configparser.Error) as e:
-    	Error('Error:Fichero no encontrado')
+    	#Error('Error:Fichero no encontrado')
     	return dict()
 
 #Intent Añadir mdicamento
@@ -75,9 +77,9 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
     med = intentMessage.slots.Medicamento.first().value
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med'], max_instances=10000)
+    #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med'], max_instances=10000)
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
-    add_Reminder(med,fecha)
+    #add_Reminder(med,fecha)
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 
@@ -90,7 +92,7 @@ def action_wrapper_user(hermes, intentMessage,conf):
     user = intentMessage.slots.user.first().value
    
     msg="Cambio de usuario a "+user
-    Change_User(user)
+    #Change_User(user)
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 #Intent Acept
@@ -99,11 +101,11 @@ def subscribe_event_callback(hermes, intentMessage):
 
 def action_wrapper_event(hermes, intentMessage,conf):   
     msg="Evento aceptado"
-    AceptedReminder(med)
+    #AceptedReminder(med)
     hermes.publish_end_session(intentMessage.session_id, msg)
-    scheduler1.remove_job('job2')
+    #scheduler1.remove_job('job2')
 
-
+"""
 def recordatorio(med):
     print('Evento detectado para : %s' % datetime.now())
     #Para el recordatorio si no se ha dicho aceptar o algo así7
@@ -126,21 +128,23 @@ def recordatorio(med):
 def Acept(med):
     print("Tomar "+med)
 
-
+"""
 if __name__ == '__main__':
-    idFile=0
+    """idFile=0
     scheduler = BackgroundScheduler()
     scheduler.start()
     scheduler1 = BackgroundScheduler()
     scheduler1.start()
+     with open('prueba.csv', 'a') as csvfile:
+        fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()"""
     mqtt_opts = MqttOptions()
-    with open('prueba.csv', 'a') as csvfile:
-    	fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
-    	writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    	writer.writeheader()
-    	with Hermes(mqtt_options=mqtt_opts) as h:
-        	h\
-        	.subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
-	        .subscribe_intent("caguilary:user", subscribe_user_callback) \
-	        .subscribe_intent("caguilary:event", subscribe_event_callback) \
-	        .start()
+    with Hermes(mqtt_options=mqtt_opts) as h:
+        usr='default'
+
+       	h\
+      	.subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
+	    .subscribe_intent("caguilary:user", subscribe_user_callback) \
+	    .subscribe_intent("caguilary:event", subscribe_event_callback) \
+	    .start()
