@@ -82,7 +82,9 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
     e=Event(med,date,Snips.usr)
+    print(e)
     Snips.addEvent(e)
+    print(Snips)
     Snips.toString()
     hermes.publish_end_session(intentMessage.session_id, msg)
     #Intent cambiar usuario
