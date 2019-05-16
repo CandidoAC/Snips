@@ -139,7 +139,7 @@ if __name__ == '__main__':
         fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()"""
-    Snips=snips();
+    Snips=Snips();
     mqtt_opts = MqttOptions()
     with Hermes(mqtt_options=mqtt_opts) as h:
         Snips.usr='default'
