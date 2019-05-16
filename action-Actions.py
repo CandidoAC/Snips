@@ -14,7 +14,7 @@ from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
 from Evento import Event
 
-class snips()
+class snips(object)
     Levent=[]
     CONFIGURATION_ENCODING_FORMAT = "utf-8"
     CONFIG_INI = "config.ini"
