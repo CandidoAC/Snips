@@ -81,7 +81,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med'], max_instances=10000)
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
-    e=Event(med,datetime.strptime(date, "%Y-%m-%d %H:%M:%S"),Snips.usr)
+    e=Event(med,date,Snips.usr)
     Snips.addEvent(e)
     Snips.toString()
     hermes.publish_end_session(intentMessage.session_id, msg)
