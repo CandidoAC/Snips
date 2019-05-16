@@ -16,8 +16,6 @@ from Evento import Event
 
 class snips(object):
     Levent=[]
-    CONFIGURATION_ENCODING_FORMAT = "utf-8"
-    CONFIG_INI = "config.ini"
     def __init__(self):
         self.Levent = []
         self.usr='default'
@@ -71,7 +69,10 @@ class snips(object):
         writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Error','Medicamento':'','Fecha_Evento':'','Nombre_Usuario':'','Error_output':mensaje})
         t()
         """
-    def read_configuration_file(configuration_file):
+    
+CONFIGURATION_ENCODING_FORMAT = "utf-8"
+CONFIG_INI = "config.ini"
+def read_configuration_file(configuration_file):
         try:
             with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
                 conf_parser = SnipsConfigParser()
@@ -122,8 +123,6 @@ class snips(object):
         #AceptedReminder(med)
         hermes.publish_end_session(intentMessage.session_id, msg)
         #scheduler1.remove_job('job2')
-
-
     """
     def recordatorio(med):
         print('Evento detectado para : %s' % datetime.now())
@@ -163,7 +162,7 @@ if __name__ == '__main__':
     with Hermes(mqtt_options=mqtt_opts) as h:
         Snips.usr='default'
         h\
-        .subscribe_intent("caguilary:Anadir", Snips.subscribe_Anadir_callback) \
-        .subscribe_intent("caguilary:user", Snips.subscribe_user_callback) \
-        .subscribe_intent("caguilary:event", Snips.subscribe_event_callback) \
+        .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
+        .subscribe_intent("caguilary:user", subscribe_user_callback) \
+        .subscribe_intent("caguilary:event", subscribe_event_callback) \
         .start()
