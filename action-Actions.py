@@ -79,15 +79,15 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
     med = intentMessage.slots.Medicamento.first().value
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med','date'], max_instances=10000)
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
+    e=Event(med,date,Snips.usr)
     print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
     Snips.addEvent(e)
+    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
             print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
     hermes.publish_end_session(intentMessage.session_id, msg)
-    say(hermes,intentMessage,'Evento añadido para el '+str(date))
    
 #Intent cambiar usuario
 def subscribe_user_callback(hermes, intentMessage):
@@ -116,14 +116,10 @@ def say(hermes, intentMessage,text):
     hermes.publish_start_session_notification(intentMessage.session_id, "",None)
     hermes.publish_end_session(intentMessage.session_id, text)
 
-def recordatorio(med,date):
+def recordatorio(e):
     print('Evento detectado para : %s' % datetime.now())
-    enc=False
-    e=Event(med,date,Snips.usr)
-    while not enc or x in range(len(Snips.Levent)):
-        if(Snips.Levent[x].equals(e)):
-            enc=True
-            Snips.Levent[x].IncrementarVeces()
+    say(hermes,intentMessage,'Evento añadido para el '+e.fecha)
+    e.IncrementarVeces()
             
 
     #Para el recordatorio si no se ha dicho aceptar o algo así7
