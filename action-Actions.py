@@ -79,10 +79,9 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
     med = intentMessage.slots.Medicamento.first().value
-    #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med','date'], max_instances=10000)
+    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med','date'], max_instances=10000)
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
-    e=Event(med,date,Snips.usr)
     print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
     Snips.addEvent(e)
     for x in range(len(Snips.Levent)): 
@@ -148,10 +147,10 @@ def recordatorio(med,date):
 
     """
 if __name__ == '__main__':
-    """idFile=0
+    """idFile=0"""
     scheduler = BackgroundScheduler()
     scheduler.start()
-    scheduler1 = BackgroundScheduler()
+    """scheduler1 = BackgroundScheduler()
     scheduler1.start()
      with open('prueba.csv', 'a') as csvfile:
         fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
