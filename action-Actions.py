@@ -74,6 +74,7 @@ def subscribe_Anadir_callback(hermes, intentMessage):
     action_wrapper_Anadir(hermes, intentMessage, conf)
 
 def action_wrapper_Anadir(hermes, intentMessage,conf):
+    session=intentMessage.session_id
     fecha = intentMessage.slots.Fecha.first().value
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
@@ -113,7 +114,8 @@ def action_wrapper_event(hermes, intentMessage,conf):
 
 
 def say(hermes, intentMessage,text):
-    hermes.publish_start_session_notification('Recordatorio', text,None)
+    hermes.publish_start_session_notification(session, None,None)
+    hermes.publish_end_session(session, text)
 
 def recordatorio(med,date):
     print('Evento detectado para : %s' % datetime.now())
