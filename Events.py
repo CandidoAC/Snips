@@ -6,6 +6,7 @@ class Snips(object):
     Levent=[]
     def __init__(self):
         self.Levent = []
+        self.usr='default'
 
     def addEvent(self,event):
     	enc=False
