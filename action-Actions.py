@@ -114,8 +114,8 @@ def action_wrapper_event(hermes, intentMessage,conf):
 
 
 def say(hermes, intentMessage,text):
-    hermes.publish_start_session_notification(session, None,None)
-    hermes.publish_end_session(session, text)
+    hermes.publish_start_session_notification(intentMessage.session_id, None,None)
+    hermes.publish_end_session(intentMessage.session_id, text)
 
 def recordatorio(med,date):
     print('Evento detectado para : %s' % datetime.now())
