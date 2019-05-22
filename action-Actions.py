@@ -58,7 +58,6 @@ def minutes(i):
     
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-mqttClient = None
 
 def read_configuration_file(configuration_file):
     try:
@@ -85,7 +84,6 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     #add_Reminder(med,fecha)
     now=datetime.now()
     if((date - now).total_seconds()>0):
-        mqttClient=hermes
         t = Timer((date - now).total_seconds(), recordatorio,[intentMessage.session_id,med,fecha])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
@@ -160,7 +158,7 @@ if __name__ == '__main__':
         writer.writeheader()"""
     Snips=Snips();
     mqtt_opts = MqttOptions()
-    with Hermes(mqtt_options=mqtt_opts) as h:
+    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient:
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
