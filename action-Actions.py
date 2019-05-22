@@ -87,8 +87,8 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         t = Timer((date - now).total_seconds(), recordatorio,[intentMessage.session_id,med,fecha])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
-    for x in range(len(Snips.Levent)): 
-            print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
+    #for x in range(len(Snips.Levent)): 
+    #        print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
     hermes.publish_end_session(intentMessage.session_id, msg)
    
 #Intent cambiar usuario
@@ -120,8 +120,8 @@ def say(intentMessage,text):
 
 def recordatorio(intentMessage,med,fecha):
     print('Evento detectado para : %s' % datetime.now())
-    e=Event(med,fecha,Snips.usr)
-    say(intentMessage,'Evento añadido para el '+fecha+" tomar "+med)
+    e=Event(med,datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S"),Snips.usr)
+    say(intentMessage,'Evento:Toca'+med)
     e.IncrementarVeces()
     Snips.addEvent(e)
             
