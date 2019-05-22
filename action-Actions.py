@@ -85,7 +85,8 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     e=Event(med,date,Snips.usr)
     print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
     Snips.addEvent(e)
-    t = Timer(diff = (date - datetime.now()).total_seconds(), say,["hermes","intentMessage","Evento detectado para ahora"])
+    t = Timer((date - datetime.now()).total_seconds(), say,["hermes","intentMessage","Evento detectado para ahora"])
+    print(str((date - datetime.now()).total_seconds()))
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
             print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
