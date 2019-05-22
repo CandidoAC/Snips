@@ -88,7 +88,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     print(str((date - now).total_seconds()))
     if((date - now).total_seconds()>0):
         Snips.addEvent(e)
-        t = Timer((date - now).total_seconds(), recordatorio,["hermes","intentMessage","e"])
+        t = Timer((date - now).total_seconds(), recordatorio,["hermes","intentMessage","e.med","fecha"])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
@@ -122,9 +122,9 @@ def say(hermes, intentMessage,text):
     #hermes.publish_start_session_notification(intentMessage.session_id, "",None)
     hermes.publish_end_session(intentMessage.session_id, text)
 
-def recordatorio(hermes,intentMessage,e):
+def recordatorio(hermes,intentMessage,med,fecha):
     print('Evento detectado para : %s' % datetime.now())
-    say(hermes,intentMessage,'Evento añadido para el '+e.fecha.strftime("%Y-%m-%d %H:%M:%S"))
+    say(hermes,intentMessage,'Evento añadido para el '+fecha+" tomar "+med)
     e.IncrementarVeces()
             
 
