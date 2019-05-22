@@ -82,13 +82,14 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     med = intentMessage.slots.Medicamento.first().value
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
+    now=datetime.now().astimezone(tz.timezone('Europe/Madrid'))
     e=Event(med,date,Snips.usr)
     print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
-    print(e.fecha.strftime("%Y-%m-%d %H:%M:%S")+"-->"+datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-    print(str((date - datetime.now()).total_seconds()))
-    if((date - datetime.now()).total_seconds()>0):
+    print(e.fecha.strftime("%Y-%m-%d %H:%M:%S")+"-->"+now.strftime("%Y-%m-%d %H:%M:%S"))
+    print(str((date - now).total_seconds()))
+    if((date - now).total_seconds()>0):
         Snips.addEvent(e)
-        t = Timer((date - datetime.now()).total_seconds(), recordatorio,["hermes","intentMessage","e"])
+        t = Timer((date - now).total_seconds(), recordatorio,["hermes","intentMessage","e"])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
@@ -124,7 +125,7 @@ def say(hermes, intentMessage,text):
 
 def recordatorio(hermes,intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
-    say(hermes,intentMessage,'Evento añadido para el '+e.fecha)
+    say(hermes,intentMessage,'Evento añadido para el '+e.fecha.strftime("%Y-%m-%d %H:%M:%S"))
     e.IncrementarVeces()
             
 
