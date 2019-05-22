@@ -58,6 +58,8 @@ def minutes(i):
     
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
+aux=None
+
 def read_configuration_file(configuration_file):
     try:
         with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
@@ -88,7 +90,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     print(str((date - now).total_seconds()))
     if((date - now).total_seconds()>0):
         Snips.addEvent(e)
-        t = Timer((date - now).total_seconds(), recordatorio,["hermes","intentMessage","e.med","fecha"])
+        t = Timer((date - now).total_seconds(), recordatorio,[intentMessage.session_id,e.med,fecha])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
@@ -118,13 +120,13 @@ def action_wrapper_event(hermes, intentMessage,conf):
     #scheduler1.remove_job('job2')
 
 
-def say(hermes, intentMessage,text):
+def say(intentMessage,text):
     #hermes.publish_start_session_notification(intentMessage.session_id, "",None)
-    hermes.publish_end_session(intentMessage.session_id, text)
+    aux.publish_end_session(intentMessage, text)
 
-def recordatorio(hermes,intentMessage,med,fecha):
+def recordatorio(intentMessage,med,fecha):
     print('Evento detectado para : %s' % datetime.now())
-    say(hermes,intentMessage,'Evento añadido para el '+fecha+" tomar "+med)
+    say(intentMessage,'Evento añadido para el '+fecha+" tomar "+med)
     e.IncrementarVeces()
             
 
@@ -161,6 +163,7 @@ if __name__ == '__main__':
     Snips=Snips();
     mqtt_opts = MqttOptions()
     with Hermes(mqtt_options=mqtt_opts) as h:
+        aux=h
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
