@@ -14,6 +14,7 @@ from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
 from Events import Snips
 from Evento import Event
+from threading import Timer
 
 def minutes(i):
     switcher={
@@ -84,7 +85,8 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     e=Event(med,date,Snips.usr)
     print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
     Snips.addEvent(e)
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
+    t = Timer(diff = (date - datetime.now()).total_seconds(), say,["hermes","intentMessage","Evento detectado para ahora"])
+    #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
             print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
     hermes.publish_end_session(intentMessage.session_id, msg)
