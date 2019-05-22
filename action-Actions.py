@@ -121,7 +121,7 @@ def say(intentMessage,text):
 
 def recordatorio(intentMessage,med,fecha):
     print('Evento detectado para : %s' % datetime.now())
-    e=Event(med,date,Snips.usr)
+    e=Event(med,fecha,Snips.usr)
     say(intentMessage,'Evento añadido para el '+fecha+" tomar "+med)
     e.IncrementarVeces()
     Snips.addEvent(e)
