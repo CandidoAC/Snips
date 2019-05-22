@@ -84,6 +84,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     #add_Reminder(med,fecha)
     e=Event(med,date,Snips.usr)
     print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
+    print(e.fecha+"-->"+datetime.now())
     print(str((date - datetime.now()).total_seconds()))
     if((date - datetime.now()).total_seconds()>0):
         Snips.addEvent(e)
