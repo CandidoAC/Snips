@@ -84,9 +84,11 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     #add_Reminder(med,fecha)
     e=Event(med,date,Snips.usr)
     print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
-    Snips.addEvent(e)
-    t = Timer((date - datetime.now()).total_seconds(), say,["hermes","intentMessage","Evento detectado para ahora"])
     print(str((date - datetime.now()).total_seconds()))
+    if((date - datetime.now()).total_seconds()>0):
+        Snips.addEvent(e)
+        t = Timer((date - datetime.now()).total_seconds(), say,["hermes","intentMessage","Evento detectado para ahora"])
+        t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
             print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
@@ -116,6 +118,7 @@ def action_wrapper_event(hermes, intentMessage,conf):
 
 
 def say(hermes, intentMessage,text):
+    print("Diciendo:"+text)
     hermes.publish_start_session_notification(intentMessage.session_id, "",None)
     hermes.publish_end_session(intentMessage.session_id, text)
 
