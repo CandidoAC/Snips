@@ -4,7 +4,6 @@ import time
 import io
 import configparser
 import csv
-import mqtt_client, json
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from datetime import timedelta
@@ -59,31 +58,7 @@ def minutes(i):
     
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-
-TOML_PATH = '/etc/snips.toml'
-
-# Get the MQTT host and port from /etc/snips.toml.
-try:
-    TOML = toml.load(TOML_PATH)
-    MQTT_ADDR_PORT = TOML['snips-common']['mqtt']
-    MQTT_ADDR, MQTT_PORT = MQTT_ADDR_PORT.split(':')
-    MQTT_PORT = int(mqtt_port)
-except (KeyError, ValueError):
-    MQTT_ADDR = 'localhost'
-    MQTT_PORT = 1883
-    MQTT_ADDR_PORT = "{}:{}".format(MQTT_ADDR, str(MQTT_PORT))
-
-try:
-    TOML = toml.load(TOML_PATH)
-    MQTT_USER = TOML['snips-common']['mqtt_username']
-    MQTT_PASS = TOML['snips-common']['mqtt_password']
-except (KeyError, ValueError):
-    MQTT_USER = ''
-    MQTT_PASS = ''
-
-client = mqtt.Client("Client")  # create new instance
-client.username_pw_set(MQTT_USER, MQTT_PASS)
-client.connect(MQTT_ADDR, int(MQTT_PORT)) 
+mqttClient = None
 
 def read_configuration_file(configuration_file):
     try:
@@ -110,6 +85,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     #add_Reminder(med,fecha)
     now=datetime.now()
     if((date - now).total_seconds()>0):
+        mqttClient=hermes
         t = Timer((date - now).total_seconds(), recordatorio,[intentMessage.session_id,med,fecha])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
@@ -141,14 +117,8 @@ def action_wrapper_event(hermes, intentMessage,conf):
 
 
 def say(intentMessage,text):
-
-    data = {}
-    data['siteId'] = site_id
-    data['init'] = {}
-    data['init']['type'] = 'notification'
-    data['init']['text'] = text
-    json_data = json.dumps(data)
-    client.put('hermes/dialogueManager/startSession', str(json_data))
+    mqttClient.publish_start_session_notification(intentMessage, "",None)
+    mqttClient.publish_end_session(intentMessage, text)
 
 def recordatorio(intentMessage,med,fecha):
     print('Evento detectado para : %s' % datetime.now())
