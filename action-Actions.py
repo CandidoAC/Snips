@@ -95,8 +95,8 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
 
     print("Ver evento activos:")
     List=threading.enumerate()
-     for x in range(len(List)): 
-            print(x, end=" ")
+    for x in range(len(List)): 
+        print(x, end=" ")
     hermes.publish_end_session(intentMessage.session_id, msg)
    
 #Intent cambiar usuario
