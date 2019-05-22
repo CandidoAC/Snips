@@ -4,6 +4,7 @@ import time
 import io
 import configparser
 import csv
+import mqtt_client, json
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from datetime import timedelta
@@ -58,7 +59,31 @@ def minutes(i):
     
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-mqttClient = None
+
+TOML_PATH = '/etc/snips.toml'
+
+# Get the MQTT host and port from /etc/snips.toml.
+try:
+    TOML = toml.load(TOML_PATH)
+    MQTT_ADDR_PORT = TOML['snips-common']['mqtt']
+    MQTT_ADDR, MQTT_PORT = MQTT_ADDR_PORT.split(':')
+    MQTT_PORT = int(mqtt_port)
+except (KeyError, ValueError):
+    MQTT_ADDR = 'localhost'
+    MQTT_PORT = 1883
+    MQTT_ADDR_PORT = "{}:{}".format(MQTT_ADDR, str(MQTT_PORT))
+
+try:
+    TOML = toml.load(TOML_PATH)
+    MQTT_USER = TOML['snips-common']['mqtt_username']
+    MQTT_PASS = TOML['snips-common']['mqtt_password']
+except (KeyError, ValueError):
+    MQTT_USER = ''
+    MQTT_PASS = ''
+
+client = mqtt.Client("Client")  # create new instance
+client.username_pw_set(MQTT_USER, MQTT_PASS)
+client.connect(MQTT_ADDR, int(MQTT_PORT)) 
 
 def read_configuration_file(configuration_file):
     try:
@@ -85,7 +110,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     #add_Reminder(med,fecha)
     now=datetime.now()
     if((date - now).total_seconds()>0):
-        t = Timer(hermes(date - now).total_seconds(), recordatorio,[intentMessage.session_id,med,fecha])
+        t = Timer((date - now).total_seconds(), recordatorio,[intentMessage.session_id,med,fecha])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
@@ -115,14 +140,20 @@ def action_wrapper_event(hermes, intentMessage,conf):
     #scheduler1.remove_job('job2')
 
 
-def say(hermes,intentMessage,text):
-    aux.publish_start_session_notification(intentMessage, "",None)
-    aux.publish_end_session(intentMessage, text)
+def say(intentMessage,text):
 
-def recordatorio(hermes,intentMessage,med,fecha):
+    data = {}
+    data['siteId'] = site_id
+    data['init'] = {}
+    data['init']['type'] = 'notification'
+    data['init']['text'] = text
+    json_data = json.dumps(data)
+    client.put('hermes/dialogueManager/startSession', str(json_data))
+
+def recordatorio(intentMessage,med,fecha):
     print('Evento detectado para : %s' % datetime.now())
     e=Event(med,fecha,Snips.usr)
-    say(hermes,intentMessage,'Evento añadido para el '+fecha+" tomar "+med)
+    say(intentMessage,'Evento añadido para el '+fecha+" tomar "+med)
     e.IncrementarVeces()
     Snips.addEvent(e)
             
@@ -160,7 +191,6 @@ if __name__ == '__main__':
     Snips=Snips();
     mqtt_opts = MqttOptions()
     with Hermes(mqtt_options=mqtt_opts) as h:
-        mqttClient=h
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
