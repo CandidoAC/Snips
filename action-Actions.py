@@ -87,16 +87,11 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     print(str((date - datetime.now()).total_seconds()))
     if((date - datetime.now()).total_seconds()>0):
         Snips.addEvent(e)
-        t = Timer((date - datetime.now()).total_seconds(), say,["hermes","intentMessage","Evento detectado para ahora"])
+        t = Timer((date - datetime.now()).total_seconds(), recordatorio,["e"])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
             print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
-
-    print("Ver evento activos:")
-    List=threading.enumerate()
-    for x in range(len(List)): 
-        print(x, end=" ")
     hermes.publish_end_session(intentMessage.session_id, msg)
    
 #Intent cambiar usuario
@@ -123,7 +118,6 @@ def action_wrapper_event(hermes, intentMessage,conf):
 
 
 def say(hermes, intentMessage,text):
-    print("Diciendo:"+text)
     hermes.publish_start_session_notification(intentMessage.session_id, "",None)
     hermes.publish_end_session(intentMessage.session_id, text)
 
