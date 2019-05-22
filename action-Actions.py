@@ -3,7 +3,6 @@
 import time
 import io
 import configparser
-import pytz as tz
 import csv
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
@@ -82,7 +81,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     med = intentMessage.slots.Medicamento.first().value
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
-    now=datetime.now().astimezone(tz.timezone('Europe/Madrid'))
+    now=datetime.now()
     e=Event(med,date,Snips.usr)
     print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
     print(e.fecha.strftime("%Y-%m-%d %H:%M:%S")+"-->"+now.strftime("%Y-%m-%d %H:%M:%S"))
