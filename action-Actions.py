@@ -84,12 +84,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
     now=datetime.now()
-    e=Event(med,date,Snips.usr)
-    print(e.med+","+e.fecha.strftime("%Y-%m-%d %H:%M:%S")+","+e.user)
-    print(e.fecha.strftime("%Y-%m-%d %H:%M:%S")+"-->"+now.strftime("%Y-%m-%d %H:%M:%S"))
-    print(str((date - now).total_seconds()))
     if((date - now).total_seconds()>0):
-        Snips.addEvent(e)
         t = Timer((date - now).total_seconds(), recordatorio,[intentMessage.session_id,e.med,fecha])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
@@ -121,13 +116,15 @@ def action_wrapper_event(hermes, intentMessage,conf):
 
 
 def say(intentMessage,text):
-    #hermes.publish_start_session_notification(intentMessage.session_id, "",None)
+    hermes.publish_start_session_notification(intentMessage, "",None)
     aux.publish_end_session(intentMessage, text)
 
 def recordatorio(intentMessage,med,fecha):
     print('Evento detectado para : %s' % datetime.now())
+    e=Event(med,date,Snips.usr)
     say(intentMessage,'Evento añadido para el '+fecha+" tomar "+med)
     e.IncrementarVeces()
+    Snips.addEvent(e)
             
 
     #Para el recordatorio si no se ha dicho aceptar o algo así7
