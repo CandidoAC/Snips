@@ -92,6 +92,11 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     for x in range(len(Snips.Levent)): 
             print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
+
+    print("Ver evento activos:")
+    List=threading.enumerate()
+     for x in range(len(List)): 
+            print(x, end=" ")
     hermes.publish_end_session(intentMessage.session_id, msg)
    
 #Intent cambiar usuario
