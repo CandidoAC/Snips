@@ -84,7 +84,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     #add_Reminder(med,fecha)
     now=datetime.now()
     if((date - now).total_seconds()>0):
-        t = Timer((date - now).total_seconds(), recordatorio,[intentMessage.session_id,med,fecha])
+        t = Timer((date - now).total_seconds(), recordatorio,['default'.session_id,med,fecha])
         t.start()
     #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
     #for x in range(len(Snips.Levent)): 
