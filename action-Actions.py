@@ -116,7 +116,7 @@ def action_wrapper_event(hermes, intentMessage,conf):
 
 def say(intentMessage,text):
     print('Entrando metodo say')
-    mqttClient.publish_start_session_notification(intentMessage, "",None)
+    mqttClient.publish_start_session_notification(intentMessage, text,None)
     mqttClient.publish_end_session(intentMessage, text)
     print('Saliendo metodo say')
 def recordatorio(intentMessage,med,fecha):
