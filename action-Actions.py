@@ -119,6 +119,8 @@ def say(intentMessage,text):
     mqttClient.publish_start_session_notification(intentMessage, text,None)
     mqttClient.publish_end_session(intentMessage, text)
     print('Saliendo metodo say')
+
+    
 def recordatorio(intentMessage,med,fecha):
     print('Evento detectado para : %s' % datetime.now())
     e=Event(med,datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S"),Snips.usr)
