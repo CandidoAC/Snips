@@ -58,6 +58,7 @@ def minutes(i):
     
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
+Recordatorio=""
 
 def read_configuration_file(configuration_file):
     try:
@@ -103,14 +104,39 @@ def action_wrapper_user(hermes, intentMessage,conf):
     Snips.usr=user
     #Change_User(user)
     hermes.publish_end_session(intentMessage.session_id, msg)
-    #Intent Acept
-def subscribe_event_callback(hermes, intentMessage):
-    action_wrapper_event(hermes, intentMessage, conf)
 
-def action_wrapper_event(hermes, intentMessage,conf):   
+#Intent Acept-->TODO control nombre med
+def subscribe_confirmar_callback(hermes, intentMessage):
+    action_wrapper_Confirmar(hermes, intentMessage, conf)
+
+def action_wrapper_Confirmar(hermes, intentMessage,conf):   
     msg="Evento aceptado"
     #AceptedReminder(med)
     hermes.publish_end_session(intentMessage.session_id, msg)
+    #scheduler1.remove_job('job2')
+
+#Intent Negar-->TODO control nombre med
+def subscribe_Negar_callback(hermes, intentMessage):
+    action_wrapper_Negar(hermes, intentMessage, conf)
+
+def action_wrapper_Negar(hermes, intentMessage,conf):
+    Recordatorio
+    for x in range(len(Snips.Levent)): 
+        fechaE=x.fecha
+        fechaE.total_seconds-=5*x.veces
+        e=Event(Recordatorio,datetime.strptime(fechaE,"%Y-%m-%d %H:%M:%S"),Snips.usr)
+        if x.equals(e):
+            x.IncrementarVeces()
+            if x.veces<=5:
+                msg="Evento no aceptado.Se te volverá ha avisar en 5 segundos"
+                #AceptedReminder(med)
+                t = Timer(5, recordatorioTomar,['default',Recordatorio])
+                t.start()
+                hermes.publish_end_session(intentMessage.session_id, msg)
+            else:
+                msg='Evento ignorado:tomar '+x.med
+                hermes.publish_end_session(intentMessage.session_id, msg)
+
     #scheduler1.remove_job('job2')
 
 
@@ -124,6 +150,19 @@ def recordatorio(intentMessage,med,fecha):
     say(intentMessage,'Evento:Toca '+med)
     e.IncrementarVeces()
     Snips.addEvent(e)
+    #Continue session-->aceptar/negar(pasar med si se puede)  
+    Recordatorio=med
+
+def recordatorioTomar(intentMessage,med):
+    print('¿Te has tomado ' +Recordatorio+'?')
+    for x in range(len(Snips.Levent)): 
+        fechaE=x.fecha
+        fechaE.total_seconds-=5*x.veces
+        e=Event(Recordatorio,datetime.strptime(fechaE,"%Y-%m-%d %H:%M:%S"),Snips.usr)
+        if x.equals(e):
+            x.IncrementarVeces()
+    mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +Recordatorio+'?' ,["Aceptar","Negar"])
+
             
 
     #Para el recordatorio si no se ha dicho aceptar o algo así7
@@ -162,5 +201,6 @@ if __name__ == '__main__':
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
-        .subscribe_intent("caguilary:event", subscribe_event_callback) \
+        .subscribe_intent("caguilary:Confirmar", subscribe_confirmar_callback) \
+        .subscribe_intent("caguilary:Negar", subscribe_Negar_callback) \
         .start()
