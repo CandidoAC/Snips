@@ -88,7 +88,8 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     if((date - now).total_seconds()>0):
         t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
         t.start()"""
-    scheduler.add_job(recordatorio, 'date', run_date=date.astimezone(tz.timezone('Europe/Madrid')),id=fecha,args=['med','fecha',Snips.usr], max_instances=10000)
+    timezone = pytz.timezone('Europe/Madrid')
+    scheduler.add_job(recordatorio, 'date', run_date=timezone.localize(date),id=fecha,args=['med','fecha',Snips.usr], max_instances=10000)
     hermes.publish_end_session(intentMessage.session_id, msg)
     #Intent cambiar usuario
 def subscribe_user_callback(hermes, intentMessage):
