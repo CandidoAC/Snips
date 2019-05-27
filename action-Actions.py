@@ -154,12 +154,6 @@ def recordatorio(intentMessage,med,fecha,usr):
 def recordatorioTomar(e,intentMessage):
     if(e.veces<6):
         print('¿Te has tomado ' +e.med+'?:Vez '+e.veces)
-    """for x in range(len(Snips.Levent)): 
-        fechaE=x.fecha
-        fechaE.total_seconds-=5*x.veces
-        e=Event(Recordatorio,datetime.strptime(fechaE,"%Y-%m-%d %H:%M:%S"),Snips.usr)
-        if x.equals(e):"""
-
         e.IncrementarVeces()
         say(intentMessage,'¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])        
         mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])
