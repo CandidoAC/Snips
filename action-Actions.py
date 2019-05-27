@@ -152,6 +152,8 @@ def recordatorio(intentMessage,med,fecha):
     Snips.addEvent(e)
     #Continue session-->aceptar/negar(pasar med si se puede)  
     Recordatorio=med
+    mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +Recordatorio+'?' ,["Aceptar","Negar"])
+
 
 def recordatorioTomar(intentMessage,med):
     print('¿Te has tomado ' +Recordatorio+'?')
@@ -161,8 +163,6 @@ def recordatorioTomar(intentMessage,med):
         e=Event(Recordatorio,datetime.strptime(fechaE,"%Y-%m-%d %H:%M:%S"),Snips.usr)
         if x.equals(e):
             x.IncrementarVeces()
-    mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +Recordatorio+'?' ,["Aceptar","Negar"])
-
             
 
     #Para el recordatorio si no se ha dicho aceptar o algo así7
