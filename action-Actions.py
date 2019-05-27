@@ -87,7 +87,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     if((date - now).total_seconds()>0):
         t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
         t.start()"""
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med','fecha',Snips.usr], max_instances=10000)
+    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=[med,date,Snips.usr], max_instances=10000)
     hermes.publish_end_session(intentMessage.session_id, msg)
     #Intent cambiar usuario
 def subscribe_user_callback(hermes, intentMessage):
@@ -117,7 +117,6 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    Recordatorio
     for x in range(len(Snips.Levent)): 
         fechaE=x.fecha
         fechaE.total_seconds-=5*x.veces
@@ -142,10 +141,9 @@ def say(intentMessage,text):
     
 def recordatorio(med,fecha,usr):
     print('Evento detectado para : %s' % datetime.now())
-    e=Event(med,datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S"),usr)
+    e=Event(med,fecha,usr)
     say(intentMessage,'Evento:Toca '+med)
     Snips.addEvent(e)
-    med
     scheduler1.add_job(recordatorioTomar, 'interval', seconds=5,id='job2',args=[e])
     #t = Timer(5, recordatorioTomar,['default',Recordatorio])
     #t.start()
