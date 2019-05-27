@@ -83,11 +83,11 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     med = intentMessage.slots.Medicamento.first().value
     msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
-    now=datetime.now()
+    """now=datetime.now()
     if((date - now).total_seconds()>0):
         t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
-        t.start()
-    #scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['e'], max_instances=10000)
+        t.start()"""
+    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['med','fecha',Snips.usr], max_instances=10000)
     #for x in range(len(Snips.Levent)): 
     #        print(Snips.Levent[x].med+","+Snips.Levent[x].fecha.strftime("%Y-%m-%d %H:%M:%S")+","+str(Snips.Levent[x].veces)+","+Snips.Levent[x].user, end=" ")
     hermes.publish_end_session(intentMessage.session_id, msg)
@@ -113,7 +113,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     msg="Evento aceptado"
     #AceptedReminder(med)
     hermes.publish_end_session(intentMessage.session_id, msg)
-    #scheduler1.remove_job('job2')
+    scheduler1.remove_job('job2')
 
 #Intent Negar-->TODO control nombre med
 def subscribe_Negar_callback(hermes, intentMessage):
@@ -130,11 +130,10 @@ def action_wrapper_Negar(hermes, intentMessage,conf):
             if x.veces<=5:
                 msg="Evento no aceptado.Se te volverá ha avisar en 5 segundos"
                 #AceptedReminder(med)
-                t = Timer(5, recordatorioTomar,['default',Recordatorio])
-                t.start()
                 hermes.publish_end_session(intentMessage.session_id, msg)
             else:
                 msg='Evento ignorado:tomar '+x.med
+                scheduler1.remove_job('job2')
                 hermes.publish_end_session(intentMessage.session_id, msg)
 
     #scheduler1.remove_job('job2')
@@ -144,26 +143,27 @@ def say(intentMessage,text):
     mqttClient.publish_start_session_notification(intentMessage, text,None)
 
     
-def recordatorio(intentMessage,med,fecha):
+def recordatorio(med,fecha,usr):
     print('Evento detectado para : %s' % datetime.now())
-    e=Event(med,datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S"),Snips.usr)
+    e=Event(med,datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S"),usr)
     say(intentMessage,'Evento:Toca '+med)
-    e.IncrementarVeces()
     Snips.addEvent(e)
-    #Continue session-->aceptar/negar(pasar med si se puede)  
-    Recordatorio=med
-    mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +Recordatorio+'?' ,["Aceptar","Negar"])
+    med
+    scheduler1.add_job(recordatorioTomar, 'interval', seconds=5,id='job2',args=[e])
+    #t = Timer(5, recordatorioTomar,['default',Recordatorio])
+    #t.start()
+   
 
-
-def recordatorioTomar(intentMessage,med):
-    print('¿Te has tomado ' +Recordatorio+'?')
-    for x in range(len(Snips.Levent)): 
+def recordatorioTomar(e):
+    print('¿Te has tomado ' +e.med+'?')
+    """for x in range(len(Snips.Levent)): 
         fechaE=x.fecha
         fechaE.total_seconds-=5*x.veces
         e=Event(Recordatorio,datetime.strptime(fechaE,"%Y-%m-%d %H:%M:%S"),Snips.usr)
-        if x.equals(e):
-            x.IncrementarVeces()
-            
+        if x.equals(e):"""
+
+    e.IncrementarVeces()        
+    mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])
 
     #Para el recordatorio si no se ha dicho aceptar o algo así7
     """i=0
@@ -189,8 +189,9 @@ if __name__ == '__main__':
     """idFile=0"""
     scheduler = BackgroundScheduler()
     scheduler.start()
-    """scheduler1 = BackgroundScheduler()
+    scheduler1 = BackgroundScheduler()
     scheduler1.start()
+    """
      with open('prueba.csv', 'a') as csvfile:
         fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
