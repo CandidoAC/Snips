@@ -160,7 +160,7 @@ def recordatorioTomar(e):
     e.IncrementarVeces()        
     mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])
 
-    #Para el recordatorio si no se ha dicho aceptar o algo así7
+    #Para el recordatorio si no se ha dicho aceptar o algo así
     """i=0
     scheduler1.add_job(Acept, 'interval', minutes=5,id='job2',args=['med'])
     while (scheduler1.get_job('job2')!=None):
