@@ -104,6 +104,7 @@ def action_wrapper_user(hermes, intentMessage,conf):
 
 #Intent Acept-->TODO control nombre med
 def subscribe_confirmar_callback(hermes, intentMessage):
+    conf = read_configuration_file(CONFIG_INI)
     action_wrapper_Confirmar(hermes, intentMessage, conf)
 
 def action_wrapper_Confirmar(hermes, intentMessage,conf):   
@@ -114,6 +115,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
 
 #Intent Negar-->TODO control nombre med
 def subscribe_Negar_callback(hermes, intentMessage):
+    conf = read_configuration_file(CONFIG_INI)
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
@@ -150,16 +152,22 @@ def recordatorio(intentMessage,med,fecha,usr):
    
 
 def recordatorioTomar(e,intentMessage):
-    print('¿Te has tomado ' +e.med+'?')
+    if(e.veces<6):
+        print('¿Te has tomado ' +e.med+'?:Vez '+e.veces)
     """for x in range(len(Snips.Levent)): 
         fechaE=x.fecha
         fechaE.total_seconds-=5*x.veces
         e=Event(Recordatorio,datetime.strptime(fechaE,"%Y-%m-%d %H:%M:%S"),Snips.usr)
         if x.equals(e):"""
 
-    e.IncrementarVeces()        
-    mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])
-
+        e.IncrementarVeces()
+        say(intentMessage,'¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])        
+        mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])
+    else:
+        msg='Evento ignorado:tomar '+x.med
+        scheduler1.remove_job('job2')
+        hermes.publish_end_session(intentMessage, msg)
+        
     #Para el recordatorio si no se ha dicho aceptar o algo así
     """i=0
     scheduler1.add_job(Acept, 'interval', minutes=5,id='job2',args=['med'])
