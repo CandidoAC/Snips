@@ -146,7 +146,7 @@ def recordatorio(intentMessage,med,fecha,usr):
     e=Event(med,fecha,usr)
     say(intentMessage,'Evento:Toca '+med)
     Snips.addEvent(e)
-    scheduler1.add_job(recordatorioTomar, 'interval', seconds=5,id='job2',args=[e,intentMessage])
+    scheduler1.add_job(recordatorioTomar, 'interval', seconds=10,id='job2',args=[e,intentMessage])
     #t = Timer(5, recordatorioTomar,['default',Recordatorio])
     #t.start()
    
@@ -158,7 +158,7 @@ def recordatorioTomar(e,intentMessage):
         say(intentMessage,'¿Te has tomado ' +e.med+'?')        
         mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])
     else:
-        msg='Evento ignorado:tomar '+x.med
+        msg='Evento ignorado:tomar '+e.med
         scheduler1.remove_job('job2')
         hermes.publish_end_session(intentMessage, msg)
         
