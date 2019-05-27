@@ -154,13 +154,13 @@ def recordatorio(intentMessage,med,fecha,usr):
 def recordatorioTomar(e,intentMessage):
     if(e.veces<6):
         print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
-        e.IncrementarVeces()
-        say(intentMessage,'¿Te has tomado ' +e.med+'?')        
+        e.IncrementarVeces()     
         mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?' ,["Aceptar","Negar"])
+        say(intentMessage,'¿Te has tomado ' +e.med+'?')   
     else:
         msg='Evento ignorado:tomar '+e.med
         scheduler1.remove_job('job2')
-        hermes.publish_end_session(intentMessage, msg)
+        mqttClient.publish_end_session(intentMessage, msg)
         
     #Para el recordatorio si no se ha dicho aceptar o algo así
     """i=0
