@@ -120,8 +120,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
     for x in range(len(Snips.Levent)): 
-        fechaE=Snips.Levent[x].fecha
-        fechaE.total_seconds-=5*Snips.Levent[x].veces
+        fechaE=Snips.Levent[x].fecha-5*Snips.Levent[x].veces
         e=Event(Recordatorio,datetime.strptime(fechaE,"%Y-%m-%d %H:%M:%S"),Snips.usr)
         if x.equals(e):
             x.IncrementarVeces()
