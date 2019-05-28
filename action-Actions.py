@@ -155,7 +155,7 @@ def recordatorioTomar(e,intentMessage):
     if(e.veces<6):
         print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
         e.IncrementarVeces()     
-        mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?',["Aceptar","Negar"],True)
+        mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?',["Aceptar","Negar"])
         say(intentMessage,'¿Te has tomado ' +e.med+'?')   
     else:
         msg='Evento ignorado:tomar '+e.med
