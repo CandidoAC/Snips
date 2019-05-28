@@ -154,7 +154,7 @@ def recordatorioTomar(e,intentMessage):
     if(e.veces<6):
         print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
         e.IncrementarVeces()  
-        hermes.publish_start_session_action(site_id=intentMessage,session_init_text="",
+        mqttClient.publish_start_session_action(site_id=intentMessage,session_init_text="",
                                             session_init_intent_filter=None,
                                             session_init_can_be_enqueued=False)   
         mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?',["Aceptar","Negar"])  
