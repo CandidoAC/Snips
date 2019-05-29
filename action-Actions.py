@@ -155,6 +155,7 @@ def recordatorioTomar(e,intentMessage):
             session_init_text="",
             session_init_intent_filter=None,
             session_init_can_be_enqueued=True,
+            session_init_send_intent_not_recognized=False,
             custom_data=None)
     if(e.veces<6):
         print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
