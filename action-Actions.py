@@ -152,9 +152,9 @@ def recordatorio(intentMessage,med,fecha,usr):
 
 def recordatorioTomar(e,intentMessage):
     mqttClient.publish_start_session_action(site_id=intentMessage,
-            session_init_text="¿Te has tomado ' +e.med+'?",
+            session_init_text="¿Te has tomado  "+e.med+"?",
             session_init_intent_filter=["Aceptar","Negar"],
-            session_init_can_be_enqueued=True,
+            session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=False,
             custom_data=None)
     
