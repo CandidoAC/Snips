@@ -152,16 +152,16 @@ def recordatorio(intentMessage,med,fecha,usr):
 
 def recordatorioTomar(e,intentMessage):
     mqttClient.publish_start_session_action(site_id=intentMessage,
-            session_init_text="",
-            session_init_intent_filter=[],
+            session_init_text="¿Te has tomado" +e.med+"?",
+            session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
             session_init_can_be_enqueued=False,
-            session_init_send_intent_not_recognized=True,
+            session_init_send_intent_not_recognized=False,
             custom_data=None)
     
     if(e.veces<6):
         print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
         e.IncrementarVeces()     
-        mqttClient.publish_continue_session(intentMessage,"¿Te has tomado ' +e.med+'?", ["caguilary:Confirmar","caguilary:Negar"])  
+        mqttClient.publish_end_session(intentMessage, msg)  
     else:
         msg='Evento ignorado:tomar '+e.med
         scheduler1.remove_job('job2')
