@@ -87,7 +87,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     if((date - now).total_seconds()>0):
         t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
         t.start()"""
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=[intentMessage.session_id,med,date,Snips.usr], max_instances=10000)
+    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['default',med,date,Snips.usr], max_instances=10000)
     hermes.publish_end_session(intentMessage.session_id, msg)
     #Intent cambiar usuario
 def subscribe_user_callback(hermes, intentMessage):
@@ -151,16 +151,17 @@ def recordatorio(intentMessage,med,fecha,usr):
    
 
 def recordatorioTomar(e,intentMessage):
-    mqttClient.publish_start_session_action(site_id=intentMessage,
-            session_init_text="",
+    """mqttClient.publish_start_session_action(site_id=intentMessage,
+            session_init_text="¿Te has tomado ' +e.med+'?",
             session_init_intent_filter=["Aceptar","Negar"],
             session_init_can_be_enqueued=True,
             session_init_send_intent_not_recognized=False,
             custom_data=None)
+    """
     if(e.veces<6):
         print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
         e.IncrementarVeces()     
-        mqttClient.publish_continue_session(intentMessage, '¿Te has tomado ' +e.med+'?',["Aceptar","Negar"])  
+        mqttClient.publish_continue_session(intentMessage, )  
     else:
         msg='Evento ignorado:tomar '+e.med
         scheduler1.remove_job('job2')
