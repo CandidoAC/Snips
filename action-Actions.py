@@ -122,7 +122,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
     for x in range(len(Snips.Levent)): 
-        if (Recordatorio.equals(Snips.Levent[x])):
+        if (Recordatorio==Snips.Levent[x]):
             if Snips.Levent[x].veces<=5:
                 msg="Evento no aceptado.Se te volverá ha avisar en 5 segundos"
                 hermes.publish_end_session(intentMessage.session_id, msg)
