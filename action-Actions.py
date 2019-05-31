@@ -121,7 +121,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    print("Recordatorio{\n\tNombre:"+Recordatorio.med+",\n\tfecha:"+str(Recordatorio.fecha)+",\n\tveces:"+str(e.veces)+"}")
+    print("Recordatorio{\n\tNombre:"+Recordatorio.med+",\n\tfecha:"+str(Recordatorio.fecha)+",\n\tveces:"+str(Recordatorio.veces)+"}")
     for x in range(len(Snips.Levent)):
         print("Nombre:"+Recordatorio.med+",fecha:"+str(Recordatorio.fecha)+",veces:"+str(e.veces))
         if (Recordatorio==Snips.Levent[x]):
