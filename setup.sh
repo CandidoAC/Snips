@@ -29,8 +29,7 @@ then
     # Activate the virtual environment and install requirements.
     . $VENV/bin/activate
     pip3 install -r requirements.txt
-    sudo chmod +x /var/lib/snips/skills/Snips/action-Actions.py
-    $PYTHON /var/lib/snips/skills/Snips/action-Actions.py
+
 else
     >&2 echo "Cannot find Python 3. Please install it."
 fi
