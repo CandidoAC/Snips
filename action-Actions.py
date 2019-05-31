@@ -62,7 +62,6 @@ CONFIG_INI = "config.ini"
 def global_variables():
     global Recordatorio,e,Snips
     Snips=Snips();
-    Recordatorio=Event("",datetime.now,"")
 
 def read_configuration_file(configuration_file):
     try:
@@ -124,7 +123,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    msg="Evento no aceptado.Se te volverá ha avisar en 5 segundos"
+    msg="Evento no aceptado.Se te volverá ha avisar en 20 segundos"
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
@@ -135,14 +134,13 @@ def recordatorio(intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
         say(intentMessage,'Evento:Toca '+e.med)
-        scheduler1.add_job(recordatorioTomar, 'interval', seconds=10,id='job2',args=[e,intentMessage])
+        scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
     #t = Timer(5, recordatorioTomar,['default',Recordatorio])
     #t.start()
    
 
 def recordatorioTomar(e,intentMessage):
     if(e.user==Snips.usr):
-        print("Recordatorio{\n\tNombre:"+Recordatorio.med+",\n\tfecha:"+str(Recordatorio.fecha)+",\n\tveces:"+str(e.veces)+"}")
         mqttClient.publish_start_session_action(site_id=intentMessage,
             session_init_text="¿Te has tomado " +e.med+"?",
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
@@ -157,6 +155,7 @@ def recordatorioTomar(e,intentMessage):
             mqttClient.publish_end_session(intentMessage, msg)  
         else:
             msg='Evento ignorado:tomar '+e.med
+            say(intentMessage,msg)
             scheduler1.remove_job('job2')
             mqttClient.publish_end_session(intentMessage, msg)
     else:
