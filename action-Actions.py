@@ -58,7 +58,6 @@ def minutes(i):
     
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-Recordatorio=""
 
 def read_configuration_file(configuration_file):
     try:
@@ -152,13 +151,13 @@ def recordatorio(intentMessage,e):
 
 def recordatorioTomar(e,intentMessage):
     Recordatorio=e
-    mqttClient.publish_start_session_action(site_id=intentMessage,
+    if(e.user==Snips.usr):
+        mqttClient.publish_start_session_action(site_id=intentMessage,
             session_init_text="¿Te has tomado " +e.med+"?",
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
             session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=False,
             custom_data=None)
-    if(e.user==Snips.usr):
         if(e.veces<6):
             msg=""
             print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
@@ -168,6 +167,8 @@ def recordatorioTomar(e,intentMessage):
             msg='Evento ignorado:tomar '+e.med
             scheduler1.remove_job('job2')
             mqttClient.publish_end_session(intentMessage, msg)
+    else:
+        scheduler1.remove_job('job2')
         
     #Para el recordatorio si no se ha dicho aceptar o algo así
     """i=0
@@ -202,6 +203,7 @@ if __name__ == '__main__':
         writer.writeheader()"""
     Snips=Snips();
     mqtt_opts = MqttOptions()
+    Recordatorio=Event("",datetime.now,"")
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient:
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
