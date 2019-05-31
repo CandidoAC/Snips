@@ -58,6 +58,10 @@ def minutes(i):
     
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
+def global_variables():
+    global Recordatorio,e,Snips
+    Snips=Snips();
+    Recordatorio=Event("",datetime.now,"")
 
 def read_configuration_file(configuration_file):
     try:
@@ -127,6 +131,7 @@ def action_wrapper_Negar(hermes, intentMessage,conf):
         if (Recordatorio==Snips.Levent[x]):
             if Snips.Levent[x].veces<=5:
                 msg="Evento no aceptado.Se te volverá ha avisar en 5 segundos"
+                Snips.Levent[x].IncrementarVeces()
                 hermes.publish_end_session(intentMessage.session_id, msg)
             else:
                 msg='Evento ignorado:tomar '+x.med
@@ -162,7 +167,8 @@ def recordatorioTomar(e,intentMessage):
         if(e.veces<6):
             msg=""
             print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
-            e.IncrementarVeces()     
+            Snips.Incrementar(e) 
+            e.IncrementarVeces()    
             mqttClient.publish_end_session(intentMessage, msg)  
         else:
             msg='Evento ignorado:tomar '+e.med
@@ -205,7 +211,6 @@ if __name__ == '__main__':
         writer.writeheader()"""
     Snips=Snips();
     mqtt_opts = MqttOptions()
-    Recordatorio=Event("",datetime.now,"")
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient:
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
