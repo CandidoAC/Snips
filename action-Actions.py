@@ -96,7 +96,8 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     Snips.addEvent(e)
     scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['default',e], max_instances=10000)
     hermes.publish_end_session(intentMessage.session_id, msg)
-    #Intent cambiar usuario
+
+#Intent cambiar usuario
 def subscribe_user_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper_user(hermes, intentMessage, conf)
@@ -109,7 +110,6 @@ def action_wrapper_user(hermes, intentMessage,conf):
     #Change_User(user)
     hermes.publish_end_session(intentMessage.session_id, msg)
 
-#Intent Acept-->TODO control nombre med
 def subscribe_confirmar_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper_Confirmar(hermes, intentMessage, conf)
@@ -119,28 +119,13 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     #AceptedReminder(med)
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
-
-#Intent Negar-->TODO control nombre med
 def subscribe_Negar_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    print("Recordatorio{\n\tNombre:"+Recordatorio.med+",\n\tfecha:"+str(Recordatorio.fecha)+",\n\tveces:"+str(Recordatorio.veces)+"}")
-    for x in range(len(Snips.Levent)):
-        print("Nombre:"+Recordatorio.med+",fecha:"+str(Recordatorio.fecha)+",veces:"+str(Recordatorio.veces))
-        if (Recordatorio==Snips.Levent[x]):
-            if Snips.Levent[x].veces<=5:
-                msg="Evento no aceptado.Se te volverá ha avisar en 5 segundos"
-                Snips.Levent[x].IncrementarVeces()
-                hermes.publish_end_session(intentMessage.session_id, msg)
-            else:
-                msg='Evento ignorado:tomar '+x.med
-                scheduler1.remove_job('job2')
-                hermes.publish_end_session(intentMessage.session_id, msg)
-
-    #scheduler1.remove_job('job2')
-
+    msg="Evento no aceptado.Se te volverá ha avisar en 5 segundos"
+    hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
     mqttClient.publish_start_session_notification(intentMessage, text,None)
@@ -157,7 +142,6 @@ def recordatorio(intentMessage,e):
 
 def recordatorioTomar(e,intentMessage):
     if(e.user==Snips.usr):
-        Recordatorio=e
         print("Recordatorio{\n\tNombre:"+Recordatorio.med+",\n\tfecha:"+str(Recordatorio.fecha)+",\n\tveces:"+str(e.veces)+"}")
         mqttClient.publish_start_session_action(site_id=intentMessage,
             session_init_text="¿Te has tomado " +e.med+"?",

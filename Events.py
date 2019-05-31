@@ -18,8 +18,4 @@ class Snips(object):
 	    	print("Nombre:"+Recordatorio.med+",fecha:"+str(Recordatorio.fecha)+",veces:"+str(Recordatorio.veces))
 	    	if (event==Snips.Levent[x]):
 	        	Snips.Levent[x].IncrementarVeces()
-
-    	enc=False
-    	if(not (any(x for x in self.Levent if x.__eq__(event)))):
-    		self.Levent.append(event)
         
