@@ -141,13 +141,13 @@ def recordatorio(intentMessage,e):
 
 def recordatorioTomar(e,intentMessage):
     if(e.user==Snips.usr):
-        mqttClient.publish_start_session_action(site_id=intentMessage,
+        if(e.veces<6):
+            mqttClient.publish_start_session_action(site_id=intentMessage,
             session_init_text="¿Te has tomado " +e.med+"?",
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
             session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=False,
             custom_data=None)
-        if(e.veces<6):
             msg=""
             print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
             Snips.Incrementar(e) 
