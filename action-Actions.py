@@ -123,7 +123,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
 def action_wrapper_Negar(hermes, intentMessage,conf):
     print("Recordatorio{\n\tNombre:"+Recordatorio.med+",\n\tfecha:"+str(Recordatorio.fecha)+",\n\tveces:"+str(Recordatorio.veces)+"}")
     for x in range(len(Snips.Levent)):
-        print("Nombre:"+Recordatorio.med+",fecha:"+str(Recordatorio.fecha)+",veces:"+str(e.veces))
+        print("Nombre:"+Recordatorio.med+",fecha:"+str(Recordatorio.fecha)+",veces:"+str(Recordatorio.veces))
         if (Recordatorio==Snips.Levent[x]):
             if Snips.Levent[x].veces<=5:
                 msg="Evento no aceptado.Se te volverá ha avisar en 5 segundos"
