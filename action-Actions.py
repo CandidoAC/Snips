@@ -123,7 +123,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    msg="Evento no aceptado.Se te volverá ha avisar en 20 segundos"
+    msg="Evento no aceptado.Se te volverá ha avisar en 30 segundos"
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
@@ -134,7 +134,7 @@ def recordatorio(intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
         say(intentMessage,'Evento:Toca '+e.med)
-        scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
+        scheduler1.add_job(recordatorioTomar, 'interval', seconds=30,id='job2',args=[e,intentMessage])
     #t = Timer(5, recordatorioTomar,['default',Recordatorio])
     #t.start()
    
