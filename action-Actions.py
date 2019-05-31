@@ -143,7 +143,7 @@ def say(intentMessage,text):
     
 def recordatorio(intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
-    if(e.user.equals(Snips.usr)):
+    if(e.user==Snips.usr):
         say(intentMessage,'Evento:Toca '+e.med)
         scheduler1.add_job(recordatorioTomar, 'interval', seconds=10,id='job2',args=[e,intentMessage])
     #t = Timer(5, recordatorioTomar,['default',Recordatorio])
@@ -158,7 +158,7 @@ def recordatorioTomar(e,intentMessage):
             session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=False,
             custom_data=e)
-    if(e.user.equals(Snips.usr)):
+    if(e.user==Snips.usr):
         if(e.veces<6):
             msg=""
             print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
