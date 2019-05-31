@@ -157,7 +157,7 @@ def recordatorioTomar(e,intentMessage):
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
             session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=False,
-            custom_data=e)
+            custom_data=None)
     if(e.user==Snips.usr):
         if(e.veces<6):
             msg=""
