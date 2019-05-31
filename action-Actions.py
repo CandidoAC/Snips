@@ -123,7 +123,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    msg="Evento no aceptado.Se te volverá ha avisar en 30 segundos"
+    msg="Evento no aceptado.Se te volverá ha avisar en 20 segundos"
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
@@ -134,7 +134,7 @@ def recordatorio(intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
         say(intentMessage,'Evento:Toca '+e.med)
-        scheduler1.add_job(recordatorioTomar, 'interval', seconds=30,id='job2',args=[e,intentMessage])
+        scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
     #t = Timer(5, recordatorioTomar,['default',Recordatorio])
     #t.start()
    
@@ -145,7 +145,7 @@ def recordatorioTomar(e,intentMessage):
             mqttClient.publish_start_session_action(site_id=intentMessage,
             session_init_text="¿Te has tomado " +e.med+"?",
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
-            session_init_can_be_enqueued=False,
+            session_init_can_be_enqueued=True,
             session_init_send_intent_not_recognized=False,
             custom_data=None)
             msg=""
