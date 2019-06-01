@@ -118,9 +118,9 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     msg="Evento aceptado"
     with open('prueba.csv', 'r') as f:
         for row in reversed(list(csv.reader(f))):
-            if lines[3]=="Recordatorio":
-                 AceptedReminder(lines[3],Snips.usr)
-                 break
+            if row[3]=="Recordatorio":
+                AceptedReminder(lines[3],Snips.usr)
+                break
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
 
