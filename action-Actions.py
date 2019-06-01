@@ -36,27 +36,27 @@ def global_variables():
 def add_Reminder(med,fecha,usr):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Añadir_Evento','Medicamento':med,'Fecha_Evento':fecha,'Nombre_Usuario':'','Error_output':''})
-    t()
+    idFile+=1
 
 def Change_User(user):
     date=datetime.now()
     writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Cambio_Usuario','Medicamento':'','Fecha_Evento':'','Nombre_Usuario':user,'Error_output':''})
-    t()
+    idFile+=1
 
 def Reminder(med,user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Recordatorio','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':'','Error_output':''})
-    t()
+    idFile+=1
 
 def AceptedReminder(med,user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Aceptado','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':'','Error_output':''})
-    t()
+    idFile+=1
 
 def Error(mensaje):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Error','Medicamento':'','Fecha_Evento':'','Nombre_Usuario':'','Error_output':mensaje})
-    t()
+    idFile+=1
 
 
 def read_configuration_file(configuration_file):
