@@ -92,6 +92,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     e=Event(med,date,Snips.usr)
     e.IncrementarVeces()
     Snips.addEvent(e)
+    Recordatorio=e
     add_Reminder(med,fecha,Snips.usr)
     scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['default',e], max_instances=10000)
     hermes.publish_end_session(intentMessage.session_id, msg)
@@ -115,7 +116,11 @@ def subscribe_confirmar_callback(hermes, intentMessage):
 
 def action_wrapper_Confirmar(hermes, intentMessage,conf):   
     msg="Evento aceptado"
-    AceptedReminder(med,Snips.usr)
+    with open('some_file.csv', 'r') as f:
+        for row in reversed(list(csv.reader(f))):
+            if lines[3]=="Recordatorio":
+                 AceptedReminder(lines[3],Snips.usr)
+                 break
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
 
