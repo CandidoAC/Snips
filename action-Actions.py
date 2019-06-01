@@ -116,7 +116,7 @@ def subscribe_confirmar_callback(hermes, intentMessage):
 
 def action_wrapper_Confirmar(hermes, intentMessage,conf):   
     msg="Evento aceptado"
-    with open('some_file.csv', 'r') as f:
+    with open('prueba.csv', 'r') as f:
         for row in reversed(list(csv.reader(f))):
             if lines[3]=="Recordatorio":
                  AceptedReminder(lines[3],Snips.usr)
