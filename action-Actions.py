@@ -165,6 +165,7 @@ if __name__ == '__main__':
     scheduler1 = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
     scheduler1.start()
     mqtt_opts = MqttOptions()
+    idFile=0
     global_variables()
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a') as csvfile:
         fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
