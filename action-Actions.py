@@ -24,44 +24,40 @@ def minutes(i):
         }
     return switcher.get(i," y " + str(i))
 
-    """
-    def t():
-        global idFile
-        idFile += 1
-
-
-    def add_Reminder(med,fecha):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Añadir_Evento','Medicamento':med,'Fecha_Evento':fecha,'Nombre_Usuario':'','Error_output':''})
-        t()
-
-    def Change_User(user):
-        date=datetime.now()
-        writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Cambio_Usuario','Medicamento':'','Fecha_Evento':'','Nombre_Usuario':user,'Error_output':''})
-        t()
-
-    def Reminder(med):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Recordatorio','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':'','Error_output':''})
-        t()
-
-    def AceptedReminder(med):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Aceptado','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':'','Error_output':''})
-        t()
-
-    def Error(mensaje):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Error','Medicamento':'','Fecha_Evento':'','Nombre_Usuario':'','Error_output':mensaje})
-        t()
-        """
- 
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
+
 def global_variables():
-    global Recordatorio,e,Snips
+    global Recordatorio,e,Snips,idFile
+    idFile=0
     Snips=Snips();
+
+def add_Reminder(med,fecha,usr):
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Añadir_Evento','Medicamento':med,'Fecha_Evento':fecha,'Nombre_Usuario':'','Error_output':''})
+    t()
+
+def Change_User(user):
+    date=datetime.now()
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Cambio_Usuario','Medicamento':'','Fecha_Evento':'','Nombre_Usuario':user,'Error_output':''})
+    t()
+
+def Reminder(med,user):
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Recordatorio','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':'','Error_output':''})
+    t()
+
+def AceptedReminder(med,user):
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Aceptado','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':'','Error_output':''})
+    t()
+
+def Error(mensaje):
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Error','Medicamento':'','Fecha_Evento':'','Nombre_Usuario':'','Error_output':mensaje})
+    t()
+
 
 def read_configuration_file(configuration_file):
     try:
@@ -93,6 +89,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     e=Event(med,date,Snips.usr)
     e.IncrementarVeces()
     Snips.addEvent(e)
+    add_Reminder(med,fecha,Snips.usr)
     scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['default',e], max_instances=10000)
     hermes.publish_end_session(intentMessage.session_id, msg)
 
@@ -106,7 +103,7 @@ def action_wrapper_user(hermes, intentMessage,conf):
        
     msg="Cambio de usuario a "+user
     Snips.usr=user
-    #Change_User(user)
+    Change_User(user)
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 def subscribe_confirmar_callback(hermes, intentMessage):
@@ -115,9 +112,10 @@ def subscribe_confirmar_callback(hermes, intentMessage):
 
 def action_wrapper_Confirmar(hermes, intentMessage,conf):   
     msg="Evento aceptado"
-    #AceptedReminder(med)
+    AceptedReminder(med,Snips.usr)
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
+
 def subscribe_Negar_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper_Negar(hermes, intentMessage, conf)
@@ -135,17 +133,16 @@ def recordatorio(intentMessage,e):
     if(e.user==Snips.usr):
         say(intentMessage,'Evento:Toca '+e.med)
         scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
-    #t = Timer(5, recordatorioTomar,['default',Recordatorio])
-    #t.start()
    
 
 def recordatorioTomar(e,intentMessage):
     if(e.user==Snips.usr):
         if(e.veces<6):
+            Reminder(e.med,e.user)
             mqttClient.publish_start_session_action(site_id=intentMessage,
             session_init_text="¿Te has tomado " +e.med+"?",
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
-            session_init_can_be_enqueued=True,
+            session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=False,
             custom_data=None)
             msg=""
@@ -161,41 +158,18 @@ def recordatorioTomar(e,intentMessage):
     else:
         print("Usuario actual distinto al del evento")
         scheduler1.remove_job('job2')
-        
-    #Para el recordatorio si no se ha dicho aceptar o algo así
-    """i=0
-    scheduler1.add_job(Acept, 'interval', minutes=5,id='job2',args=['med'])
-    while (scheduler1.get_job('job2')!=None):
-        #Reminder(med)
-        time.sleep(360)
-        print("Vez "+str(i+1))
-        i+=1
-        if(i==4):
-         scheduler1.remove_job('job2')
 
-        if scheduler1.get_job('job2')!=None:
-            print("Evento realizado")
-        else:
-            print("Evento ignorado")       
-
-    def Acept(med):
-        print("Tomar "+med)
-
-    """
 if __name__ == '__main__':
-    """idFile=0"""
     scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
     scheduler.start()
     scheduler1 = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
     scheduler1.start()
-    """
-     with open('prueba.csv', 'a') as csvfile:
-        fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()"""
     mqtt_opts = MqttOptions()
     global_variables()
-    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient:
+    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a') as csvfile:
+        fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
