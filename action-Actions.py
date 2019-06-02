@@ -179,7 +179,7 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
-    filePath='/home/pi/Python_kode/prueba.csv'
+    filePath='/home/pi/prueba.csv'
     if os.path.exists(filePath):
         os.remove(filePath)
     else:
