@@ -4,6 +4,7 @@ import time
 import io
 import configparser
 import csv
+import os
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from datetime import timedelta
@@ -178,7 +179,11 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
-    with open('prueba.csv', 'w') as csvfile:
+    filePath='/home/pi/Python_kode/prueba.csv'
+    if os.path.exists(filePath):
+        os.remove(filePath)
+    else:
+        print("Can not delete the file as it doesn't exists")
 
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a') as csvfile:
         fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
