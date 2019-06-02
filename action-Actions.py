@@ -146,6 +146,7 @@ def recordatorio(intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
         say(intentMessage,'Evento:Toca '+e.med)
+        Reminder(e.med,e.user)
         scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
    
 
