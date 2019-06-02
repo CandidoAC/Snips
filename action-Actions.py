@@ -116,14 +116,17 @@ def subscribe_confirmar_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper_Confirmar(hermes, intentMessage, conf)
 
-def action_wrapper_Confirmar(hermes, intentMessage,conf):   
+def action_wrapper_Confirmar(hermes, intentMessage,conf):
+    global Snips   
     msg="Evento aceptado"
     with open('prueba.csv', 'r') as f:
         for row in reversed(list(csv.reader(f))):
             if row[2]=="Recordatorio":
                 rec=row[3]
+                AceptedReminder(rec,Snips.usr)
+                print("Aceptando "+rec)
                 break
-    AceptedReminder(rec,Snips.usr)
+
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
 
