@@ -120,9 +120,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
         for row in reversed(list(csv.reader(f))):
             if row[2]=="Recordatorio":
                 rec=row[3]
-                print(rec)
                 break
-    print(rec)
     AceptedReminder(rec,Snips.usr)
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
@@ -178,6 +176,8 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
+    with open('prueba.csv', 'w') as csvfile:
+
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a') as csvfile:
         fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
