@@ -78,6 +78,7 @@ def subscribe_Anadir_callback(hermes, intentMessage):
     action_wrapper_Anadir(hermes, intentMessage, conf)
 
 def action_wrapper_Anadir(hermes, intentMessage,conf):
+    global Snips
     session=intentMessage.session_id
     fecha = intentMessage.slots.Fecha.first().value
     fecha=fecha [ :fecha.index('+')-1 ]
@@ -103,8 +104,8 @@ def subscribe_user_callback(hermes, intentMessage):
     action_wrapper_user(hermes, intentMessage, conf)
 
 def action_wrapper_user(hermes, intentMessage,conf):
+    global Snips
     user = intentMessage.slots.user.first().value
-       
     msg="Cambio de usuario a "+user
     Snips.usr=user
     Change_User(user)
@@ -145,6 +146,7 @@ def recordatorio(intentMessage,e):
    
 
 def recordatorioTomar(e,intentMessage):
+    global Snips
     if(e.user==Snips.usr):
         if(e.veces<6):
             Reminder(e.med,e.user)
