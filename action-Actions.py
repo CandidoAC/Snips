@@ -119,13 +119,14 @@ def subscribe_confirmar_callback(hermes, intentMessage):
 def action_wrapper_Confirmar(hermes, intentMessage,conf):
     global Snips   
     msg="Evento aceptado"
-    with open('prueba.csv', 'r') as f:
-        for row in reversed(list(csv.reader(f))):
-            if row[2]=="Recordatorio":
-                rec=row[3]
-                AceptedReminder(rec,Snips.usr)
-                print("Aceptando "+rec)
-                break
+    print("Abriendo prueba.csv")
+    for row in reversed(list(csvfile.reader(f))):
+        print (str(row))
+        if row[2]=="Recordatorio":
+            rec=row[3]
+            AceptedReminder(rec,Snips.usr)
+            print("Aceptando "+rec)
+            break
 
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
@@ -189,7 +190,7 @@ if __name__ == '__main__':
     else:
         print("Can not delete the file as it doesn't exists")
 
-    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a') as csvfile:
+    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a+') as csvfile:
         fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
