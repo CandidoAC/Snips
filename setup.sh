@@ -28,6 +28,7 @@ then
 
     # Activate the virtual environment and install requirements.
     . $VENV/bin/activate
+    pip3 install apscheduler
     pip3 install -r requirements.txt
     chmod /var/lib/snips/skills/Snips/action-Actions.py
     $PYTHON /var/lib/snips/skills/Snips/action-Actions.py
