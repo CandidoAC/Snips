@@ -120,7 +120,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     global Snips   
     msg="Evento aceptado"
     print("Abriendo prueba.csv")
-    for row in reversed(list(csvfile.reader(f))):
+    for row in reversed(list(reader)):
         print (str(row))
         if row[2]=="Recordatorio":
             rec=row[3]
@@ -194,6 +194,7 @@ if __name__ == '__main__':
         fieldnames = ['id', 'Fecha','Tipo','Medicamento','Fecha_Evento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
+        reader = csv.reader(csvfile)
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
