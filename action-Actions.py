@@ -119,15 +119,16 @@ def subscribe_confirmar_callback(hermes, intentMessage):
 def action_wrapper_Confirmar(hermes, intentMessage,conf):
     global Snips   
     msg="Evento aceptado"
-    reader = csv.DictReader(csvfile)
-    print("Abriendo prueba.csv")
-    for row in reversed(list(reader)):
-        print (row)
-        if row[2]=="Recordatorio":
-            rec=row[3]
-            AceptedReminder(rec,Snips.usr)
-            print("Aceptando "+rec)
-            break
+    with open('prueba.csv', 'rb') as csvfile:
+        reader = csv.DictWriter(csvfile, newline='')
+        print("Abriendo prueba.csv")
+        for row in reversed(list(reader)):
+            print (row)
+            if row[2]=="Recordatorio":
+                rec=row[3]
+                AceptedReminder(rec,Snips.usr)
+                print("Aceptando "+rec)
+                break
 
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
@@ -159,9 +160,9 @@ def recordatorioTomar(e,intentMessage):
             Reminder(e.med,e.user)
             mqttClient.publish_start_session_action(site_id=intentMessage,
             session_init_text="¿Te has tomado " +e.med+"?",
-            session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
+            session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar","hermes/nlu/intentNotRecognized"],
             session_init_can_be_enqueued=False,
-            session_init_send_intent_not_recognized=False,
+            session_init_send_intent_not_recognized=True,
             custom_data=None)
             msg=""
             print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
