@@ -2,4 +2,4 @@
 hermes-python>=0.1.29
 
 # More dependency goes here.. 
-apscheduler
+APScheduler
