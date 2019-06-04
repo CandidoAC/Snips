@@ -119,14 +119,14 @@ def subscribe_confirmar_callback(hermes, intentMessage):
 def action_wrapper_Confirmar(hermes, intentMessage,conf):
     global Snips   
     msg="Evento aceptado"
-    with open('prueba.csv', 'rb') as csvfile:
-        reader = csv.DictWriter(csvfile, newline='')
+    with open('/home/pi/prueba.csv', 'r') as csvfile:
+        reader = csv.reader(csvfile)
         print("Abriendo prueba.csv")
         for row in reversed(list(reader)):
             print (row)
             if row[2]=="Recordatorio":
                 rec=row[3]
-                AceptedReminder(rec,Snips.usr)
+                ##AceptedReminder(rec,Snips.usr)
                 print("Aceptando "+rec)
                 break
 
