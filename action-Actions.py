@@ -81,7 +81,7 @@ def subscribe_Anadir_callback(hermes, intentMessage):
 def action_wrapper_Anadir(hermes, intentMessage,conf):
     global Snips
     print(str(intentMessage.slots.Repeticion))
-    if(intentMessage.slots.Repeticion is None):
+    if(intentMessage.slots.Repeticion):
         session=intentMessage.session_id
         fecha = intentMessage.slots.Fecha.first().value
         fecha=fecha [ :fecha.index('+')-1 ]
@@ -106,12 +106,14 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         fecha=fecha [ :fecha.index('+')-1 ]
         date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
         med = intentMessage.slots.Medicamento.first().value
-        if(intentMessage.slots.cantidad is None):
+        if(intentMessage.slots.cantidad):
             veces=1
         else:
             veces= intentMessage.slots.cantidad.first().value
 
+        print(str(veces))
         frecuencia=intentMessage.slots.Repeticion.first().value
+        print(str(frecuencia))
         if(frecuencia=='diariamente'):
             #scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr, second='*/2',hour=17,minute=24, replace_existing=True, args=['job executed!!!!']) run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias'
