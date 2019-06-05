@@ -81,7 +81,7 @@ def subscribe_Anadir_callback(hermes, intentMessage):
 def action_wrapper_Anadir(hermes, intentMessage,conf):
     global Snips
     print(str(intentMessage.slots.Repeticion))
-    if(intentMessage.slots.Repeticion):
+    if(not intentMessage.slots.Repeticion):
         session=intentMessage.session_id
         fecha = intentMessage.slots.Fecha.first().value
         fecha=fecha [ :fecha.index('+')-1 ]
