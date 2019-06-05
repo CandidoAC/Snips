@@ -116,27 +116,27 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         print(str(frecuencia))
         if(frecuencia=='diariamente'):
             #scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr, second='*/2',hour=17,minute=24, replace_existing=True, args=['job executed!!!!']) run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias'
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
         elif(frecuencia=='dia'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' dias'
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' dias empezando '+str(fecha)
         elif(frecuencia=='mes'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' meses'
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' meses empezando '+str(fecha)
         elif(frecuencia=='semana'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' semana'
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' semana empezando '+str(fecha)
             
-        print("Mesaje a decir: "+msg)
-            #add_Reminder(med,fecha)
-            """now=datetime.now()
-            if((date - now).total_seconds()>0):
-                t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
-                t.start()"""
-            """e=Event(med,date,Snips.usr)
-            e.IncrementarVeces()
-            Snips.addEvent(e)
-            Recordatorio=e
-            add_Reminder(med,fecha,Snips.usr)
-            scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])"""
-            hermes.publish_end_session(intentMessage.session_id, msg)
+        print("Mensaje a decir: "+msg)
+        #add_Reminder(med,fecha)
+        """now=datetime.now()
+        if((date - now).total_seconds()>0):
+            t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
+            t.start()"""
+        """e=Event(med,date,Snips.usr)
+        e.IncrementarVeces()
+        Snips.addEvent(e)
+        Recordatorio=e
+        add_Reminder(med,fecha,Snips.usr)
+        scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])"""
+        hermes.publish_end_session(intentMessage.session_id, msg)
 
 #Intent cambiar usuario
 def subscribe_user_callback(hermes, intentMessage):
