@@ -39,7 +39,7 @@ def global_variables():
 
 def add_Reminder(med,fecha,usr):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Añadir_Evento','Medicamento':med,'Fecha_Evento':fecha,'Nombre_Usuario':'','Error_output':''})
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Añadir_Evento','Medicamento':med,'Fecha_Evento':fecha,'Nombre_Usuario':usr,'Error_output':''})
     t()
 
 def Change_User(user):
@@ -49,12 +49,12 @@ def Change_User(user):
 
 def Reminder(med,user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Recordatorio','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':'','Error_output':''})
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Recordatorio','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':usr,'Error_output':''})
     t()
 
 def AceptedReminder(med,user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Aceptado','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':'','Error_output':''})
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Aceptado','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':usr,'Error_output':''})
     t()
 
 def Error(mensaje):
@@ -85,7 +85,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     fecha=fecha [ :fecha.index('+')-1 ]
     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
     med = intentMessage.slots.Medicamento.first().value
-    msg="Añadiendo recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
+    msg=Snips.usr+" está añadiendo un recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
     #add_Reminder(med,fecha)
     """now=datetime.now()
     if((date - now).total_seconds()>0):
@@ -118,12 +118,13 @@ def subscribe_confirmar_callback(hermes, intentMessage):
 
 def action_wrapper_Confirmar(hermes, intentMessage,conf):
     global Snips   
-    msg="Evento aceptado"
-    with open('/home/pi/prueba.csv', 'r') as csvfile:
+    msg="Evento aceptado por "+e.user
+
+    with open('prueba.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
-        print("Abriendo prueba.csv")
+        print("Abriendo prueba.csv"+str(csvfile))
         for row in reversed(list(reader)):
-            print (row)
+            print (row[0])
             if row[2]=="Recordatorio":
                 rec=row[3]
                 ##AceptedReminder(rec,Snips.usr)
@@ -138,7 +139,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    msg="Evento no aceptado.Se te volverá ha avisar en 20 segundos"
+    msg="Evento no aceptado por "+e.user+",se te volverá ha avisar en 20 segundos"
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
@@ -148,7 +149,7 @@ def say(intentMessage,text):
 def recordatorio(intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
-        say(intentMessage,'Evento:Toca '+e.med)
+        say(intentMessage,e.user+'te toca tomarte '+e.med)
         Reminder(e.med,e.user)
         scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
    
@@ -159,18 +160,18 @@ def recordatorioTomar(e,intentMessage):
         if(e.veces<6):
             Reminder(e.med,e.user)
             mqttClient.publish_start_session_action(site_id=intentMessage,
-            session_init_text="¿Te has tomado " +e.med+"?",
+            session_init_text="¿"+e.user+",te has tomado " +e.med+"?",
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar","hermes/nlu/intentNotRecognized"],
             session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=True,
             custom_data=None)
             msg=""
-            print('¿Te has tomado ' +e.med+'?:Vez '+str(e.veces))
+            print('¿'+e.user+',Te has tomado ' +e.med+'?:Vez '+str(e.veces))
             Snips.Incrementar(e) 
             e.IncrementarVeces()    
             mqttClient.publish_end_session(intentMessage, msg)  
         else:
-            msg='Evento ignorado:tomar '+e.med
+            msg=e.user+'ha ignorado el evento tomar '+e.med
             say(intentMessage,msg)
             scheduler1.remove_job('job2')
             mqttClient.publish_end_session(intentMessage, msg)
