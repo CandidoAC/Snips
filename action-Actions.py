@@ -123,6 +123,8 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' meses'
         elif(frecuencia=='semana'):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' semana'
+            
+        print("Mesaje a decir: "+msg)
             #add_Reminder(med,fecha)
             """now=datetime.now()
             if((date - now).total_seconds()>0):
