@@ -80,6 +80,7 @@ def subscribe_Anadir_callback(hermes, intentMessage):
 
 def action_wrapper_Anadir(hermes, intentMessage,conf):
     global Snips
+    print(str(intentMessage.slots.Repeticion))
     if(intentMessage.slots.Repeticion==None):
         session=intentMessage.session_id
         fecha = intentMessage.slots.Fecha.first().value
@@ -101,7 +102,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         hermes.publish_end_session(intentMessage.session_id, msg)
     else:
         session=intentMessage.session_id
-        fecha = intentMessage.slots.Repeticion.first().value
+        fecha = intentMessage.slots.fecha.first().value
         fecha=fecha [ :fecha.index('+')-1 ]
         date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
         med = intentMessage.slots.Medicamento.first().value
