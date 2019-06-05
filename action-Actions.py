@@ -49,12 +49,12 @@ def Change_User(user):
 
 def Reminder(med,user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Recordatorio','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':usr,'Error_output':''})
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Recordatorio','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':user,'Error_output':''})
     t()
 
 def AceptedReminder(med,user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Aceptado','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':usr,'Error_output':''})
+    writer.writerow({'id': idFile,  'Fecha':date,'Tipo':'Aceptado','Medicamento':med,'Fecha_Evento':'','Nombre_Usuario':user,'Error_output':''})
     t()
 
 def Error(mensaje):
@@ -118,8 +118,8 @@ def subscribe_confirmar_callback(hermes, intentMessage):
 
 def action_wrapper_Confirmar(hermes, intentMessage,conf):
     global Snips   
-    msg="Evento aceptado por "+e.user
-
+    #msg="Evento aceptado por "+e.user
+    msg="Evento aceptado"
     with open('prueba.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         print("Abriendo prueba.csv"+str(csvfile))
@@ -149,7 +149,7 @@ def say(intentMessage,text):
 def recordatorio(intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
-        say(intentMessage,e.user+'te toca tomarte '+e.med)
+        say(intentMessage,e.user+' te toca tomarte '+e.med)
         Reminder(e.med,e.user)
         scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
    
