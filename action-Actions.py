@@ -80,24 +80,58 @@ def subscribe_Anadir_callback(hermes, intentMessage):
 
 def action_wrapper_Anadir(hermes, intentMessage,conf):
     global Snips
-    session=intentMessage.session_id
-    fecha = intentMessage.slots.Fecha.first().value
-    fecha=fecha [ :fecha.index('+')-1 ]
-    date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
-    med = intentMessage.slots.Medicamento.first().value
-    msg=Snips.usr+" está añadiendo un recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
-    #add_Reminder(med,fecha)
-    """now=datetime.now()
-    if((date - now).total_seconds()>0):
-        t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
-        t.start()"""
-    e=Event(med,date,Snips.usr)
-    e.IncrementarVeces()
-    Snips.addEvent(e)
-    Recordatorio=e
-    add_Reminder(med,fecha,Snips.usr)
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])
-    hermes.publish_end_session(intentMessage.session_id, msg)
+    if(intentMessage.slots.Repeticion==None):
+        session=intentMessage.session_id
+        fecha = intentMessage.slots.Fecha.first().value
+        fecha=fecha [ :fecha.index('+')-1 ]
+        date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+        med = intentMessage.slots.Medicamento.first().value
+        msg=Snips.usr+" está añadiendo un recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
+        #add_Reminder(med,fecha)
+        """now=datetime.now()
+        if((date - now).total_seconds()>0):
+            t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
+            t.start()"""
+        e=Event(med,date,Snips.usr)
+        e.IncrementarVeces()
+        Snips.addEvent(e)
+        Recordatorio=e
+        add_Reminder(med,fecha,Snips.usr)
+        scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])
+        hermes.publish_end_session(intentMessage.session_id, msg)
+    else:
+        session=intentMessage.session_id
+        fecha = intentMessage.slots.Repeticion.first().value
+        fecha=fecha [ :fecha.index('+')-1 ]
+        date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+        med = intentMessage.slots.Medicamento.first().value
+        if(intentMessage.slots.cantidad==None):
+            veces=1
+        else:
+            veces= intentMessage.slots.cantidad.first().value
+
+        frecuencia=intentMessage.slots.Repeticion.first().value
+        if(frecuencia=='diariamente'):
+            #scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr, second='*/2',hour=17,minute=24, replace_existing=True, args=['job executed!!!!']) run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias'
+        elif(frecuencia=='dia'):
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' dias'
+        elif(frecuencia=='mes'):
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' meses'
+        elif(frecuencia=='semana'):
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' semana'
+            #add_Reminder(med,fecha)
+            """now=datetime.now()
+            if((date - now).total_seconds()>0):
+                t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
+                t.start()"""
+            """e=Event(med,date,Snips.usr)
+            e.IncrementarVeces()
+            Snips.addEvent(e)
+            Recordatorio=e
+            add_Reminder(med,fecha,Snips.usr)
+            scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])"""
+            hermes.publish_end_session(intentMessage.session_id, msg)
 
 #Intent cambiar usuario
 def subscribe_user_callback(hermes, intentMessage):
