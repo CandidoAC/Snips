@@ -96,7 +96,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     Snips.addEvent(e)
     Recordatorio=e
     add_Reminder(med,fecha,Snips.usr)
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.usr,args=['default',e])
+    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 #Intent cambiar usuario
