@@ -96,7 +96,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     Snips.addEvent(e)
     Recordatorio=e
     add_Reminder(med,fecha,Snips.usr)
-    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha,args=['default',e], max_instances=10000)
+    scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.usr,args=['default',e])
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 #Intent cambiar usuario
@@ -139,7 +139,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    msg="Evento no aceptado por "+e.user+",se te volverá ha avisar en 20 segundos"
+    msg="Evento no aceptado por "+e.user+" se te volverá ha avisar en 20 segundos"
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
@@ -160,13 +160,13 @@ def recordatorioTomar(e,intentMessage):
         if(e.veces<6):
             Reminder(e.med,e.user)
             mqttClient.publish_start_session_action(site_id=intentMessage,
-            session_init_text="¿"+e.user+",te has tomado " +e.med+"?",
+            session_init_text=e.user+'¿ te has tomado " +e.med+"?',
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar","hermes/nlu/intentNotRecognized"],
             session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=True,
             custom_data=None)
             msg=""
-            print('¿'+e.user+',Te has tomado ' +e.med+'?:Vez '+str(e.veces))
+            print(e.user+'¿te has tomado ' +e.med+'?:Vez '+str(e.veces))
             Snips.Incrementar(e) 
             e.IncrementarVeces()    
             mqttClient.publish_end_session(intentMessage, msg)  
