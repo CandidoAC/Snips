@@ -122,7 +122,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         if(not intentMessage.slots.cantidad):
             veces=1
         else:
-            veces= intentMessage.slots.cantidad.first().value
+            veces= int(intentMessage.slots.cantidad.first().value)
 
         print(str(veces))
         frecuencia=intentMessage.slots.Repeticion.first().value
@@ -147,16 +147,11 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             e=Event(med,date,Snips.usr,False,'')
             e.IncrementarVeces()
             scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
-        elif(frecuencia=='minuto'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' minutos empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,False,'')
-            e.IncrementarVeces()
-            scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=date.hour,minute=str(date.minute)+'/'+str(veces), replace_existing=True, args=['default',e]) 
         elif(frecuencia=='hora'):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
             e=Event(med,date,Snips.usr,False,'')
             e.IncrementarVeces()
-            scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=date.hour+'/veces',minute=date.minute+'/'+str(veces), replace_existing=True, args=['default',e]) 
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=date.hour+'/veces',minute=date.minute, replace_existing=True, args=['default',e]) 
         else:
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
             e=Event(med,date,Snips.usr,False,'')
