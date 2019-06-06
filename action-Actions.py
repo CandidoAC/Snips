@@ -130,19 +130,19 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
             scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,moth=date.moth,day=date.day+'/1',hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e])
         elif(frecuencia=='dia'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' dias empezando '+str(fecha)
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
             scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,moth=date.moth,day=date.day+'/veces',hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e])             
         elif(frecuencia=='mes'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' meses empezando '+str(fecha)
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
             scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,moth=date.moth+'/veces',day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
         elif(frecuencia=='semana'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' semana empezando '+str(fecha)
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' semana empezando '+str(fecha)
             scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,moth=date.moth,day=date.day+'/(7*veces)',hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
         elif(frecuencia=='minutos'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' minutos empezando '+str(fecha)
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' minutos empezando '+str(fecha)
             scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,moth=date.moth,day=date.day,hour=date.hour,minute=date.minute+'/veces', replace_existing=True, args=['default',e]) 
         elif(frecuencia=='hora'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+veces+' horas empezando '+str(fecha)
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
             scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,moth=date.moth,day=date.day,hour=date.hour+'/veces',minute=date.minute/veces, replace_existing=True, args=['default',e]) 
         else:
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
