@@ -116,6 +116,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         session=intentMessage.session_id
         fecha = intentMessage.slots.Fecha.first().value
         fecha=fecha [ :fecha.index('+')-1 ]
+        print(fecha)
         date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
         med = intentMessage.slots.Medicamento.first().value
         if(not intentMessage.slots.cantidad):
