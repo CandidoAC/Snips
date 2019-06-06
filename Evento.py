@@ -1,10 +1,12 @@
 class Event(object):
     
-    def __init__(self, med, fecha, user):
+    def __init__(self, med, fecha, user,rep,when):
         self.med = med
         self.fecha = fecha
         self.veces=0
         self.user=user
+        self.rep=rep
+        self.when=when
 
     def setNextDate(self,date):
         self.fecha=date
