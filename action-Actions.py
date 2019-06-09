@@ -64,7 +64,10 @@ def Change_User(user):
     t()
 
 def Reminder(e):
-    global logging
+    LOG = 60
+    logging.addLevelName(LOG, "LOG")
+    log="prueba.csv"
+    logging.basicConfig(filename=log,filemode='a',level=LOG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
     if(e.rep):
         logging.log(60,idFile+',Recordatorio,'+e.med+',Repetitivo,'+e.when+','+e.user)
     else:
@@ -201,7 +204,7 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
-    msg="Evento no aceptado por "+e.user+" se te volverá ha avisar en 20 segundos"
+    msg="Evento no aceptado por "+Snips.usr+" se te volverá ha avisar en 20 segundos"
     NotAceptedReminder()
     hermes.publish_end_session(intentMessage.session_id, msg)
 
@@ -213,8 +216,8 @@ def recordatorio(intentMessage,e):
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
         say(intentMessage,e.user+' te toca tomarte '+e.med)
-        Reminder(e)
         scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
+        Reminder(e)
    
 
 def recordatorioTomar(e,intentMessage):
