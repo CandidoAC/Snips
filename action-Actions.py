@@ -50,33 +50,39 @@ def global_variables():
     Snips=Snips();
 
 def add_Reminder(e):
+    global logging
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if(e.rep):
         logging.log(60,str(idFile)+',Creación evento,'+e.med+','+e.user+',Repetitivo,'+e.when)
     else:
-        logging.log(60,str(idFile)+',Creación evento,'+e.med+','+e.fecha+','+e.user+',No repetitivo')
+        logging.log(60,str(idFile)+',Creación evento,'+e.med+','+str(e.fecha)+','+e.user+',No repetitivo')
     t()
 
 def Change_User(user):
+    global logging
     logging.log(60,idFile,'Cambio usuario,'+user)
     t()
 
 def Reminder(e):
+    global logging
     if(e.rep):
         logging.log(60,idFile+',Recordatorio,'+e.med+',Repetitivo,'+e.when+','+e.user)
     else:
-        logging.log(60,idFile+',Recordatorio,'+e.med+',No repetitivo,'+e.fecha+','+e.user)
+        logging.log(60,idFile+',Recordatorio,'+e.med+',No repetitivo,'+str(e.fecha)+','+e.user)
     t()
 
 def AceptedReminder():
+    global logging
     logging.log(60,idFile,'\tEvento aceptado,'+Snips.usr)
     t()
 
 def NotAceptedReminder():
+    global logging
     logging.log(60,idFile,'\tEvento no aceptado,'+Snips.usr)
     t()
 
 def Error(mensaje):
+    global logging
     logging.log(60,idFile,'Error:'+mensaje)
     t()
 
