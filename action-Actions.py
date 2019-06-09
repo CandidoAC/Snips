@@ -52,32 +52,32 @@ def global_variables():
 def add_Reminder(e):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if(e.rep):
-        logging.debug(idFile,'Creación evento',e.med,e.user,'Repetitivo',e.when)
+        logging.info(idFile,'Creación evento',e.med,e.user,'Repetitivo',e.when)
     else:
-        logging.debug(idFile,'Creación evento',e.med,e.fecha,e.user,'No repetitivo')
+        logging.info(idFile,'Creación evento',e.med,e.fecha,e.user,'No repetitivo')
     t()
 
 def Change_User(user):
-    logging.debug(idFile,'Cambio usuario',e.user)
+    logging.info(idFile,'Cambio usuario',e.user)
     t()
 
 def Reminder(e):
     if(e.rep):
-        logging.debug(idFile,'Recordatorio',e.med,'Repetitivo',e.when,e.user)
+        logging.info(idFile,'Recordatorio',e.med,'Repetitivo',e.when,e.user)
     else:
-        logging.debug(idFile,'Creación evento',e.med,'No repetitivo',e.fecha,e.user)
+        logging.info(idFile,'Creación evento',e.med,'No repetitivo',e.fecha,e.user)
     t()
 
 def AceptedReminder():
-    logging.debug(idFile,'\tEvento aceptado',Snips.usr)
+    logging.info(idFile,'\tEvento aceptado',Snips.usr)
     t()
 
 def NotAceptedReminder():
-    logging.debug(idFile,'\tEvento no aceptado',Snips.usr)
+    logging.info(idFile,'\tEvento no aceptado',Snips.usr)
     t()
 
 def Error(mensaje):
-    logging.debug(idFile,'Error',mensaje)
+    logging.info(idFile,'Error',mensaje)
     t()
 
 
@@ -245,8 +245,8 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
-    log=r"C:\Users\usuario\Desktop\prueba.csv"
-    logging.basicConfig(filename=log,filemode='w',level=logging.DEBUG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+    log="prueba.csv"
+    logging.basicConfig(filename=log,filemode='w',level=logging.INFO,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient:
         h\
