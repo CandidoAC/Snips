@@ -247,7 +247,7 @@ if __name__ == '__main__':
     LOG = 60
     logging.addLevelName(LOG, "LOG")
     log="prueba.csv"
-    logging.basicConfig(filename=log,filemode='w',level=logging.LOG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+    logging.basicConfig(filename=log,filemode='w',level=lOG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
 
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient:
         h\
