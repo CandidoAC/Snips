@@ -64,10 +64,7 @@ def Change_User(user):
     t()
 
 def Reminder(e):
-    LOG = 60
-    logging.addLevelName(LOG, "LOG")
-    log="prueba.csv"
-    logging.basicConfig(filename=log,filemode='a',level=LOG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+    global logging
     if(e.rep):
         logging.log(60,idFile+',Recordatorio,'+e.med+',Repetitivo,'+e.when+','+e.user)
     else:
