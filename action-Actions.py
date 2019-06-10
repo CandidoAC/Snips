@@ -4,7 +4,7 @@ import time
 import io
 import configparser
 import os
-import logging
+import csv
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime
 from datetime import timedelta
@@ -50,40 +50,35 @@ def global_variables():
     Snips=Snips();
 
 def add_Reminder(e):
-    global logging
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if(e.rep):
-        logging.log(60,str(idFile)+',Creación evento,'+e.med+','+e.user+',Repetitivo,'+e.when)
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
     else:
-        logging.log(60,str(idFile)+',Creación evento,'+e.med+','+str(e.fecha)+','+e.user+',No repetitivo')
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
     t()
 
 def Change_User(user):
-    global logging
-    logging.log(60,idFile,'Cambio usuario,'+user)
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
     t()
 
 def Reminder(e):
-    global logging
     if(e.rep):
-        logging.log(60,idFile+',Recordatorio,'+e.med+',Repetitivo,'+e.when+','+e.user)
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
     else:
-        logging.log(60,idFile+',Recordatorio,'+e.med+',No repetitivo,'+str(e.fecha)+','+e.user)
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
     t()
 
 def AceptedReminder():
-    global logging
-    logging.log(60,idFile,'\tEvento aceptado,'+Snips.usr)
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
     t()
 
 def NotAceptedReminder():
-    global logging
-    logging.log(60,idFile,'\tEvento no aceptado,'+Snips.usr)
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
     t()
 
 def Error(mensaje):
-    global logging
-    logging.log(60,idFile,'Error:'+mensaje)
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
     t()
 
 
@@ -250,12 +245,16 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
-    LOG = 60
-    logging.addLevelName(LOG, "LOG")
-    log="prueba.csv"
-    logging.basicConfig(filename=log,filemode='w',level=LOG,format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %H:%M:%S')
+    filePath='/home/pi/prueba.csv'
+    if os.path.exists(filePath):
+        os.remove(filePath)
+    else:
+        print("Can not delete the file as it doesn't exists")
 
-    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient:
+    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a+') as csvfile:
+        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Evento','Medicamento','Nombre_Usuario','Error_output']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
