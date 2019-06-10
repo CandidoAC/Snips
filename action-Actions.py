@@ -255,7 +255,7 @@ if __name__ == '__main__':
         print("Can not delete the file as it doesn't exists")
 
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a+') as csvfile:
-        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Evento','Medicamento','Nombre_Usuario','Error_output']
+        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         h\
