@@ -63,6 +63,7 @@ def Change_User(user):
     t()
 
 def Reminder(e):
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if(e.rep):
         writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
     else:
@@ -70,6 +71,7 @@ def Reminder(e):
     t()
 
 def AceptedReminder():
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
     t()
 
@@ -78,6 +80,7 @@ def NotAceptedReminder():
     t()
 
 def Error(mensaje):
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
     t()
 
