@@ -200,6 +200,7 @@ def subscribe_user_callback(hermes, intentMessage):
 
 def action_wrapper_user(hermes, intentMessage,conf):
     global Snips
+    print(str(Snips.usr))
     user = intentMessage.slots.user.first().value
     if(Snips.existUser):
         msg="Cambio de usuario a "+user
@@ -215,6 +216,7 @@ def subscribe_AnadirUsuario_callback(hermes, intentMessage):
 
 def action_wrapper_AnadirUsuario(hermes, intentMessage,conf):
     global Snips
+    print(str(Snips.usr))
     user = intentMessage.slots.user.first().value
     if(not Snips.existUser):
         msg="Añadiendo usuario "+user +' y cambio a dicho usuario'
@@ -231,6 +233,7 @@ def subscribe_CheckUsuario_callback(hermes, intentMessage):
 
 def action_wrapper_CheckUsuario(hermes, intentMessage,conf):
     global Snips
+    print(str(Snips.usr))
     msg="El usuario activo es "+Snips.usr
     hermes.publish_end_session(intentMessage.session_id, msg)
     
