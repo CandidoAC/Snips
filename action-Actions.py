@@ -202,7 +202,7 @@ def action_wrapper_user(hermes, intentMessage,conf):
     global Snips
     print(str(Snips.Luser))
     user = intentMessage.slots.user.first().value
-    if(Snips.existUser):
+    if(Snips.existUser(user)):
         msg="Cambio de usuario a "+user
         Snips.usr=user
         Change_User(user)
@@ -218,7 +218,7 @@ def action_wrapper_AnadirUsuario(hermes, intentMessage,conf):
     global Snips
     print(str(Snips.Luser))
     user = intentMessage.slots.user.first().value
-    if(not Snips.existUser):
+    if(not Snips.existUser(user)):
         msg="Añadiendo usuario "+user +' y cambio a dicho usuario'
         Snips.usr=user
         Snips.addUser(user)
