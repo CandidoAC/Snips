@@ -10,7 +10,7 @@ class Snips(object):
         self.Levent = []
         self.Luser = []
         self.usr='default'
-        self.Levent.append(self.usr)
+        self.Luser.append(self.usr)
 
     def addEvent(self,event):
     	enc=False
@@ -20,7 +20,7 @@ class Snips(object):
     def addUser(self,user):
         enc=False
         if(not (any(x for x in self.Luser if x.__eq__(user)))):
-            self.Levent.append(user)
+            self.Luser.append(user)
 
     def existUser(self,user):
         enc=False
