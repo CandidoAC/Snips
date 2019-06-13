@@ -123,7 +123,11 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         hermes.publish_end_session(intentMessage.session_id, msg)
     else:
         session=intentMessage.session_id
-        fecha = intentMessage.slots.Fecha.first().value
+        if(intentMessage.slots.cantidad):
+            fecha = intentMessage.slots.Fecha.first().value
+        else:
+            fecha=datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+
         fecha=fecha [ :fecha.index('+')-1 ]
         date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
         med = intentMessage.slots.Medicamento.first().value
@@ -149,7 +153,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             e.IncrementarVeces()
             scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
         elif(frecuencia=='semana'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' semana empezando '+str(fecha)
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
             e=Event(med,date,Snips.usr,True,str(veces)+' semanas')
             e.IncrementarVeces()
             scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
@@ -158,6 +162,21 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             e=Event(med,date,Snips.usr,True,str(veces)+' horas')
             e.IncrementarVeces()
             scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e]) 
+        elif(frecuencia=='desayuno'):
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en el desayuno'
+            e=Event(med,date,Snips.usr,True,'Desayuno')
+            e.IncrementarVeces()
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='9/1',minute=date.minute, replace_existing=True, args=['default',e]) 
+        elif(frecuencia=='comida'):
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la comida'
+            e=Event(med,date,Snips.usr,True,'Comida')
+            e.IncrementarVeces()
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='14/1',minute=date.minute, replace_existing=True, args=['default',e]) 
+        elif(frecuencia=='cena'): 
+            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la cena'
+            e=Event(med,date,Snips.usr,True,'Cena')
+            e.IncrementarVeces()
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='21/1',minute=date.minute, replace_existing=True, args=['default',e]) 
         else:
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
             e=Event(med,date,Snips.usr,True,Repeticion)
@@ -248,11 +267,6 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
-    filePath='/home/pi/prueba.csv'
-    if os.path.exists(filePath):
-        os.remove(filePath)
-    else:
-        print("Can not delete the file as it doesn't exists")
 
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a+') as csvfile:
         fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
