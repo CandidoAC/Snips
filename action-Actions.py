@@ -155,7 +155,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e])             
         elif(frecuencia=='mes'):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' meses')
+            e=Event(med,date,Snips.usr,True,str(veces)+' meses'4
             e.IncrementarVeces()
             scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
         elif(frecuencia=='semana'):
@@ -182,7 +182,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la cena'
             e=Event(med,date,Snips.usr,True,'Cena')
             e.IncrementarVeces()
-            scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='2)/1',minute=date.minute, replace_existing=True, args=['default',e]) 
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='24/1',minute=date.minute, replace_existing=True, args=['default',e]) 
         else:
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
             e=Event(med,date,Snips.usr,True,Repeticion)
