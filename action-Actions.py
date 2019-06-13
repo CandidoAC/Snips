@@ -62,6 +62,11 @@ def Change_User(user):
     writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
     t()
 
+def Add_User(user):
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
+    t()
+
 def Reminder(e):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if(e.rep):
@@ -196,10 +201,39 @@ def subscribe_user_callback(hermes, intentMessage):
 def action_wrapper_user(hermes, intentMessage,conf):
     global Snips
     user = intentMessage.slots.user.first().value
-    msg="Cambio de usuario a "+user
-    Snips.usr=user
-    Change_User(user)
+    if(Snips.existUser):
+        msg="Cambio de usuario a "+user
+        Snips.usr=user
+        Change_User(user)
+    else:
+        msg="El usuario "+user+" no existe"
     hermes.publish_end_session(intentMessage.session_id, msg)
+
+def subscribe_AnadirUsuario_callback(hermes, intentMessage):
+    conf = read_configuration_file(CONFIG_INI)
+    action_wrapper_AnadirUsuario(hermes, intentMessage, conf)
+
+def action_wrapper_AnadirUsuario(hermes, intentMessage,conf):
+    global Snips
+    user = intentMessage.slots.user.first().value
+    if(not Snips.existUser):
+        msg="Añadiendo usuario "+user +' y cambio a dicho usuario'
+        Snips.usr=user
+        Snips.addUser(user)
+        Add_User(user)
+    else:
+        msg="El usuario "+user+" ya existe"
+    hermes.publish_end_session(intentMessage.session_id, msg)
+
+def subscribe_CheckUsuario_callback(hermes, intentMessage):
+    conf = read_configuration_file(CONFIG_INI)
+    action_wrapper_CheckUsuario(hermes, intentMessage, conf)
+
+def action_wrapper_CheckUsuario(hermes, intentMessage,conf):
+    global Snips
+    msg="El usuario activo es "+Snips.usr
+    hermes.publish_end_session(intentMessage.session_id, msg)
+    
 
 def subscribe_confirmar_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
@@ -278,4 +312,6 @@ if __name__ == '__main__':
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
         .subscribe_intent("caguilary:Confirmar", subscribe_confirmar_callback) \
         .subscribe_intent("caguilary:Negar", subscribe_Negar_callback) \
+        .subscribe_intent("caguilary:Anadir_usuario", subscribe_AnadirUsuario_callback) \
+        .subscribe_intent("caguilary:userActivo", subscribe_CheckUsuario_callback) \
         .start()
