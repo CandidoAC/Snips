@@ -168,21 +168,21 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             e=Event(med,date,Snips.usr,True,str(veces)+' horas')
             e.IncrementarVeces()
             scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e]) 
-        elif(frecuencia=='desayuno'):
+        elif(frecuencia=='desayuno'):#HORA-1
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en el desayuno'
             e=Event(med,date,Snips.usr,True,'Desayuno')
             e.IncrementarVeces()
-            scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='9/1',minute=date.minute, replace_existing=True, args=['default',e]) 
-        elif(frecuencia=='comida'):
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e]) 
+        elif(frecuencia=='comida'):#HORA-1
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la comida'
             e=Event(med,date,Snips.usr,True,'Comida')
             e.IncrementarVeces()
-            scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='14/1',minute=date.minute, replace_existing=True, args=['default',e]) 
-        elif(frecuencia=='cena'): 
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='14/1',minute=40, replace_existing=True, args=['default',e]) 
+        elif(frecuencia=='cena'): #HORA-1
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la cena'
             e=Event(med,date,Snips.usr,True,'Cena')
             e.IncrementarVeces()
-            scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='0/1',minute=date.minute, replace_existing=True, args=['default',e]) 
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e]) 
         else:
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
             e=Event(med,date,Snips.usr,True,Repeticion)
