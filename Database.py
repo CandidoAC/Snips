@@ -95,6 +95,21 @@ class Database(object):
 
                 self.cursor.execute(query,params)
                 self.con_bd.commit()
+
+    def NingunaVeces(self,e):
+        if(self.ExistsUser(e.user)):
+           ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(e.user,)).fetchone()[0])
+           print(ID)
+           if (self.ExistsEvent(e,ID)):
+                if(e.rep):
+                    params=(ID,e.med,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))
+                    query='UPDATE Eventos SET veces = 0 WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
+                else:
+                    params=(ID,e.med,e.rep,e.fecha)
+                    query='UPDATE Eventos SET veces = 0 WHERE user = ? and med=? and Repeticion=? and FechaEvento=? and Tipo_rep IS NULL and cant_rep IS NULL'
+
+                self.cursor.execute(query,params)
+                self.con_bd.commit()
         
     def FinishedEvent(self,e):
         if(self.ExistsUser(e.user)):
