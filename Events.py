@@ -24,23 +24,23 @@ class Snips(object):
                     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
 
                 if(Repeticion=='dia'):
-                    scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=str(e.date.day)+'/'+str(veces),hour=e.date.hour,minute=e.date.minute, replace_existing=True, args=['default',e])
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+e.med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e])
                 elif(Repeticion=='mes'):
-                    scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+e.med+','+Snips.usr,year=e.date.year,month=str(e.date.month)+'/'+str(veces),day=e.date.day,hour=e.date.hour,minute=e.date.minute, replace_existing=True, args=['default',e]) 
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+e.med+','+Snips.usr,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
                 elif(Repeticion=='semana'):
-                    scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=str(e.date.day)+'/'+str(7*veces),hour=e.date.hour,minute=e.date.minute, replace_existing=True, args=['default',e]) 
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+e.med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
                 elif(Repeticion=='hora'):
-                    scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=e.date.day,hour=str(e.date.hour)+'/'+str(veces),minute=e.date.minute, replace_existing=True, args=['default',e]) 
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+e.med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e]) 
                 elif(Repeticion=='desayuno'):#HORA-1
-                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=e.date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e]) 
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+e.med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e]) 
                 elif(Repeticion=='comida'):#HORA-1
-                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=e.date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e]) 
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+e.med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e]) 
                 elif(Repeticion=='cena'): #HORA-1
-                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=e.date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e]) 
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+e.med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e]) 
                 else:
-                    scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+Snips.usr,day_of_week=dia_sem(Repeticion),year=e.date.year,month=e.date.month,day=e.date.day,hour=e.date.hour,minute=e.date.minute, replace_existing=True, args=['default',e]) 
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+Snips.usr,day_of_week=dia_sem(Repeticion),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e]) 
             else:
-                scheduler.add_job(recordatorio, 'e.date', run_e.date=e.date,id=fecha+','+e.e.med+','+e.user,args=['default',e])
+                scheduler.add_job(recordatorio, 'e.date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])
                 
     def addEvent(self,event):
     	self.Database.insertEvent(e.datetime.now(),event)
