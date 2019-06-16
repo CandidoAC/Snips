@@ -44,10 +44,10 @@ class Snips(object):
                 scheduler.add_job(recordatorio, 'e.date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e])
                 
     def addEvent(self,event):
-    	self.Database.insertEvent(e.datetime.now(),event)
+    	self.Database.insertEvent(datetime.now(),event)
 
     def addUser(self,user):
-        self.Database.insertUsers(e.datetime.now(),event)
+        self.Database.insertUsers(user)
 
     def existUser(self,user):   
         return self.Database.ExistsUser()
