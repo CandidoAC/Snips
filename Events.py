@@ -5,6 +5,7 @@ from Database import Database
 class Snips(object):
     
     def __init__(self):
+        self.Database=Database()
         self.Database.connectDB()
         self.Database.createTable()
         self.Database.insertUsers('default')
