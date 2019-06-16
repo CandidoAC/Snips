@@ -2,7 +2,7 @@
 import sqlite3
 
 class Database(object):
-   def connectDB(self):
+    def connectDB(self):
         self.con_bd = sqlite3.connect('Reminders.db')
         self.cursor=self.con_bd.cursor()
         
