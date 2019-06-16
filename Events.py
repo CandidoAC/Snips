@@ -1,36 +1,68 @@
 from Evento import Event
 from datetime import datetime
+from Database import Database
 
 class Snips(object):
     
-    Levent=[]
-    Luser=[]
-
     def __init__(self):
-        self.Levent = []
-        self.Luser = []
-        self.usr='default'
-        self.Luser.append(self.usr)
+        self.Database.connectDB()
+        self.Database.createTable()
+        self.Database.insertUsers('default')
+        self.usr=self.Database.UserActive()
+        if(not self.usr):
+            self.Database.changeActiveUsers('default')
 
+        LEvent=self.Database.eventActives()
+        for e in LEvent:
+            if(Rep):
+                Repeticion=e.when[e.when.index(' ')+1:]
+                veces=int(e.when[:e.when.index(' ')])
+                if(not e.fecha is None):
+                    date=e.fecha
+                else:
+                    fecha=datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+                    date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+
+                if(Repeticion=='dia'):
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=str(e.date.day)+'/'+str(veces),hour=e.date.hour,minute=e.date.minute, replace_existing=True, args=['default',e])
+                elif(Repeticion=='mes'):
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+e.med+','+Snips.usr,year=e.date.year,month=str(e.date.month)+'/'+str(veces),day=e.date.day,hour=e.date.hour,minute=e.date.minute, replace_existing=True, args=['default',e]) 
+                elif(Repeticion=='semana'):
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=str(e.date.day)+'/'+str(7*veces),hour=e.date.hour,minute=e.date.minute, replace_existing=True, args=['default',e]) 
+                elif(Repeticion=='hora'):
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=e.date.day,hour=str(e.date.hour)+'/'+str(veces),minute=e.date.minute, replace_existing=True, args=['default',e]) 
+                elif(Repeticion=='desayuno'):#HORA-1
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=e.date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e]) 
+                elif(Repeticion=='comida'):#HORA-1
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=e.date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e]) 
+                elif(Repeticion=='cena'): #HORA-1
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+e.med+','+Snips.usr,year=e.date.year,month=e.date.month,day=e.date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e]) 
+                else:
+                    scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+Snips.usr,day_of_week=dia_sem(Repeticion),year=e.date.year,month=e.date.month,day=e.date.day,hour=e.date.hour,minute=e.date.minute, replace_existing=True, args=['default',e]) 
+            else:
+                scheduler.add_job(recordatorio, 'e.date', run_e.date=e.date,id=fecha+','+e.e.med+','+e.user,args=['default',e])
+                
     def addEvent(self,event):
-    	enc=False
-    	if(not (any(x for x in self.Levent if x.__eq__(event)))):
-    		self.Levent.append(event)
+    	self.Database.insertEvent(e.datetime.now(),event)
 
     def addUser(self,user):
-        enc=False
-        if(not (any(x for x in self.Luser if x.__eq__(user)))):
-            self.Luser.append(user)
+        self.Database.insertUsers(e.datetime.now(),event)
 
-    def existUser(self,user):
-        enc=False
-        if(any(x for x in self.Luser if x.__eq__(user))):
-            enc=True    
-        return enc
+    def existUser(self,user):   
+        return self.Database.ExistsUser()
 
     def Incrementar(self,event):
-    	for x in range(len(Snips.Levent)):
-	    	print("Nombre:"+Recordatorio.med+",fecha:"+str(Recordatorio.fecha)+",veces:"+str(Recordatorio.veces))
-	    	if (event==Snips.Levent[x]):
-	        	Snips.Levent[x].IncrementarVeces()
-        
+    	self.Database.IncrementarVeces(event)
+
+    def FinishEvent(e):
+        self.Database.FinishedEvent(e)
+
+    def insertUsers(User):
+        self.Database.insertUsers(User)
+
+    def changeActiveUsers(User):
+        self.Database.changeActiveUsers(User)
+        self.usr=User
+    
+    def UserActive():
+        self.Database.UserActive()

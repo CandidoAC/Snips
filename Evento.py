@@ -7,12 +7,16 @@ class Event(object):
         self.user=user
         self.rep=rep
         self.when=when
+        self.activo=True
 
     def setNextDate(self,date):
         self.fecha=date
         
     def IncrementarVeces(self):
         self.veces += 1
+
+    def NoActivo():
+        self.activo=False
 
     def __eq__(self, other):
          return (

@@ -89,6 +89,21 @@ def Error(mensaje):
     writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
     t()
 
+def lastEventReminder():
+        with open('prueba.csv', 'r') as csvfile:
+            myreader = csv.DictReader(csvfile)
+            headers = myreader.fieldnames
+            for row in myreader:
+                print(row[headers[2]])
+                if(row['Tipo']=='Recordatorio'):
+                   aux=row
+                   
+            if(aux['¿Repetitivo?']=='Si'):
+                e=Event(aux['Medicamento'],None,aux['Nombre_Usuario'],True,aux['Recordatorio'])
+            else:
+                e=Event(aux['Medicamento'],aux['Recordatorio'],aux['Nombre_Usuario'],False,None)
+            return e
+
 
 def read_configuration_file(configuration_file):
     try:
@@ -128,7 +143,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         hermes.publish_end_session(intentMessage.session_id, msg)
     else:
         session=intentMessage.session_id
-        if(intentMessage.slots.cantidad):
+        if(intentMessage.slots.Fecha):
             fecha = intentMessage.slots.Fecha.first().value
             fecha=fecha [ :fecha.index('+')-1 ]
             date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
@@ -145,7 +160,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         frecuencia=intentMessage.slots.Repeticion.first().value
         if(frecuencia=='diariamente'):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,'Diario')
+            e=Event(med,date,Snips.usr,True,'1 dias')
             e.IncrementarVeces()
             scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/1',hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e])
         elif(frecuencia=='dia'):
@@ -177,7 +192,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la comida'
             e=Event(med,date,Snips.usr,True,'Comida')
             e.IncrementarVeces()
-            scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='13/1',minute=45, replace_existing=True, args=['default',e]) 
+            scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e]) 
         elif(frecuencia=='cena'): #HORA-1
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la cena'
             e=Event(med,date,Snips.usr,True,'Cena')
@@ -203,7 +218,7 @@ def action_wrapper_user(hermes, intentMessage,conf):
     user = intentMessage.slots.user.first().value
     if(Snips.existUser(user)):
         msg="Cambio de usuario a "+user
-        Snips.usr=user
+        Snips.changeActiveUsers(user)
         Change_User(user)
     else:
         msg="El usuario "+user+" no existe"
@@ -218,8 +233,8 @@ def action_wrapper_AnadirUsuario(hermes, intentMessage,conf):
     user = intentMessage.slots.user.first().value
     if(not Snips.existUser(user)):
         msg="Añadiendo usuario "+user +' y cambio a dicho usuario'
-        Snips.usr=user
         Snips.addUser(user)
+        Snips.changeActiveUsers(user)
         Add_User(user)
     else:
         msg="El usuario "+user+" ya existe"
@@ -244,6 +259,8 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     #msg="Evento aceptado por "+e.user
     msg="Evento aceptado"
     AceptedReminder()
+    event=lastEventReminder()
+    FinishEvent(event)
 
     hermes.publish_end_session(intentMessage.session_id, msg)
     scheduler1.remove_job('job2')
@@ -273,13 +290,13 @@ def recordatorioTomar(e,intentMessage):
     global Snips
     if(e.user==Snips.usr):
         if(e.veces<6):
+            Reminder(e) 
             mqttClient.publish_start_session_action(site_id=intentMessage,
             session_init_text=e.user+'¿ te has tomado ' +e.med+'?',
             session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
             session_init_can_be_enqueued=False,
             session_init_send_intent_not_recognized=True,
             custom_data=None)
-            Reminder(e)
             msg=""
             print(e.user+'¿te has tomado ' +e.med+'?:Vez '+str(e.veces))
             Snips.Incrementar(e) 
@@ -289,6 +306,7 @@ def recordatorioTomar(e,intentMessage):
             msg=e.user+'ha ignorado el evento tomar '+e.med
             say(intentMessage,msg)
             scheduler1.remove_job('job2')
+            Snips.FinishEvent(e)
             mqttClient.publish_end_session(intentMessage, msg)
     else:
         print("Usuario actual distinto al del evento")
@@ -302,7 +320,6 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
-
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a+') as csvfile:
         fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
