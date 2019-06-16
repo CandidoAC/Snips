@@ -50,7 +50,7 @@ class Snips(object):
         self.Database.insertUsers(user)
 
     def existUser(self,user):   
-        return self.Database.ExistsUser()
+        return self.Database.ExistsUser(user)
 
     def Incrementar(self,event):
     	self.Database.IncrementarVeces(event)

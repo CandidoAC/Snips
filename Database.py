@@ -57,7 +57,7 @@ class Database(object):
            return result.fetchall()
        
     def ExistsEvent(self,e,userID):
-        if(e.when==None):
+        if(e.rep):
             result=self.cursor.execute('SELECT ID FROM Eventos WHERE user == ? and med LIKE ? and Repeticion=? and FechaEvento=? and Tipo_rep IS NULL and cant_rep IS NULL',(userID,e.med,e.rep,e.fecha))
         else:
             result=self.cursor.execute('SELECT ID FROM Eventos WHERE user == ? and med LIKE ? and Repeticion=? and FechaEvento IS NULL and Tipo_rep LIKE ? and cant_rep == ?',(userID,e.med,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')])))
