@@ -8,6 +8,7 @@ import csv
 from datetime import datetime
 from datetime import timedelta
 from snipsTools import SnipsConfigParser
+from hermes_python.hermes import Hermes
 from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
 from Events import Snips
