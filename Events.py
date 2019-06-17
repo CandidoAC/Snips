@@ -28,7 +28,7 @@ class Snips(object):
                     Repeticion=e.when[e.when.index(' ')+1:]
                     veces=int(e.when[:e.when.index(' ')])
                     if(not e.fecha is None):
-                        date=e.fecha
+                        date=datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")
                     else:
                         fecha=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                         date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
@@ -50,11 +50,12 @@ class Snips(object):
                     else:
                         self.scheduler.add_job(self.recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+Snips.usr,day_of_week=dia_sem(Repeticion),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
                     
-                    if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")>datetime.now()):
+                    if(date>datetime.now()):
                         self.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
                 else:
+                    date=datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")
                     if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")<datetime.now()):
-                        self.scheduler.add_job(self.recordatorio, 'e.date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e,False])
+                        self.scheduler.add_job(self.recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e,False])
                     else:
                         self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
                 

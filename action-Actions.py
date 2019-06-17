@@ -117,7 +117,7 @@ def read_configuration_file(configuration_file):
         Error('Intent no reconocido')
         return dict()
 
-    #Intent Añadir mdicamento
+    #Intent Añadir mdicamento 
 def subscribe_Anadir_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper_Anadir(hermes, intentMessage, conf)
