@@ -126,7 +126,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     global Snips
     print(str(intentMessage.slots.Repeticion))
     if(not intentMessage.slots.Repeticion):
-        session=intentMessage.session_id
+        session=intentMessage.session_id 
         fecha = intentMessage.slots.Fecha.first().value
         fecha=fecha [ :fecha.index('+')-1 ] 
         date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
