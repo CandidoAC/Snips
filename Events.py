@@ -94,7 +94,7 @@ class Snips(object):
     	self.Database.insertEvent(datetime.now(),event)
 
     def addUser(self,user):
-        self.Database.insertUsers(user)
+        self.Database.insertUsers(user) 
 
     def existUser(self,user):   
         return self.Database.ExistsUser(user)

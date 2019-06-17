@@ -218,7 +218,7 @@ def subscribe_user_callback(hermes, intentMessage):
 def action_wrapper_user(hermes, intentMessage,conf):
     global Snips
     user = intentMessage.slots.user.first().value
-    if(Snips.existUser(user)):
+    if(Snips.existUser(user)): 
         msg="Cambio de usuario a "+user
         Snips.changeActiveUsers(user)
         Change_User(user)
