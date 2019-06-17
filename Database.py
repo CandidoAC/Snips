@@ -46,15 +46,51 @@ class Database(object):
             s+=row
         return s
     def eventActives(self):
+       LEvents=[]
        result=self.cursor.execute('SELECT * FROM Eventos WHERE Active=1')
-       return result.fetchall()
+       for x in result.fetchall():
+           med=x[2]
+           s=''
+           for row in self.cursor.execute('SELECT Name FROM Users where ID==?',(x[3],)).fetchone():
+               s+=row
+           user=s
+           rep=bool(x[4])
+           if(rep):
+               fecha=None
+               when=str(x[8])+' '+x[7]
+           else:
+               fecha=x[6]
+               when=None
+            
+           e=Event(med,fecha,user,rep,when)
+           e.veces=x[5]
+           LEvents.append(e)
+       return LEvents
 
     def eventByUser(self,user):
-        if(self.ExistsUser(e.user)):
-           ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(e.user,)).fetchone()[0])
+        if(self.ExistsUser(user)):
+           ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(user,)).fetchone()[0])
            print(ID)
            result=self.cursor.execute('SELECT * FROM Eventos WHERE user=?',(ID,))
-           return result.fetchall()
+           LEvents=[]
+           for x in result.fetchall():
+               med=x[2]
+               s=''
+               for row in self.cursor.execute('SELECT Name FROM Users where ID==?',(x[3],)).fetchone():
+                   s+=row
+               user=s
+               rep=bool(x[4])
+               if(rep):
+                   fecha=None
+                   when=str(x[8])+' '+x[7]
+               else:
+                   fecha=x[6]
+                   when=None
+                
+               e=Event(med,fecha,user,rep,when)
+               e.veces=x[5]
+               LEvents.append(e)
+           return LEvents
        
     def ExistsEvent(self,e,userID):
         if(not e.rep):
