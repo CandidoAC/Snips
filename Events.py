@@ -1,10 +1,15 @@
 from Evento import Event
 from datetime import datetime
 from Database import Database
+from apscheduler.schedulers.background import BackgroundScheduler
 
 class Snips(object):
     
     def __init__(self):
+        self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
+        self.scheduler.start()
+        self.scheduler1 = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
+        self.scheduler1.start()
         self.Database=Database()
         self.Database.connectDB()
         self.Database.createTable()
