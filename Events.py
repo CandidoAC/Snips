@@ -8,6 +8,7 @@ from hermes_python.ffi.utils import MqttOptions
 class Snips(object):
     
     def __init__(self):
+        mqtt_opts = MqttOptions()
         self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
         self.scheduler.start()
         self.scheduler1 = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})

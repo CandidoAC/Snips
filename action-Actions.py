@@ -269,7 +269,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     Snips.scheduler1.remove_job('job2')
 
 def subscribe_Negar_callback(hermes, intentMessage):
-    conf = read_configuration_file(CONFIG_INI)
+    conf = read_configuration_file(CONFIG_INI) 
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
