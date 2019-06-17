@@ -81,6 +81,7 @@ def AceptedReminder():
     t()
 
 def NotAceptedReminder():
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
     t()
 

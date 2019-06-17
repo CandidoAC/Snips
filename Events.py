@@ -10,7 +10,7 @@ class Snips(object):
         self.Database.createTable()
         self.Database.insertUsers('default')
         self.usr=self.Database.UserActive()
-        if(not self.usr):
+        if(self.usr==''):
             self.Database.changeActiveUsers('default')
 
         LEvent=self.Database.eventActives()
@@ -61,18 +61,18 @@ class Snips(object):
     def Incrementar(self,event):
     	self.Database.IncrementarVeces(event)
 
-    def FinishEvent(e):
+    def FinishEvent(self,e):
         self.Database.FinishedEvent(e)
 
-    def insertUsers(User):
+    def insertUsers(self,User):
         self.Database.insertUsers(User)
 
-    def changeActiveUsers(User):
+    def changeActiveUsers(self,User):
         self.Database.changeActiveUsers(User)
         self.usr=User
 
-    def NingunaVez(e):
+    def NingunaVez(self,e):
         self.Database.NingunaVeces(e)
     
-    def UserActive():
+    def UserActive(self):
         self.Database.UserActive()

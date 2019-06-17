@@ -1,5 +1,6 @@
 #!/usr/bin/env pytho
 import sqlite3
+from Evento import Event
 
 class Database(object):
     def connectDB(self):
