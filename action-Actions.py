@@ -130,7 +130,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
     if(not intentMessage.slots.Repeticion):
         session=intentMessage.session_id
         fecha = intentMessage.slots.Fecha.first().value
-        fecha=fecha [ :fecha.index('+')-1 ]
+        fecha=fecha [ :fecha.index('+')-1 ] 
         date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
         med = intentMessage.slots.Medicamento.first().value 
         msg=Snips.usr+" está añadiendo un recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med

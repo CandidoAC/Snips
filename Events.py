@@ -41,10 +41,10 @@ class Snips(object):
                 else:
                     scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+Snips.usr,day_of_week=dia_sem(Repeticion),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
                 
-                if(e.fecha.strptime(fecha,"%Y-%m-%d %H:%M:%S")>datetime.now().date()):
+                if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")>datetime.now().date()):
                     scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
             else:
-                if(e.fecha.strptime(fecha,"%Y-%m-%d %H:%M:%S")<datetime.now().date()):
+                if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")<datetime.now().date()):
                     scheduler.add_job(recordatorio, 'e.date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e,False])
                 else:
                     scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
