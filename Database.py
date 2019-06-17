@@ -149,13 +149,13 @@ class Database(object):
                 self.con_bd.commit()
         
     def FinishedEvent(self,e):
-        if(self.ExistsUser(e.user)):
+       if(self.ExistsUser(e.user)):
            ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(e.user,)).fetchone()[0])
            print(ID)
            if (self.ExistsEvent(e,ID)):
                 self.con_bd.set_trace_callback(print)
                 if(e.rep):
-                    params=(ID,e.med,e.rep,e.when[:e.when.index(' ')],e.when[e.when.index(' ')+1:])
+                    params=(ID,e.med,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))
                     query='UPDATE Eventos SET Active = 0  WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
                 else:
                     params=(ID,e.med,e.rep,e.fecha)
