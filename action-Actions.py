@@ -14,7 +14,7 @@ from hermes_python.ontology import *
 from Events import Snips
 from Evento import Event
 from threading import Timer
-
+ 
 def minutes(i):
     switcher={
         0:"",
