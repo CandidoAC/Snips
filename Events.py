@@ -3,6 +3,7 @@ from datetime import datetime
 from Database import Database
 from apscheduler.schedulers.background import BackgroundScheduler
 from hermes_python.hermes import Hermes
+from hermes_python.ffi.utils import MqttOptions
 
 class Snips(object):
     
