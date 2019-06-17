@@ -115,7 +115,7 @@ def read_configuration_file(configuration_file):
             return conf_parser.to_dict()
     except (IOError, configparser.Error) as e:
         Error('Intent no reconocido')
-        return dict()
+        return dict() 
 
     #Intent Añadir mdicamento 
 def subscribe_Anadir_callback(hermes, intentMessage):
