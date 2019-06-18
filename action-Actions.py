@@ -5,7 +5,7 @@ import io
 import configparser
 import os
 from datetime import datetime
-from datetime import timedelta
+from datetime import timedelta 
 from snipsTools import SnipsConfigParser
 from hermes_python.hermes import Hermes 
 from hermes_python.ffi.utils import MqttOptions
