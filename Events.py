@@ -64,11 +64,11 @@ class Snips(object):
                     else:
                         self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
     #Métodos relacionados con el tratamiento de ficheros
-    def t():
+    def t(self):
         global idFile
         self.idFile+=1
 
-    def add_Reminder(e):
+    def add_Reminder(self,e):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if(e.rep):
             writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
@@ -76,17 +76,17 @@ class Snips(object):
             writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
         t()
 
-    def Change_User(user):
+    def Change_User(self,user):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
         t()
 
-    def Add_User(user):
+    def Add_User(self,user):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
         t()
 
-    def Reminder(e):
+    def Reminder(self,e):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if(e.rep):
             self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
@@ -94,17 +94,17 @@ class Snips(object):
             self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
         t()
 
-    def AceptedReminder():
+    def AceptedReminder(self):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
         t()
 
-    def NotAceptedReminder():
+    def NotAceptedReminder(self):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
         t()
 
-    def Error(mensaje):
+    def Error(self,mensaje):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
         t()

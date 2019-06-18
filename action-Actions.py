@@ -11,7 +11,7 @@ from hermes_python.hermes import Hermes
 from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
 from Events import Snips
-from Evento import Event 
+from Evento import Event
  
 def minutes(i):
     switcher={
