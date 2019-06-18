@@ -9,7 +9,7 @@ import csv
 class Snips(object):
     
     def __init__(self):
-        idFile=0
+        self.idFile=0
         mqtt_opts = MqttOptions()
         self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
         self.scheduler.start()
