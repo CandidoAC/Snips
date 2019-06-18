@@ -8,6 +8,7 @@ from hermes_python.ffi.utils import MqttOptions
 class Snips(object):
     
     def __init__(self):
+        idFile=0
         mqtt_opts = MqttOptions()
         self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
         self.scheduler.start()
@@ -18,7 +19,10 @@ class Snips(object):
         self.Database.createTable()
         self.Database.insertUsers('default')
         self.usr=self.Database.UserActive()
-        with Hermes(mqtt_options=mqtt_opts) as mqttClient:
+        with Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a+') as csvfile:
+            fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
+            self.writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            self.writer.writeheader()
             if(self.usr==''):
                 self.Database.changeActiveUsers('default')
 
@@ -51,28 +55,92 @@ class Snips(object):
                         self.scheduler.add_job(self.recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+e.user,day_of_week=dia_sem(Repeticion),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
                     
                     if(date>datetime.now()):
-                        self.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
+                        self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
                 else:
                     date=datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")
                     if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")<datetime.now()):
                         self.scheduler.add_job(self.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
                     else:
                         self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
-                
+    #Métodos relacionados con el tratamiento de ficheros
+    def t():
+        global idFile
+        self.idFile+=1
+
+    def add_Reminder(e):
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if(e.rep):
+            writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        else:
+            writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        t()
+
+    def Change_User(user):
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
+        t()
+
+    def Add_User(user):
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
+        t()
+
+    def Reminder(e):
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if(e.rep):
+            self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        else:
+            self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        t()
+
+    def AceptedReminder():
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
+        t()
+
+    def NotAceptedReminder():
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
+        t()
+
+    def Error(mensaje):
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
+        t()
+
+    def lastEventReminder():
+        aux=None
+        with open('prueba.csv', 'r') as csvfile:
+            myreader = csv.DictReader(csvfile)
+            headers = myreader.fieldnames
+            for row in myreader:
+                print(row[headers[2]])
+                if(row['Tipo']=='Recordatorio'):
+                   aux=row
+            if(aux):     
+                if(aux['¿Repetitivo?']=='Si'):
+                    e=Event(aux['Medicamento'],None,aux['Nombre_Usuario'],True,aux['Recordatorio'])
+                else:
+                    e=Event(aux['Medicamento'],aux['Recordatorio'],aux['Nombre_Usuario'],False,None)
+                return e
+            else:
+                return None
+
+    #Métodos relacionados con recordatorios y MQTT             
     def recordatorio(self,intentMessage,e,Repetitivo):
         print('Evento detectado para : %s' % datetime.now())
         if(e.user==self.usr):
             if(Repetitivo):
                 self.NingunaVeces(e)
-            say(intentMessage,e.user+' te toca tomarte '+e.med)
+            self.say(intentMessage,e.user+' te toca tomarte '+e.med)
             self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
-            Reminder(e)
+            self.Reminder(e)
    
 
     def recordatorioTomar(self,e,intentMessage):
         if(e.user==self.usr):
             if(e.veces<6):
-                Reminder(e) 
+                self.Reminder(e) 
                 mqttClient.publish_start_session_action(site_id=intentMessage,
                 session_init_text=e.user+'¿ te has tomado ' +e.med+'?',
                 session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
@@ -86,13 +154,20 @@ class Snips(object):
                 mqttClient.publish_end_session(intentMessage, msg)  
             else:
                 msg=e.user+'ha ignorado el evento tomar '+e.med
-                say(intentMessage,msg)
+                self.say(intentMessage,msg)
                 self.scheduler1.remove_job('job2')
                 self.FinishEvent(e)
                 mqttClient.publish_end_session(intentMessage, msg)
         else:
             print("Usuario actual distinto al del evento")
             self.scheduler1.remove_job('job2')
+
+
+
+    def say(self,intentMessage,text):
+        mqttClient.publish_start_session_notification(intentMessage, text,None)
+
+    #Métodos relacionados con la base de datos
     def addEvent(self,event):
     	self.Database.insertEvent(datetime.now(),event)
 

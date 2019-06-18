@@ -39,83 +39,19 @@ def dia_sem(i):
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-
-def t():
-    global idFile
-    idFile+=1
-
 def global_variables():
     global Recordatorio,e,Snips
     Snips=Snips();
 
-def add_Reminder(e):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if(e.rep):
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-    else:
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-    t()
-
-def Change_User(user):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
-    t()
-
-def Add_User(user):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
-    t()
-
-def Reminder(e):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if(e.rep):
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-    else:
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-    t()
-
-def AceptedReminder():
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
-    t()
-
-def NotAceptedReminder():
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
-    t()
-
-def Error(mensaje):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
-    t()
-
-def lastEventReminder():
-        aux=None
-        with open('prueba.csv', 'r') as csvfile:
-            myreader = csv.DictReader(csvfile)
-            headers = myreader.fieldnames
-            for row in myreader:
-                print(row[headers[2]])
-                if(row['Tipo']=='Recordatorio'):
-                   aux=row
-            if(aux):     
-                if(aux['¿Repetitivo?']=='Si'):
-                    e=Event(aux['Medicamento'],None,aux['Nombre_Usuario'],True,aux['Recordatorio'])
-                else:
-                    e=Event(aux['Medicamento'],aux['Recordatorio'],aux['Nombre_Usuario'],False,None)
-                return e
-            else:
-                return None
-
-
 def read_configuration_file(configuration_file):
+    global Snips
     try:
         with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
             conf_parser = SnipsConfigParser()
             conf_parser.readfp(f)
             return conf_parser.to_dict()
     except (IOError, configparser.Error) as e:
-        Error('Intent no reconocido')
+        Snips.Error('Intent no reconocido')
         return dict() 
 
     #Intent Añadir mdicamento 
@@ -141,7 +77,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         e=Event(med,date,Snips.usr,False,'')
         e.IncrementarVeces()
         Snips.addEvent(e)
-        add_Reminder(e)
+        Snips.add_Reminder(e)
         Snips.scheduler.add_job(Snips.recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e,False])
         hermes.publish_end_session(intentMessage.session_id, msg)
     else:
@@ -208,7 +144,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             Snips.scheduler.add_job(Snips.Snips.recordatorio, 'cron',id='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr,day_of_week=dia_sem(frecuencia),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
 
         Snips.addEvent(e)
-        add_Reminder(e)
+        Snips.add_Reminder(e)
         hermes.publish_end_session(intentMessage.session_id, msg)
 
 #Intent cambiar usuario
@@ -222,7 +158,7 @@ def action_wrapper_user(hermes, intentMessage,conf):
     if(Snips.existUser(user)): 
         msg="Cambio de usuario a "+user
         Snips.changeActiveUsers(user)
-        Change_User(user)
+        Snips.Change_User(user)
     else:
         msg="El usuario "+user+" no existe"
     hermes.publish_end_session(intentMessage.session_id, msg)
@@ -238,7 +174,7 @@ def action_wrapper_AnadirUsuario(hermes, intentMessage,conf):
         msg="Añadiendo usuario "+user +' y cambio a dicho usuario'
         Snips.addUser(user)
         Snips.changeActiveUsers(user)
-        Add_User(user)
+        Snips.Add_User(user)
     else:
         msg="El usuario "+user+" ya existe"
     hermes.publish_end_session(intentMessage.session_id, msg)
@@ -261,10 +197,10 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     global Snips   
     #msg="Evento aceptado por "+e.user
     msg="Evento aceptado"
-    AceptedReminder()
-    event=lastEventReminder()
+    Snips.AceptedReminder()
+    event=snips.lastEventReminder()
     if(event):
-        FinishEvent(event)
+        snips.FinishEvent(event)
 
     hermes.publish_end_session(intentMessage.session_id, msg)
     Snips.scheduler1.remove_job('job2')
@@ -274,23 +210,17 @@ def subscribe_Negar_callback(hermes, intentMessage):
     action_wrapper_Negar(hermes, intentMessage, conf)
 
 def action_wrapper_Negar(hermes, intentMessage,conf):
+    global Snips
     msg="Evento no aceptado por "+Snips.usr+" se te volverá ha avisar en 20 segundos"
-    NotAceptedReminder()
+    Snips.NotAceptedReminder()
     hermes.publish_end_session(intentMessage.session_id, msg)
-
-def say(intentMessage,text):
-    mqttClient.publish_start_session_notification(intentMessage, text,None)
 
     
 
 if __name__ == '__main__':
     mqtt_opts = MqttOptions()
-    idFile=0
     global_variables()
-    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a+') as csvfile:
-        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
+    with Hermes(mqtt_options=mqtt_opts) as h:
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
