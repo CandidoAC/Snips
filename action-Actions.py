@@ -287,7 +287,7 @@ def recordatorio(intentMessage,e,Repetitivo):
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
         if(Repetitivo):
-            Snips.NingunaVeces(e) 
+            Snips.NingunaVeces(e)
         say(intentMessage,e.user+' te toca tomarte '+e.med)
         Snips.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
         Reminder(e)
