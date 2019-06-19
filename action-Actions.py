@@ -134,13 +134,12 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la cena'
             e=Event(med,date,Snips.usr,True,'Cena')
             e.IncrementarVeces()
-           Snips.scheduler.add_job(Snips.recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e,True]) 
+            Snips.scheduler.add_job(Snips.recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e,True]) 
         else:
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
             e=Event(med,date,Snips.usr,True,Repeticion)
             e.IncrementarVeces()
             Snips.scheduler.add_job(Snips.Snips.recordatorio, 'cron',id='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr,day_of_week=dia_sem(frecuencia),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
- 
         Snips.addEvent(e)
         Snips.add_Reminder(e) 
         hermes.publish_end_session(intentMessage.session_id, msg)
