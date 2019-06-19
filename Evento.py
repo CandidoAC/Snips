@@ -8,9 +8,6 @@ class Event(object):
         self.rep=rep
         self.when=when
         self.activo=True
-
-    def setNextDate(self,date):
-        self.fecha=date
         
     def IncrementarVeces(self):
         self.veces += 1

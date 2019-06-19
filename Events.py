@@ -7,6 +7,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 class Snips(object):
     
+    usr=''
+
     def __init__(self):
         file=__import__('action-Actions')
         self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})

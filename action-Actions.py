@@ -264,7 +264,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     AceptedReminder()
     event=lastEventReminder()
     if(event):
-        FinishEvent(event)
+        Snips.FinishEvent(event)
 
     hermes.publish_end_session(intentMessage.session_id, msg)
     Snips.scheduler1.remove_job('job2')
