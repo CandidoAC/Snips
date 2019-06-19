@@ -151,12 +151,15 @@ class Snips(object):
                 self.NingunaVeces(e)
 
             with Hermes(mqtt_options=self.mqtt_opts) as mqttClient:
+                print("i'm in withas")
                 self.say(intentMessage,e.user+' te toca tomarte '+e.med)
+                print('oye te toca tocarte medicacion loco')
                 self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
             self.Reminder(e)
    
 
     def recordatorioTomar(self,e,intentMessage):
+        print("a recordar cada 20 sec")
         if(e.user==self.usr):
             if(e.veces<6):
                 self.Reminder(e) 
