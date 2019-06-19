@@ -8,11 +8,12 @@ import csv
 
 class Snips(object):
     
-    def __init__(self,csvfile):
+    def __init__(self,csvfile,mqttClient):
         self.idFile=0
         fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
         self.writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         self.writer.writeheader()
+        self.mqttClient=mqttClient
         mqtt_opts = MqttOptions()
         self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
         self.scheduler.start()
