@@ -4,7 +4,7 @@ from Evento import Event
 
 class Database(object):
     def connectDB(self):
-        self.con_bd = sqlite3.connect('Reminders.db', check_same_thread=False)
+        self.con_bd = sqlite3.connect('/home/pi/Reminders.db', check_same_thread=False)
         self.cursor=self.con_bd.cursor()
         
     def createTable(self):

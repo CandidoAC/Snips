@@ -91,7 +91,7 @@ def Error(mensaje):
 
 def lastEventReminder():
         aux=None
-        with open('prueba.csv', 'r') as csvfile:
+        with open('/home/pi/prueba.csv', 'r') as csvfile:
             myreader = csv.DictReader(csvfile)
             headers = myreader.fieldnames
             for row in myreader:
@@ -323,7 +323,7 @@ if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
-    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('/prueba.csv', 'a+') as csvfile:
+    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('/home/pi/prueba.csv', 'a+') as csvfile:
         fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
