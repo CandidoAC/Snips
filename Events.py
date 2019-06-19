@@ -20,10 +20,7 @@ class Snips(object):
         self.Database.createTable()
         self.Database.insertUsers('default')
         self.usr=self.Database.UserActive()
-        with Hermes(mqtt_options=mqtt_opts) as mqttClient,open('prueba.csv', 'a+') as csvfile:
-            fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
-            self.writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            self.writer.writeheader()
+        with Hermes(mqtt_options=mqtt_opts) as mqttClient:
             if(self.usr==''):
                 self.Database.changeActiveUsers('default')
 

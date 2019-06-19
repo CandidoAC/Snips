@@ -37,9 +37,10 @@ def dia_sem(i):
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-def global_variables():
-    global Recordatorio,e,Snips
-    Snips=Snips();
+def global_variables(writer):
+    global Snips
+    Snips=Snips()
+    Snips.writer=writer
 
 def read_configuration_file(configuration_file):
     global Snips
@@ -217,8 +218,11 @@ def action_wrapper_Negar(hermes, intentMessage,conf):
 
 if __name__ == '__main__':
     mqtt_opts = MqttOptions()
-    global_variables()
-    with Hermes(mqtt_options=mqtt_opts) as h:
+    with Hermes(mqtt_options=mqtt_opts) as h,open('prueba.csv', 'a+') as csvfile:
+        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        global_variables(writer)
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
