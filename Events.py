@@ -7,8 +7,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 class Snips(object):
     
-    usr=''
-
     def __init__(self):
         file=__import__('action-Actions')
         self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
@@ -20,7 +18,7 @@ class Snips(object):
         self.Database.createTable()
         self.Database.insertUsers('default')
         self.usr=self.Database.UserActive()
-        if(self.usr==''):
+        if(not self.usr):
             self.Database.changeActiveUsers('default')
 
         LEvent=self.Database.eventActives()
