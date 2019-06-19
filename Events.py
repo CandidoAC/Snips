@@ -14,7 +14,8 @@ class Snips(object):
         with open('prueba.csv', 'a+') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
             writer.writeheader()
-        mqtt_opts = MqttOptions()
+
+        self.mqtt_opts = MqttOptions()
         self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
         self.scheduler.start()
         self.scheduler1 = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
@@ -24,7 +25,7 @@ class Snips(object):
         self.Database.createTable()
         self.Database.insertUsers('default')
         self.usr=self.Database.UserActive()
-        with Hermes(mqtt_options=mqtt_opts) as self.mqttClient:
+        with Hermes(mqtt_options=self.mqtt_opts) as self.mqttClient:
             if(not self.usr):
                 self.Database.changeActiveUsers('default')
 
@@ -149,7 +150,7 @@ class Snips(object):
             if(Repetitivo):
                 self.NingunaVeces(e)
 
-            with Hermes(mqtt_options=mqtt_opts) as mqttClient:
+            with Hermes(mqtt_options=self.mqtt_opts) as mqttClient:
                 self.say(intentMessage,e.user+' te toca tomarte '+e.med)
                 self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
             self.Reminder(e)
