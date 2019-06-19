@@ -142,7 +142,7 @@ class Snips(object):
         if(e.user==self.usr):
             if(e.veces<6):
                 self.Reminder(e) 
-                mqttClient.publish_start_session_action(site_id=intentMessage,
+                self.mqttClient.publish_start_session_action(site_id=intentMessage,
                 session_init_text=e.user+'¿ te has tomado ' +e.med+'?',
                 session_init_intent_filter=["caguilary:Confirmar","caguilary:Negar"],
                 session_init_can_be_enqueued=False,
@@ -152,13 +152,13 @@ class Snips(object):
                 print(e.user+'¿te has tomado ' +e.med+'?:Vez '+str(e.veces))
                 self.Incrementar(e) 
                 e.IncrementarVeces()    
-                mqttClient.publish_end_session(intentMessage, msg)  
+                self.mqttClient.publish_end_session(intentMessage, msg)  
             else:
                 msg=e.user+'ha ignorado el evento tomar '+e.med
                 self.say(intentMessage,msg)
                 self.scheduler1.remove_job('job2')
                 self.FinishEvent(e)
-                mqttClient.publish_end_session(intentMessage, msg)
+                self.mqttClient.publish_end_session(intentMessage, msg)
         else:
             print("Usuario actual distinto al del evento")
             self.scheduler1.remove_job('job2')
@@ -166,7 +166,7 @@ class Snips(object):
 
 
     def say(self,intentMessage,text):
-        mqttClient.publish_start_session_notification(intentMessage, text,None)
+        self.mqttClient.publish_start_session_notification(intentMessage, text,None)
 
     #Métodos relacionados con la base de datos
     def addEvent(self,event):
