@@ -23,8 +23,8 @@ class Snips(object):
         self.Database.createTable()
         self.Database.insertUsers('default')
         self.usr=self.Database.UserActive()
-        with Hermes(mqtt_options=mqtt_opts) as mqttClient:
-            if(self.usr==''):
+        with Hermes(mqtt_options=mqtt_opts) as self.mqttClient:
+            if(not self.usr):
                 self.Database.changeActiveUsers('default')
 
             LEvent=self.Database.eventActives()
