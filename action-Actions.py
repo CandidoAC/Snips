@@ -266,8 +266,8 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     if(event):
         Snips.FinishEvent(event)
 
+    Snips.scheduler1.remove_job('recordando tomar '+event.med+' a '+event.user)
     hermes.publish_end_session(intentMessage.session_id, msg)
-    Snips.scheduler1.remove_job('job2')
 
 def subscribe_Negar_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
@@ -289,8 +289,8 @@ def recordatorio(intentMessage,e,Repetitivo):
         if(Repetitivo):
             Snips.NingunaVeces(e)
         say(intentMessage,e.user+' te toca tomarte '+e.med)
-        Snips.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
         Reminder(e)
+        Snips.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='recordando tomar '+e.med+' a '+e.user,args=[e,intentMessage])
    
 
 def recordatorioTomar(e,intentMessage):
@@ -312,7 +312,7 @@ def recordatorioTomar(e,intentMessage):
         else:
             msg=e.user+'ha ignorado el evento tomar '+e.med
             say(intentMessage,msg)
-            Snips.scheduler1.remove_job('job2')
+            Snips.scheduler1.remove_job('recordando tomar '+e.med+' a '+e.user)
             Snips.FinishEvent(e)
             mqttClient.publish_end_session(intentMessage, msg)
     else:
