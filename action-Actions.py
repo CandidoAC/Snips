@@ -37,7 +37,7 @@ def dia_sem(i):
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
-def global_variables(csvfile,mqttClient):
+def global_variables():
     global Snips
     Snips=Snips()
 
