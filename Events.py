@@ -71,9 +71,9 @@ class Snips(object):
     def add_Reminder(self,e):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if(e.rep):
-            writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+            self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
         else:
-            writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+            self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
         self.t()
 
     def Change_User(self,user):

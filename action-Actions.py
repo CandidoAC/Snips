@@ -71,7 +71,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         """now=datetime.now()
         if((date - now).total_seconds()>0):
             t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
-            t.start()"""
+            t.start()""" 
         e=Event(med,date,Snips.usr,False,'')
         e.IncrementarVeces()
         Snips.addEvent(e)
