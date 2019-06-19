@@ -239,7 +239,7 @@ def action_wrapper_AnadirUsuario(hermes, intentMessage,conf):
         Snips.addUser(user)
         Snips.changeActiveUsers(user)
         Add_User(user)
-    else:
+    else: 
         msg="El usuario "+user+" ya existe"
     hermes.publish_end_session(intentMessage.session_id, msg)
 
