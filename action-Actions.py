@@ -38,7 +38,7 @@ def dia_sem(i):
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 def global_variables():
-    global Snips
+    global Snips 
     Snips=Snips()
 
 def read_configuration_file(configuration_file):
@@ -56,7 +56,7 @@ def read_configuration_file(configuration_file):
 def subscribe_Anadir_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
     action_wrapper_Anadir(hermes, intentMessage, conf)
-
+ 
 def action_wrapper_Anadir(hermes, intentMessage,conf):
     global Snips
     print(str(intentMessage.slots.Repeticion))
