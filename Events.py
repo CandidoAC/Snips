@@ -8,12 +8,12 @@ import csv
 
 class Snips(object):
     
-    def __init__(self,csvfile,mqttClient):
+    def __init__(self):
         self.idFile=0
-        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
-        self.writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        self.writer.writeheader()
-        self.mqttClient=mqttClient
+        self.fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
+        with open('prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
         mqtt_opts = MqttOptions()
         self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
         self.scheduler.start()
@@ -70,45 +70,59 @@ class Snips(object):
         self.idFile+=1
 
     def add_Reminder(self,e):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        if(e.rep):
-            self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-        else:
-            self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-        self.t()
+        with open('prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
+            date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if(e.rep):
+                writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+            else:
+                writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+            self.t()
 
     def Change_User(self,user):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
-        self.t()
+        with open('prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
+            date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
+            self.t()
 
     def Add_User(self,user):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
-        self.t()
+        with open('prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
+            date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
+            self.t()
 
     def Reminder(self,e):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        if(e.rep):
-            self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-        else:
-            self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-        self.t()
+        with open('prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
+            date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            if(e.rep):
+                writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+            else:
+                writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+            self.t()
 
     def AceptedReminder(self):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
-        self.t()
+        with open('prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
+            date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
+            self.t()
 
     def NotAceptedReminder(self):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
-        self.t()
+        with open('prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
+            date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
+            self.t()
 
     def Error(self,mensaje):
-        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
-        self.t()
+        with open('prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=self.fieldnames)
+            date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
+            self.t()
 
     def lastEventReminder():
         aux=None
@@ -134,8 +148,10 @@ class Snips(object):
         if(e.user==self.usr):
             if(Repetitivo):
                 self.NingunaVeces(e)
-            self.say(intentMessage,e.user+' te toca tomarte '+e.med)
-            self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
+
+            with Hermes(mqtt_options=mqtt_opts) as mqttClient:
+                self.say(intentMessage,e.user+' te toca tomarte '+e.med)
+                self.scheduler1.add_job(self.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,intentMessage])
             self.Reminder(e)
    
 
