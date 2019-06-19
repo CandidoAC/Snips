@@ -279,7 +279,7 @@ def action_wrapper_Negar(hermes, intentMessage,conf):
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
-    mqttClient.publish_start_session_notification(intentMessage, text,None)
+    mqttClient.publish_start_session_notification(intentMessage, text,None) 
 
     
 def recordatorio(intentMessage,e,Repetitivo):
