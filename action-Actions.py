@@ -79,7 +79,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         Snips.scheduler.add_job(Snips.recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e,False])
         hermes.publish_end_session(intentMessage.session_id, msg)
     else:
-        session=intentMessage.session_id
+        session=intentMessage.session_id 
         if(intentMessage.slots.Fecha): 
             fecha = intentMessage.slots.Fecha.first().value
             fecha=fecha [ :fecha.index('+')-1 ]

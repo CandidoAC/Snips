@@ -74,17 +74,17 @@ class Snips(object):
             writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
         else:
             writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-        t()
+        self.t()
 
     def Change_User(self,user):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
-        t()
+        self.t()
 
     def Add_User(self,user):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
-        t()
+        self.t()
 
     def Reminder(self,e):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -92,22 +92,22 @@ class Snips(object):
             self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
         else:
             self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
-        t()
+        self.t()
 
     def AceptedReminder(self):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
-        t()
+        self.t()
 
     def NotAceptedReminder(self):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
-        t()
+        self.t()
 
     def Error(self,mensaje):
         date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.writer.writerow({'timestamp':date,'id': str(self.idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
-        t()
+        self.t()
 
     def lastEventReminder():
         aux=None
