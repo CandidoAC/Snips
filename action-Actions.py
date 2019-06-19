@@ -184,7 +184,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         elif(frecuencia=='hora'):
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
             e=Event(med,date,Snips.usr,True,str(veces)+' horas')
-            e.IncrementarVeces()
+            e.IncrementarVeces() 
             Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e,True]) 
         elif(frecuencia=='desayuno'):#HORA-1
             msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en el desayuno'

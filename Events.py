@@ -58,7 +58,7 @@ class Snips(object):
                     fecha=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
                 if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")<datetime.now()):
-                    self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e,False])
+                    self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
                 else:
                     self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='job2',args=[e,'default'])
                 
