@@ -267,7 +267,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
         if(not event.rep):
             Snips.FinishEvent(event)
         else:
-            Snips.NingunaVez(event)
+            Snips.NingunaVez(event) 
 
     Snips.scheduler1.remove_job('recordando tomar '+event.med+' a '+event.user)
     hermes.publish_end_session(intentMessage.session_id, msg)
