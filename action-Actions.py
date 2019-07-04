@@ -264,7 +264,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     AceptedReminder()
     event=lastEventReminder()
     if(event):
-        if(!event.rep):
+        if(not event.rep):
             Snips.FinishEvent(event)
         else:
             Snips.NingunaVez(event)
