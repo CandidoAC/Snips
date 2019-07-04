@@ -314,7 +314,7 @@ def recordatorioTomar(e,intentMessage):
             msg=e.user+'ha ignorado el evento tomar '+e.med
             say(intentMessage,msg)
             Snips.scheduler1.remove_job('recordando tomar '+e.med+' a '+e.user)
-            if(!e.Rep):
+            if(not e.Rep):
                 Snips.FinishEvent(e)
             else:
                 Snips.NingunaVeces(e)
@@ -338,7 +338,4 @@ if __name__ == '__main__':
         .subscribe_intent("caguilary:Negar", subscribe_Negar_callback) \
         .subscribe_intent("caguilary:Anadir_usuario", subscribe_AnadirUsuario_callback) \
         .subscribe_intent("caguilary:userActivo", subscribe_CheckUsuario_callback) \
-
-
-        
         .start()
