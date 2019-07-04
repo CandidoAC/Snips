@@ -264,7 +264,10 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     AceptedReminder()
     event=lastEventReminder()
     if(event):
-        Snips.FinishEvent(event)
+        if(!event.rep):
+            Snips.FinishEvent(event)
+        else:
+            Snips.NingunaVez(event)
 
     Snips.scheduler1.remove_job('recordando tomar '+event.med+' a '+event.user)
     hermes.publish_end_session(intentMessage.session_id, msg)
@@ -286,8 +289,6 @@ def recordatorio(intentMessage,e,Repetitivo):
     global Snips
     print('Evento detectado para : %s' % datetime.now())
     if(e.user==Snips.usr):
-        if(Repetitivo):
-            Snips.NingunaVeces(e)
         say(intentMessage,e.user+' te toca tomarte '+e.med)
         Reminder(e)
         Snips.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='recordando tomar '+e.med+' a '+e.user,args=[e,intentMessage])
@@ -313,7 +314,10 @@ def recordatorioTomar(e,intentMessage):
             msg=e.user+'ha ignorado el evento tomar '+e.med
             say(intentMessage,msg)
             Snips.scheduler1.remove_job('recordando tomar '+e.med+' a '+e.user)
-            Snips.FinishEvent(e)
+            if(!e.Rep):
+                Snips.FinishEvent(e)
+            else:
+                Snips.NingunaVeces(e)
             mqttClient.publish_end_session(intentMessage, msg)
     else:
         print("Usuario actual distinto al del evento")
@@ -334,4 +338,7 @@ if __name__ == '__main__':
         .subscribe_intent("caguilary:Negar", subscribe_Negar_callback) \
         .subscribe_intent("caguilary:Anadir_usuario", subscribe_AnadirUsuario_callback) \
         .subscribe_intent("caguilary:userActivo", subscribe_CheckUsuario_callback) \
+
+
+        
         .start()
