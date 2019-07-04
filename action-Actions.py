@@ -43,7 +43,7 @@ CONFIG_INI = "config.ini"
 def t():
     global idFile
     idFile+=1
-
+ 
 def global_variables():
     global Recordatorio,e,Snips
     Snips=Snips();
