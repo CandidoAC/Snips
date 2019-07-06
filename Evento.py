@@ -23,6 +23,6 @@ class Event(object):
          
     def __str__(self):
         if(self.rep):
-            return 'Evento :'+self.med+',,'+str(self.veces)+','+self.user+','+str(self.rep)+','+self.when+','+str(self.Active)
+            return 'Evento :'+self.med+',,'+str(self.veces)+','+self.user+','+str(self.rep)+','+self.when+','+str(self.activo)
         else:
-            return 'Evento :'+self.med+','+self.fecha+','+str(self.veces)+','+self.user+','+str(self.rep)+',,'+str(self.Active)
+            return 'Evento :'+self.med+','+self.fecha+','+str(self.veces)+','+self.user+','+str(self.rep)+',,'+str(self.activo)

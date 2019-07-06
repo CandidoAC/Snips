@@ -13,8 +13,8 @@ from hermes_python.ffi.utils import MqttOptions
 from hermes_python.ontology import *
 from Events import Snips
 from Evento import Event
-from threading import Timer
- 
+import threading
+import RPi.GPIO as GPIO
 def minutes(i):
     switcher={
         0:"",
@@ -314,7 +314,7 @@ def recordatorioTomar(e,intentMessage):
             msg=e.user+'ha ignorado el evento tomar '+e.med
             say(intentMessage,msg)
             Snips.scheduler1.remove_job('recordando tomar '+e.med+' a '+e.user)
-            if(not e.Rep):
+            if(not e.rep):
                 Snips.FinishEvent(e)
             else:
                 Snips.NingunaVeces(e)
@@ -323,10 +323,29 @@ def recordatorioTomar(e,intentMessage):
         print("Usuario actual distinto al del evento")
         Snips.scheduler1.remove_job('job2')
 
+class button(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        BUTTON = 12
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(BUTTON, GPIO.IN)
+        state = GPIO.input(BUTTON)
+
+    def run(self):
+        while True:
+            if state:
+                print("off")
+            else:
+                print("on")
+        time.sleep(1)
+
 if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
+    thread1 = mythread()
+    thread1.start()
+
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('/home/pi/prueba.csv', 'a+') as csvfile:
         fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
