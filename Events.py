@@ -6,14 +6,16 @@ from Database import Database
 from apscheduler.schedulers.background import BackgroundScheduler
 
 class Snips(object):
-    
+    usr=""
+    scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
+    scheduler1 = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
+    Database=Database()
+
+
     def __init__(self):
         file=__import__('action-Actions')
-        self.scheduler = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
         self.scheduler.start()
-        self.scheduler1 = BackgroundScheduler({'apscheduler.timezone': 'Europe/Madrid'})
         self.scheduler1.start()
-        self.Database=Database()
         self.Database.connectDB()
         self.Database.createTable()
         self.Database.insertUsers('default')
@@ -90,5 +92,8 @@ class Snips(object):
     def UserActive(self):
         self.Database.UserActive()
 
-    def eventActive(e):
-        self.Database.EventIsActive(e.med,e.fecha,e.user,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))
+    def eventActive(self,e):
+        if(e.rep):
+            self.Database.EventIsActive(e.med,None,e.user,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))
+        else:
+            self.Database.EventIsActive(e.med,e.fecha,e.user,e.rep,None,None)

@@ -340,7 +340,7 @@ class button(threading.Thread):
 
     def run(self):
         while True:
-            state = GPIO.input(BUTTON)
+            state = GPIO.input(self.BUTTON)
             if state:
                 global Snips   
                 #msg="Evento aceptado por "+e.user
