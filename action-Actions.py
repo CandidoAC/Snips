@@ -337,7 +337,7 @@ class button(threading.Thread):
                 if(x.__eq__(job)):
                     return True
         return enc
-
+ 
     def run(self):
         while True:
             state = GPIO.input(self.BUTTON)
