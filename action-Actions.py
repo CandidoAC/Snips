@@ -361,7 +361,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
             e=Event(med,date,Snips.usr,True,str(veces)+' dias')
             e.IncrementarVeces()
-           job='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr             
+            job='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr             
         elif(frecuencia=='mes'):
             msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
             e=Event(med,date,Snips.usr,True,str(veces)+' meses')
