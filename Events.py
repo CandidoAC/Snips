@@ -89,3 +89,6 @@ class Snips(object):
     
     def UserActive(self):
         self.Database.UserActive()
+
+    def eventActive(e):
+        self.Database.EventIsActive(e.med,e.fecha,e.user,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))

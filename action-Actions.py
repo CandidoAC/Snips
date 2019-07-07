@@ -263,11 +263,11 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     msg="Evento aceptado"
     AceptedReminder()
     event=lastEventReminder()
-    if(event):
+    if(Snips.eventActive(event)):
         if(not event.rep):
             Snips.FinishEvent(event)
         else:
-            Snips.NingunaVez(event) 
+            Snips.NingunaVez(event)  
 
     Snips.scheduler1.remove_job('recordando tomar '+event.med+' a '+event.user)
     hermes.publish_end_session(intentMessage.session_id, msg)
@@ -324,26 +324,48 @@ def recordatorioTomar(e,intentMessage):
         Snips.scheduler1.remove_job('job2')
 
 class button(threading.Thread):
+    BUTTON = 12
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(BUTTON, GPIO.IN)
     def __init__(self):
         threading.Thread.__init__(self)
-        BUTTON = 12
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(BUTTON, GPIO.IN)
-        state = GPIO.input(BUTTON)
+
+    def exist_Job(self,job):
+        enc=False
+        if(Snips.scheduler1.get_jobs()):
+            for x in Snips.scheduler1.get_jobs():
+                if(x.__eq__(job)):
+                    return True
+        return enc
 
     def run(self):
         while True:
+            state = GPIO.input(BUTTON)
             if state:
-                print("off")
-            else:
-                print("on")
+                global Snips   
+                #msg="Evento aceptado por "+e.user
+                msg="Evento aceptado"
+                AceptedReminder()
+                event=lastEventReminder()
+                if(event):
+                    if(Snips.eventActive(event)):
+                        if(not event.rep):
+                            Snips.FinishEvent(event)
+                        else:
+                            Snips.NingunaVez(event) 
+
+                job='recordando tomar '+event.med+' a '+event.user
+                if(exist_Job(job)):
+                    Snips.scheduler1.remove_job(job)
+                    say('default', msg)
+
         time.sleep(1)
 
 if __name__ == '__main__':
     mqtt_opts = MqttOptions()
     idFile=0
     global_variables()
-    thread1 = mythread()
+    thread1 = button()
     thread1.start()
 
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('/home/pi/prueba.csv', 'a+') as csvfile:
