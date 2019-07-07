@@ -178,3 +178,12 @@ class Database(object):
         if(result):
                 return result[9]
         return None
+
+    def deleteEvent(self,med,FechaEvento,user,Repeticion,Tipo_rep,cant_rep):
+        if(Repeticion):
+            params=(med,user,Tipo_rep,cant_rep)
+            query='DELETE FROM Eventos WHERE med LIKE ? and user=? and fechaEvento IS NULL and Repeticion=1 and Tipo_rep=? and cant_rep=?'
+        else:
+            params=(med,user,FechaEvento)
+            query='DELETE FROM Eventos WHERE med LIKE ? and user=? and fechaEvento=? and Repeticion=0 and Tipo_rep IS NULL and cant_rep IS NULL'
+        self.cursor.execute(query,params)

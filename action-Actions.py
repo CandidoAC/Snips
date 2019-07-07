@@ -55,6 +55,13 @@ def add_Reminder(e):
     else:
         writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
     t()
+def delete_Reminder(e):
+    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    if(e.rep):
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+    else:
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+    t()
 
 def Change_User(user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -252,6 +259,21 @@ def action_wrapper_CheckUsuario(hermes, intentMessage,conf):
     msg="El usuario activo es "+Snips.usr
     hermes.publish_end_session(intentMessage.session_id, msg)
     
+def exist_Job(self,job):
+    enc=False
+    if(Snips.scheduler1.get_jobs()):
+        for x in Snips.scheduler1.get_jobs():
+            if(x.__eq__(job)):
+                return True
+    return enc 
+
+def exist_Job1(self,job):
+    enc=False
+    if(Snips.scheduler.get_jobs()):
+        for x in Snips.scheduler.get_jobs():
+            if(x.__eq__(job)):
+                return True
+    return enc
 
 def subscribe_confirmar_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
@@ -263,14 +285,17 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     msg="Evento aceptado"
     AceptedReminder()
     event=lastEventReminder()
-    if(Snips.eventActive(event)):
-        if(not event.rep):
-            Snips.FinishEvent(event)
-        else:
-            Snips.NingunaVez(event)  
+    if(event):
+        if(Snips.eventActive(event)):
+            if(not event.rep):
+                Snips.FinishEvent(event)
+            else:
+                Snips.NingunaVez(event) 
 
-    Snips.scheduler1.remove_job('recordando tomar '+event.med+' a '+event.user)
-    hermes.publish_end_session(intentMessage.session_id, msg)
+        job='recordando tomar '+event.med+' a '+event.user
+        if(self.exist_Job(job)):
+            Snips.scheduler1.remove_job('recordando tomar '+event.med+' a '+event.user)
+            hermes.publish_end_session(intentMessage.session_id, msg)
 
 def subscribe_Negar_callback(hermes, intentMessage):
     conf = read_configuration_file(CONFIG_INI)
@@ -280,6 +305,109 @@ def action_wrapper_Negar(hermes, intentMessage,conf):
     msg="Evento no aceptado por "+Snips.usr+" se te volverá ha avisar en 20 segundos"
     NotAceptedReminder()
     hermes.publish_end_session(intentMessage.session_id, msg)
+
+def subscribe_Borrar_callback(hermes, intentMessage):
+    conf = read_configuration_file(CONFIG_INI)
+    action_wrapper_Negar(hermes, intentMessage, conf)
+
+def action_wrapper_Borrar(hermes, intentMessage,conf):
+    if(not intentMessage.slots.Repeticion):
+        session=intentMessage.session_id
+        fecha = intentMessage.slots.Fecha.first().value
+        fecha=fecha [ :fecha.index('+')-1 ] 
+        date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+        med = intentMessage.slots.Medicamento.first().value 
+        msg=Snips.usr+" está borrandi el recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
+        #add_Reminder(med,fecha)
+        """now=datetime.now()
+        if((date - now).total_seconds()>0):
+            t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
+            t.start()"""
+        e=Event(med,date,Snips.usr,False,'')
+        e.IncrementarVeces()
+        Snips.borrarEvento(e)
+        delete_Reminder(e)
+        job=fecha+','+e.med+','+e.user
+        if(exist_Job(job)):
+            Snips.scheduler.remove_job(job)
+
+        job='recordando tomar '+e.med+' a '+e.user
+        if(exist_Job1(job)):
+            Snips.scheduler1.remove_job(job)
+        hermes.publish_end_session(intentMessage.session_id, msg)
+    else:
+        session=intentMessage.session_id
+        if(intentMessage.slots.Fecha): 
+            fecha = intentMessage.slots.Fecha.first().value
+            fecha=fecha [ :fecha.index('+')-1 ]
+            date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+        else:
+            fecha=datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+            date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+
+        med = intentMessage.slots.Medicamento.first().value
+        if(not intentMessage.slots.cantidad):
+            veces=1
+        else:
+            veces= int(intentMessage.slots.cantidad.first().value)
+
+        frecuencia=intentMessage.slots.Repeticion.first().value
+        if(frecuencia=='diariamente'):
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
+            e=Event(med,date,Snips.usr,True,'1 dias')
+            e.IncrementarVeces()
+            job='Repeticion diaria,'+med+','+Snips.usr
+        elif(frecuencia=='dia'):
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
+            e=Event(med,date,Snips.usr,True,str(veces)+' dias')
+            e.IncrementarVeces()
+           job='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr             
+        elif(frecuencia=='mes'):
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
+            e=Event(med,date,Snips.usr,True,str(veces)+' meses')
+            e.IncrementarVeces()
+            job='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr
+        elif(frecuencia=='semana'):
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
+            e=Event(med,date,Snips.usr,True,str(veces)+' semanas')
+            e.IncrementarVeces()
+            job='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr
+        elif(frecuencia=='hora'):
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
+            e=Event(med,date,Snips.usr,True,str(veces)+' horas')
+            e.IncrementarVeces() 
+            job='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr
+        elif(frecuencia=='desayuno'):#HORA-1
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en el desayuno'
+            e=Event(med,date,Snips.usr,True,'Desayuno')
+            e.IncrementarVeces()
+            job='Repeticion Desayuno'+','+med+','+Snips.usr 
+        elif(frecuencia=='comida'):#HORA-1
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la comida'
+            e=Event(med,date,Snips.usr,True,'Comida')
+            e.IncrementarVeces()
+            job='Repeticion Comida'+','+med+','+Snips.usr
+        elif(frecuencia=='cena'): #HORA-1
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la cena'
+            e=Event(med,date,Snips.usr,True,'Cena')
+            e.IncrementarVeces()
+            job='Repeticion Cena'+','+med+','+Snips.usr
+        else:
+            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
+            e=Event(med,date,Snips.usr,True,Repeticion)
+            e.IncrementarVeces()
+            job='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr
+
+
+        Snips.borrarEvento(e)
+        delete_Reminder(e)
+        if(exist_Job(job)):
+            Snips.scheduler.remove_job(job)
+
+        job='recordando tomar '+e.med+' a '+e.user
+        if(exist_Job1(job)):
+            Snips.scheduler1.remove_job(job)
+        hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
     mqttClient.publish_start_session_notification(intentMessage, text,None) 
@@ -321,7 +449,7 @@ def recordatorioTomar(e,intentMessage):
             mqttClient.publish_end_session(intentMessage, msg)
     else:
         print("Usuario actual distinto al del evento")
-        Snips.scheduler1.remove_job('job2')
+        Snips.scheduler1.remove_job('recordando tomar '+e.med+' a '+e.user)
 
 class button(threading.Thread):
     BUTTON = 12
@@ -355,11 +483,11 @@ class button(threading.Thread):
                             Snips.NingunaVez(event) 
 
                 job='recordando tomar '+event.med+' a '+event.user
-                if(exist_Job(job)):
+                if(self.exist_Job(job)):
                     Snips.scheduler1.remove_job(job)
                     say('default', msg)
 
-        time.sleep(1)
+            time.sleep(1)
 
 if __name__ == '__main__':
     mqtt_opts = MqttOptions()
@@ -379,4 +507,5 @@ if __name__ == '__main__':
         .subscribe_intent("caguilary:Negar", subscribe_Negar_callback) \
         .subscribe_intent("caguilary:Anadir_usuario", subscribe_AnadirUsuario_callback) \
         .subscribe_intent("caguilary:userActivo", subscribe_CheckUsuario_callback) \
+        .subscribe_intent("caguilary:borrarEvento", subscribe_Borrar_callback) \
         .start()
