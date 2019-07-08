@@ -4,7 +4,7 @@ from Evento import Event
 
 class Database(object):
     def connectDB(self):
-        self.con_bd = sqlite3.connect('/home/pi/Desktop/symmetric-server-3.10.2/engines/corp.sqlite', check_same_thread=False)
+        self.con_bd = sqlite3.connect('/home/pi/Desktop/symmetric-server-3.10.2/corp.sqlite', check_same_thread=False)
         self.cursor=self.con_bd.cursor()
         
     def createTable(self):

@@ -259,7 +259,7 @@ def action_wrapper_CheckUsuario(hermes, intentMessage,conf):
     msg="El usuario activo es "+Snips.usr
     hermes.publish_end_session(intentMessage.session_id, msg)
     
-def exist_Job(self,job):
+def exist_Job(job):
     enc=False
     if(Snips.scheduler1.get_jobs()):
         for x in Snips.scheduler1.get_jobs():
@@ -267,7 +267,7 @@ def exist_Job(self,job):
                 return True
     return enc 
 
-def exist_Job1(self,job):
+def exist_Job1(job):
     enc=False
     if(Snips.scheduler.get_jobs()):
         for x in Snips.scheduler.get_jobs():
@@ -293,7 +293,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
                 Snips.NingunaVez(event) 
 
         job='recordando tomar '+event.med+' a '+event.user
-        if(self.exist_Job(job)):
+        if(exist_Job(job)):
             Snips.scheduler1.remove_job('recordando tomar '+event.med+' a '+event.user)
             hermes.publish_end_session(intentMessage.session_id, msg)
 
