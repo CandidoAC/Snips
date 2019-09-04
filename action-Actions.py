@@ -391,7 +391,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                     Snips.scheduler1.remove_job(job)
             elif(frecuencia=='dia'):
                 if(veces>30):
-                    msg="No se puede crear un evento repetitivo con cant mayor a 30 días."
+                    msg="No se puede borrar un evento repetitivo con cant mayor a 30 días."
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' dias')
@@ -406,7 +406,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                         Snips.scheduler1.remove_job(job)     
             elif(frecuencia=='mes'):
                 if(veces>11):
-                    msg="No se puede crear un evento repetitivo con cant igual o mayor que 11 meses"
+                    msg="No se puede borrar un evento repetitivo con cant igual o mayor que 11 meses"
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' meses')
@@ -421,7 +421,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                         Snips.scheduler1.remove_job(job)
             elif(frecuencia=='semana'):
                 if(veces>30):
-                    msg="No se puede crear un evento repetitivo con cant mayor a 30 semanas."
+                    msg="No se puede borrar un evento repetitivo con cant mayor a 30 semanas."
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' semanas')
@@ -436,7 +436,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                         Snips.scheduler1.remove_job(job)
             elif(frecuencia=='hora'):
                 if(veces>23):
-                    msg="No se puede crear un evento repetitivo con cant sea 23 o más."
+                    msg="No se puede borrar un evento repetitivo con cant sea 23 o más."
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' horas')
