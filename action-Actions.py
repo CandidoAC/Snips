@@ -164,20 +164,26 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
                 e.IncrementarVeces()
                 Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/1',hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])
             elif(frecuencia=='dia'):
-                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
-                e=Event(med,date,Snips.usr,True,str(veces)+' dia')
-                e.IncrementarVeces()
-                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])             
+                if(veces>30):
+                    msg="No se puede crear un evento repetitivo con cant mayor a 30 días."
+                else:
+                    msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
+                    e=Event(med,date,Snips.usr,True,str(veces)+' dia')
+                    e.IncrementarVeces()
+                    Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])             
             elif(frecuencia=='mes'):
                 msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,str(veces)+' mes')
                 e.IncrementarVeces()
                 Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
             elif(frecuencia=='semana'):
-                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
-                e=Event(med,date,Snips.usr,True,str(veces)+' semana')
-                e.IncrementarVeces()
-                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
+                if(veces>30):
+                    msg="No se puede crear un evento repetitivo con cant mayor a 30 días."
+                else:
+                    msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
+                    e=Event(med,date,Snips.usr,True,str(veces)+' semana')
+                    e.IncrementarVeces()
+                    Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
             elif(frecuencia=='hora'):
                 msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,str(veces)+' hora')
