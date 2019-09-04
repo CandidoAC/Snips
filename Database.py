@@ -102,7 +102,7 @@ class Database(object):
           if(' 'in e.when):
             result=self.cursor.execute('SELECT ID FROM Eventos WHERE user == ? and med LIKE ? and Repeticion=? and FechaEvento IS NULL and Tipo_rep LIKE ? and cant_rep == ?',(userID,e.med,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')])))
           else:
-            result=self.cursor.execute('SELECT ID FROM Eventos WHERE user == ? and med LIKE ? and Repeticion=? and FechaEvento IS NULL and Tipo_rep LIKE ? and cant_rep == ?',(userID,e.med,e.rep,e,when,''))
+            result=self.cursor.execute('SELECT ID FROM Eventos WHERE user == ? and med LIKE ? and Repeticion=? and FechaEvento IS NULL and Tipo_rep LIKE ? and cant_rep == ?',(userID,e.med,e.rep,e.when,''))
         if(result.fetchall()):
             print(True)
             return True
@@ -116,7 +116,10 @@ class Database(object):
            print(ID)
            if (not self.ExistsEvent(e,ID)):
                 if(e.rep):
+                  if(' 'in e.when):
                     event = [(timestamp,e.med,ID,e.rep,e.veces,e.fecha,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))]
+                  else:
+                    event = [(timestamp,e.med,ID,e.rep,e.veces,e.fecha,e.when,'')]
                 else:
                     event = [(timestamp,e.med,ID,e.rep,e.veces,e.fecha,None,None)]
                 self.cursor.executemany('INSERT INTO Eventos(timestamp,med,user,Repeticion,veces,FechaEvento,Tipo_rep,cant_rep,Active) VALUES (?,?,?,?,?,?,?,?,1)', event)
@@ -128,8 +131,11 @@ class Database(object):
            print(ID)
            if (self.ExistsEvent(e,ID)):
                 if(e.rep):
+                  if(' 'in e.when):
                     params=(ID,e.med,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))
-                    query='UPDATE Eventos SET veces = veces + 1 WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
+                  else:
+                    params=(ID,e.med,e.rep,e.when,'')
+                  query='UPDATE Eventos SET veces = veces + 1 WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
                 else:
                     params=(ID,e.med,e.rep,e.fecha)
                     query='UPDATE Eventos SET veces = veces + 1 WHERE user = ? and med=? and Repeticion=? and FechaEvento=? and Tipo_rep IS NULL and cant_rep IS NULL'
@@ -143,8 +149,11 @@ class Database(object):
            print(ID)
            if (self.ExistsEvent(e,ID)):
                 if(e.rep):
+                  if(' 'in e.when):
                     params=(ID,e.med,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))
-                    query='UPDATE Eventos SET veces = 0 WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
+                  else:
+                    params=(ID,e.med,e.rep,e.when,'')
+                  query='UPDATE Eventos SET veces = 0 WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
                 else:
                     params=(ID,e.med,e.rep,e.fecha)
                     query='UPDATE Eventos SET veces = 0 WHERE user = ? and med=? and Repeticion=? and FechaEvento=? and Tipo_rep IS NULL and cant_rep IS NULL'
@@ -159,8 +168,11 @@ class Database(object):
            if (self.ExistsEvent(e,ID)):
                 #self.con_bd.set_trace_callback(print)
                 if(e.rep):
+                  if(' 'in e.when):
                     params=(ID,e.med,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))
-                    query='UPDATE Eventos SET Active = 0  WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
+                  else:
+                    params=(ID,e.med,e.rep,e.when,'')
+                  query='UPDATE Eventos SET Active = 0  WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
                 else:
                     params=(ID,e.med,e.rep,e.fecha)
                     query='UPDATE Eventos SET Active = 0 WHERE user = ? and med=? and Repeticion=? and FechaEvento=? and Tipo_rep IS NULL and cant_rep IS NULL'
@@ -169,6 +181,7 @@ class Database(object):
                 
     def EventIsActive(self,med,FechaEvento,user,Repeticion,Tipo_rep,cant_rep):
         if(Repeticion):
+          if(Tipo_rep):
             rep=True
             params=(med,user,Tipo_rep,cant_rep)
             query='SELECT * FROM Eventos WHERE med LIKE ? and user=? and fechaEvento IS NULL and Repeticion=1 and Tipo_rep=? and cant_rep=?'
