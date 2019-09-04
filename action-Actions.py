@@ -24,18 +24,6 @@ def minutes(i):
         }
     return switcher.get(i," y " + str(i))
 
-def dia_sem(i):
-    switcher={
-        'Lunes':0,
-        'Martes':1,
-        'Miercoles':2,
-        'Jueves':3,
-        'Viernes':4,
-        'Sabado':5,
-        'Domingo':6
-        }
-    return switcher.get(i," y " + str(i))
-
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
@@ -46,54 +34,54 @@ def t():
  
 def global_variables():
     global Recordatorio,e,Snips
-    Snips=Snips();
+    Snips=Snips()
 
 def add_Reminder(e):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if(e.rep):
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
     else:
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
     t()
 def delete_Reminder(e):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if(e.rep):
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
     else:
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
     t()
 
 def Change_User(user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Modo de aceptar':'','Error_output':''})
     t()
 
 def Add_User(user):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Error_output':''})
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Modo de aceptar':'','Error_output':''})
     t()
 
 def Reminder(e):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     if(e.rep):
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
     else:
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Error_output':''})
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
     t()
 
-def AceptedReminder():
+def AceptedReminder(Modo):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Modo de aceptar':Modo,'Error_output':''})
     t()
 
 def NotAceptedReminder():
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Error_output':''})
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Modo de aceptar':'','Error_output':''})
     t()
 
 def Error(mensaje):
     date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Error_output':mensaje})
+    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Modo de aceptar':'','Error_output':mensaje})
     t()
 
 def lastEventReminder():
@@ -158,64 +146,66 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             fecha=fecha [ :fecha.index('+')-1 ]
             date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
         else:
-            fecha=datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-            date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+            fecha=datetime.today().strftime("%Y-%m-%d %H:%M")
+            date=datetime.strptime(fecha,"%Y-%m-%d %H:%M")
 
         med = intentMessage.slots.Medicamento.first().value
         if(not intentMessage.slots.cantidad):
             veces=1
         else:
             veces= int(intentMessage.slots.cantidad.first().value)
-
-        frecuencia=intentMessage.slots.Repeticion.first().value
-        if(frecuencia=='diariamente'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,'1 dias')
-            e.IncrementarVeces()
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/1',hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])
-        elif(frecuencia=='dia'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' dias')
-            e.IncrementarVeces()
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])             
-        elif(frecuencia=='mes'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' meses')
-            e.IncrementarVeces()
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
-        elif(frecuencia=='semana'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' semanas')
-            e.IncrementarVeces()
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
-        elif(frecuencia=='hora'):
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' horas')
-            e.IncrementarVeces() 
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e,True]) 
-        elif(frecuencia=='desayuno'):#HORA-1
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en el desayuno'
-            e=Event(med,date,Snips.usr,True,'Desayuno')
-            e.IncrementarVeces()
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e,True]) 
-        elif(frecuencia=='comida'):#HORA-1
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la comida'
-            e=Event(med,date,Snips.usr,True,'Comida')
-            e.IncrementarVeces()
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e,True]) 
-        elif(frecuencia=='cena'): #HORA-1
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la cena'
-            e=Event(med,date,Snips.usr,True,'Cena')
-            e.IncrementarVeces()
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e,True]) 
+        if (veces==0):
+            msg='No se puede crear un evento repetivo con cant  igual a 0.'
         else:
-            msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,Repeticion)
-            e.IncrementarVeces()
-            Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr,day_of_week=dia_sem(frecuencia),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
+            frecuencia=intentMessage.slots.Repeticion.first().value
+            if(frecuencia=='diariamente'):
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,'1 dia')
+                e.IncrementarVeces()
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/1',hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])
+            elif(frecuencia=='dia'):
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' dia')
+                e.IncrementarVeces()
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])             
+            elif(frecuencia=='mes'):
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' mes')
+                e.IncrementarVeces()
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
+            elif(frecuencia=='semana'):
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' semana')
+                e.IncrementarVeces()
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
+            elif(frecuencia=='hora'):
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' hora')
+                e.IncrementarVeces() 
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e,True]) 
+            elif(frecuencia=='desayuno'):#HORA-1
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en el desayuno'
+                e=Event(med,date,Snips.usr,True,'Desayuno')
+                e.IncrementarVeces()
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e,True]) 
+            elif(frecuencia=='comida'):#HORA-1
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la comida'
+                e=Event(med,date,Snips.usr,True,'Comida')
+                e.IncrementarVeces()
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e,True]) 
+            elif(frecuencia=='cena'): #HORA-1
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la cena'
+                e=Event(med,date,Snips.usr,True,'Cena')
+                e.IncrementarVeces()
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e,True]) 
+            else:
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' '+frecuencia)
+                e.IncrementarVeces()
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr,day_of_week=dia_sem(frecuencia),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
 
-        Snips.addEvent(e)
-        add_Reminder(e)
+            Snips.addEvent(e)
+            add_Reminder(e)        
         hermes.publish_end_session(intentMessage.session_id, msg)
 
 #Intent cambiar usuario
@@ -283,7 +273,7 @@ def action_wrapper_Confirmar(hermes, intentMessage,conf):
     global Snips   
     #msg="Evento aceptado por "+e.user
     msg="Evento aceptado"
-    AceptedReminder()
+    AceptedReminder('Voz')
     event=lastEventReminder()
     if(event):
         if(Snips.eventActive(event)):
@@ -307,17 +297,19 @@ def action_wrapper_Negar(hermes, intentMessage,conf):
     hermes.publish_end_session(intentMessage.session_id, msg)
 
 def subscribe_Borrar_callback(hermes, intentMessage):
+    print('Borrando evento_callback')
     conf = read_configuration_file(CONFIG_INI)
-    action_wrapper_Negar(hermes, intentMessage, conf)
+    action_wrapper_Borrar(hermes, intentMessage, conf)
 
 def action_wrapper_Borrar(hermes, intentMessage,conf):
+    print('Borrando evento')
     if(not intentMessage.slots.Repeticion):
         session=intentMessage.session_id
         fecha = intentMessage.slots.Fecha.first().value
         fecha=fecha [ :fecha.index('+')-1 ] 
         date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
         med = intentMessage.slots.Medicamento.first().value 
-        msg=Snips.usr+" está borrandi el recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
+        msg=Snips.usr+" está borrando el recordatorio para el día  " + str(date.day) + " de " + str(date.month) + " del " + str(date.year) + " a las " + str(date.hour) + minutes(date.minute)+" tomar " + med
         #add_Reminder(med,fecha)
         """now=datetime.now()
         if((date - now).total_seconds()>0):
@@ -325,6 +317,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             t.start()"""
         e=Event(med,date,Snips.usr,False,'')
         e.IncrementarVeces()
+        print('Evento a borrar: tomar '+str(e))
         Snips.borrarEvento(e)
         delete_Reminder(e)
         job=fecha+','+e.med+','+e.user
@@ -342,8 +335,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             fecha=fecha [ :fecha.index('+')-1 ]
             date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
         else:
-            fecha=datetime.today().strftime("%Y-%m-%d %H:%M:%S")
-            date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+            fecha=datetime.today().strftime("%Y-%m-%d %H:%M")
+            date=datetime.strptime(fecha,"%Y-%m-%d %H:%M")
 
         med = intentMessage.slots.Medicamento.first().value
         if(not intentMessage.slots.cantidad):
@@ -351,62 +344,65 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
         else:
             veces= int(intentMessage.slots.cantidad.first().value)
 
-        frecuencia=intentMessage.slots.Repeticion.first().value
-        if(frecuencia=='diariamente'):
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,'1 dias')
-            e.IncrementarVeces()
-            job='Repeticion diaria,'+med+','+Snips.usr
-        elif(frecuencia=='dia'):
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' dias')
-            e.IncrementarVeces()
-            job='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr             
-        elif(frecuencia=='mes'):
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' meses')
-            e.IncrementarVeces()
-            job='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr
-        elif(frecuencia=='semana'):
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' semanas')
-            e.IncrementarVeces()
-            job='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr
-        elif(frecuencia=='hora'):
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,str(veces)+' horas')
-            e.IncrementarVeces() 
-            job='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr
-        elif(frecuencia=='desayuno'):#HORA-1
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en el desayuno'
-            e=Event(med,date,Snips.usr,True,'Desayuno')
-            e.IncrementarVeces()
-            job='Repeticion Desayuno'+','+med+','+Snips.usr 
-        elif(frecuencia=='comida'):#HORA-1
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la comida'
-            e=Event(med,date,Snips.usr,True,'Comida')
-            e.IncrementarVeces()
-            job='Repeticion Comida'+','+med+','+Snips.usr
-        elif(frecuencia=='cena'): #HORA-1
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la cena'
-            e=Event(med,date,Snips.usr,True,'Cena')
-            e.IncrementarVeces()
-            job='Repeticion Cena'+','+med+','+Snips.usr
+        if (veces==0):
+            msg='No se puede crear un evento repetivo con cant  igual a 0.'
         else:
-            msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
-            e=Event(med,date,Snips.usr,True,Repeticion)
-            e.IncrementarVeces()
-            job='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr
+            frecuencia=intentMessage.slots.Repeticion.first().value
+            if(frecuencia=='diariamente'):
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,'1 dias')
+                e.IncrementarVeces()
+                job='Repeticion diaria,'+med+','+Snips.usr
+            elif(frecuencia=='dia'):
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' dias')
+                e.IncrementarVeces()
+                job='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr             
+            elif(frecuencia=='mes'):
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' meses')
+                e.IncrementarVeces()
+                job='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr
+            elif(frecuencia=='semana'):
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' semanas')
+                e.IncrementarVeces()
+                job='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr
+            elif(frecuencia=='hora'):
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' horas')
+                e.IncrementarVeces() 
+                job='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr
+            elif(frecuencia=='desayuno'):#HORA-1
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en el desayuno'
+                e=Event(med,date,Snips.usr,True,'Desayuno')
+                e.IncrementarVeces()
+                job='Repeticion Desayuno'+','+med+','+Snips.usr 
+            elif(frecuencia=='comida'):#HORA-1
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la comida'
+                e=Event(med,date,Snips.usr,True,'Comida')
+                e.IncrementarVeces()
+                job='Repeticion Comida'+','+med+','+Snips.usr
+            elif(frecuencia=='cena'): #HORA-1
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la cena'
+                e=Event(med,date,Snips.usr,True,'Cena')
+                e.IncrementarVeces()
+                job='Repeticion Cena'+','+med+','+Snips.usr
+            else:
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
+                e=Event(med,date,Snips.usr,True,str(veces)+' '+frecuencia)
+                e.IncrementarVeces()
+                job='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr
 
 
-        Snips.borrarEvento(e)
-        delete_Reminder(e)
-        if(exist_Job(job)):
-            Snips.scheduler.remove_job(job)
+            Snips.borrarEvento(e)
+            delete_Reminder(e)
+            if(exist_Job(job)):
+                Snips.scheduler.remove_job(job)
 
-        job='recordando tomar '+e.med+' a '+e.user
-        if(exist_Job1(job)):
-            Snips.scheduler1.remove_job(job)
+            job='recordando tomar '+e.med+' a '+e.user
+            if(exist_Job1(job)):
+                Snips.scheduler1.remove_job(job)
         hermes.publish_end_session(intentMessage.session_id, msg)
 
 def say(intentMessage,text):
@@ -473,7 +469,7 @@ class button(threading.Thread):
                 global Snips   
                 #msg="Evento aceptado por "+e.user
                 msg="Evento aceptado"
-                AceptedReminder()
+                AceptedReminder('Botón')
                 event=lastEventReminder()
                 if(event):
                     if(Snips.eventActive(event)):
@@ -497,7 +493,7 @@ if __name__ == '__main__':
     thread1.start()
 
     with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('/home/pi/prueba.csv', 'a+') as csvfile:
-        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Error_output']
+        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Modo de aceptar','Error_output']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         h\
@@ -507,5 +503,5 @@ if __name__ == '__main__':
         .subscribe_intent("caguilary:Negar", subscribe_Negar_callback) \
         .subscribe_intent("caguilary:Anadir_usuario", subscribe_AnadirUsuario_callback) \
         .subscribe_intent("caguilary:userActivo", subscribe_CheckUsuario_callback) \
-        .subscribe_intent("caguilary:borrarEvento", subscribe_Borrar_callback) \
+        .subscribe_intent("caguilary:Borrar_Evento", subscribe_Borrar_callback) \
         .start()

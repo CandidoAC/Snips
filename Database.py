@@ -1,11 +1,13 @@
-#!/usr/bin/env pytho
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import sqlite3
 from Evento import Event
 
 class Database(object):
     def connectDB(self):
-        self.con_bd = sqlite3.connect('/home/pi/Desktop/symmetric-server-3.10.2/corp.sqlite', check_same_thread=False)
+        self.con_bd = sqlite3.connect('/home/pi/Desktop/symmetric-server-3.10.3/corp.sqlite', check_same_thread=False)
         self.cursor=self.con_bd.cursor()
+        self.con_bd.set_trace_callback(print)
         
     def createTable(self):
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS Eventos(ID INTEGER,timestamp date,med text,user integer, Repeticion boolean, veces integer, FechaEvento Date, Tipo_rep text,cant_rep integer,Active boolean , PRIMARY KEY(ID ASC),FOREIGN KEY (user) REFERENCES Users (ID))''')
@@ -153,7 +155,7 @@ class Database(object):
            ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(e.user,)).fetchone()[0])
            print(ID)
            if (self.ExistsEvent(e,ID)):
-                self.con_bd.set_trace_callback(print)
+                #self.con_bd.set_trace_callback(print)
                 if(e.rep):
                     params=(ID,e.med,e.rep,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')]))
                     query='UPDATE Eventos SET Active = 0  WHERE user = ? and med=? and Repeticion=? and FechaEvento IS NULL and Tipo_rep=? and cant_rep=?'
@@ -180,10 +182,13 @@ class Database(object):
         return None
 
     def deleteEvent(self,med,FechaEvento,user,Repeticion,Tipo_rep,cant_rep):
-        if(Repeticion):
-            params=(med,user,Tipo_rep,cant_rep)
-            query='DELETE FROM Eventos WHERE med LIKE ? and user=? and fechaEvento IS NULL and Repeticion=1 and Tipo_rep=? and cant_rep=?'
-        else:
-            params=(med,user,FechaEvento)
-            query='DELETE FROM Eventos WHERE med LIKE ? and user=? and fechaEvento=? and Repeticion=0 and Tipo_rep IS NULL and cant_rep IS NULL'
-        self.cursor.execute(query,params)
+          if(self.ExistsUser(user)):
+               ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(user,)).fetchone()[0])
+               if(Repeticion):
+                  params=(med,ID,Tipo_rep,cant_rep)
+                  query='DELETE FROM Eventos WHERE med LIKE ? and user=? and fechaEvento IS NULL and Repeticion=1 and Tipo_rep=? and cant_rep=?'
+               else:
+                  params=(med,ID,FechaEvento)
+                  query='DELETE FROM Eventos WHERE med LIKE ? and user=? and fechaEvento=? and Repeticion=0 and Tipo_rep IS NULL and cant_rep IS NULL'
+               self.cursor.execute(query,params)
+               self.con_bd.commit()
