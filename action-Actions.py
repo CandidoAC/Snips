@@ -155,7 +155,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         else:
             veces= int(intentMessage.slots.cantidad.first().value)
         if (veces==0):
-            msg='No se puede crear un evento repetivo con cant  igual a 0.'
+            msg='No se puede crear un evento repetitivo con cant  igual a 0.'
         else:
             frecuencia=intentMessage.slots.Repeticion.first().value
             if(frecuencia=='diariamente'):
@@ -199,10 +199,10 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
                 e.IncrementarVeces()
                 Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e,True]) 
             else:
-                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
+                msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' '+frecuencia+' empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,str(veces)+' '+frecuencia)
                 e.IncrementarVeces()
-                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr,day_of_week=dia_sem(frecuencia),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
+                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr,day_of_week=Snips.dia_sem(frecuencia),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
 
             Snips.addEvent(e)
             add_Reminder(e)        
@@ -345,7 +345,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             veces= int(intentMessage.slots.cantidad.first().value)
 
         if (veces==0):
-            msg='No se puede crear un evento repetivo con cant  igual a 0.'
+            msg='No se puede crear un evento repetitivo con cant  igual a 0.'
         else:
             frecuencia=intentMessage.slots.Repeticion.first().value
             if(frecuencia=='diariamente'):
@@ -389,7 +389,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                 e.IncrementarVeces()
                 job='Repeticion Cena'+','+med+','+Snips.usr
             else:
-                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+frecuencia+' empezando '+str(fecha)
+                msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' '+frecuencia+' empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,str(veces)+' '+frecuencia)
                 e.IncrementarVeces()
                 job='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr
