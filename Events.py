@@ -79,16 +79,16 @@ class Snips(object):
     
     def exist_Job(self,job):
         enc=False
-        if(Snips.scheduler1.get_jobs()):
-            for x in Snips.scheduler1.get_jobs():
+        if(self.scheduler1.get_jobs()):
+            for x in self.scheduler1.get_jobs():
                 if(x.__eq__(job)):
                     return True
         return enc 
 
     def exist_Job1(self,job):
         enc=False
-        if(Snips.scheduler.get_jobs()):
-            for x in Snips.scheduler.get_jobs():
+        if(self.scheduler.get_jobs()):
+            for x in self.scheduler.get_jobs():
                 if(x.__eq__(job)):
                     return True
         return enc
