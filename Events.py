@@ -71,6 +71,7 @@ class Snips(object):
                 else:
                     fecha=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+                    e.fecha=date
                 if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")<datetime.now()):
                     if(not self.exist_Job(e.fecha+','+e.med+','+e.user)):
                         self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
