@@ -58,14 +58,14 @@ class Snips(object):
                     if(not self.exist_Job('Repeticion semanal cada '+Repeticion+','+e.med+','+e.user)):
                         self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+e.user,day_of_week=self.dia_sem(Repeticion),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
                 
-                if(date<datetime.strptime(datetime.now(),"%Y-%m-%d %H:%M:%S")):  
+                if(datetime.now().time(),date.time()):  
                     if(not self.exist_Job1('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
                         self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='fecha evento:'+e.fecha+'recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
             else:
                 if(not e.fecha is None):
                     date=e.fecha
 
-                if(date<datetime.strptime(datetime.now(),"%Y-%m-%d %H:%M:%S")):  
+                if(datetime.now().time(),date.time()):   
                     if(not self.exist_Job(e.fecha+','+e.med+','+e.user)):
                         self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
                 else:
