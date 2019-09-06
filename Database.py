@@ -62,7 +62,7 @@ class Database(object):
            user=s
            rep=bool(x[4])
            if(rep):
-               fecha=None
+               fecha=x[6]
                when=str(x[8])+' '+x[7]
            else:
                fecha=x[6]
