@@ -24,8 +24,12 @@ class Snips(object):
         LEvent=self.Database.eventActives()
         for e in LEvent:
             if(e.rep):
-                Repeticion=e.when[e.when.index(' ')+1:]
-                veces=int(e.when[:e.when.index(' ')])
+                if(' 'in e.when):
+                    Repeticion=e.when[e.when.index(' ')+1:]
+                    veces=int(e.when[:e.when.index(' ')])
+                else:
+                    Repeticion=e.when
+
                 if(not e.fecha is None):
                     date=e.fecha
                 else:
@@ -33,24 +37,33 @@ class Snips(object):
                     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
 
                 if(Repeticion=='dia'):
-                    self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])
+                    if(not self.exist_Job('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])
                 elif(Repeticion=='mes'):
-                    self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+e.med+','+e.user,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
+                    if(not self.exist_Job('Repeticion '+str(veces)+' meses ,'+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+e.med+','+e.user,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
                 elif(Repeticion=='semana'):
-                    self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+e.med+','+e.user,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
+                    if(not self.exist_Job('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+e.med+','+e.user,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
                 elif(Repeticion=='hora'):
-                    self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+e.med+','+e.user,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e,True]) 
+                    if(not self.exist_Job('Repeticion '+str(veces)+' horas,'+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+e.med+','+e.user,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e,True]) 
                 elif(Repeticion=='desayuno'):#HORA-1
-                    self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion Desayuno'+','+e.med+','+e.userr,year=date.year,month=date.month,day=date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e,True]) 
+                    if(not self.exist_Job('Repeticion Desayuno'+','+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion Desayuno'+','+e.med+','+e.user,year=date.year,month=date.month,day=date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e,True]) 
                 elif(Repeticion=='comida'):#HORA-1
-                    self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion Comida'+','+e.med+','+e.user,year=date.year,month=date.month,day=date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e,True]) 
+                    if(not self.exist_Job('Repeticion Comida'+','+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion Comida'+','+e.med+','+e.user,year=date.year,month=date.month,day=date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e,True]) 
                 elif(Repeticion=='cena'): #HORA-1
-                    self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion Cena'+','+e.med+','+e.user,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e,True]) 
+                    if(not self.exist_Job('Repeticion Desayuno'+','+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion Cena'+','+e.med+','+e.user,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e,True]) 
                 else:
-                    self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+e.user,day_of_week=self.dia_sem(Repeticion),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
+                    if(not self.exist_Job('Repeticion semanal cada '+Repeticion+','+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+e.user,day_of_week=self.dia_sem(Repeticion),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
                 
                 if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")>datetime.now()):  
-                    self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='fecha evento:'+e.fecha+'recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
+                    if(not self.exist_Job1('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
+                        self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='fecha evento:'+e.fecha+'recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
             else:
                 if(not e.fecha is None):
                     date=e.fecha
@@ -58,9 +71,28 @@ class Snips(object):
                     fecha=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
                 if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")<datetime.now()):
-                    self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
+                    if(not self.exist_Job('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
                 else:
-                    self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
+                    if(not self.exist_Job1('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
+                        self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
+    
+    def exist_Job(job):
+        enc=False
+        if(Snips.scheduler1.get_jobs()):
+            for x in Snips.scheduler1.get_jobs():
+                if(x.__eq__(job)):
+                    return True
+        return enc 
+
+    def exist_Job1(job):
+        enc=False
+        if(Snips.scheduler.get_jobs()):
+            for x in Snips.scheduler.get_jobs():
+                if(x.__eq__(job)):
+                    return True
+        return enc
+
     def dia_sem(self,i):
         switcher={
             'Lunes':0,
@@ -81,6 +113,9 @@ class Snips(object):
 
     def existUser(self,user):   
         return self.Database.ExistsUser(user)
+
+    def ExistsEvent(self,event):
+        return self.Database.ExistsEvent(event,event.user)
 
     def Incrementar(self,event):
         self.Database.IncrementarVeces(event)
