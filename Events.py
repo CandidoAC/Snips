@@ -71,10 +71,10 @@ class Snips(object):
                     fecha=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
                 if(datetime.strptime(e.fecha,"%Y-%m-%d %H:%M:%S")<datetime.now()):
-                    if(not self.exist_Job('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
+                    if(not self.exist_Job(e.fecha+','+e.med+','+e.user)):
                         self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
                 else:
-                    if(not self.exist_Job1('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
+                    if(not self.exist_Job1('recordando tomar '+e.med+' a '+e.user)):
                         self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
     
     def exist_Job(job):
