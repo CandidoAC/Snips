@@ -115,7 +115,7 @@ class Snips(object):
         return self.Database.ExistsUser(user)
 
     def ExistsEvent(self,event):
-        return self.Database.ExistsEvent(event,event.user)
+        return self.Database.ExistsEvent(event,IDUser(Snips.usr))
 
     def Incrementar(self,event):
         self.Database.IncrementarVeces(event)

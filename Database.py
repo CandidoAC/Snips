@@ -48,6 +48,9 @@ class Database(object):
         for (row,) in self.cursor.execute('SELECT Name FROM Users where Active == 1').fetchall():
             s+=row
         return s
+    def IDUser(self,name):
+      return ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(name,)).fetchone()[0])
+
     def eventActives(self):
        LEvents=[]
        result=self.cursor.execute('SELECT * FROM Eventos WHERE Active=1')

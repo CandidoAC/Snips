@@ -441,8 +441,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job)
                 else:
-                    Error('Evento a crear ya existe')
-                    msg='Evento a crear ya existe' 
+                    Error('Evento a borrar no existe')
+                    msg='Evento a borrar no existe' 
 
             elif(frecuencia=='dia'):
                 if(veces>30):
@@ -461,8 +461,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                    if(exist_Job1(job)):
 	                        Snips.scheduler1.remove_job(job) 
                     else:
-                        Error('Evento a crear ya existe')
-                        msg='Evento a crear ya existe' 
+                        Error('Evento a borrar no existe')
+                        msg='Evento a borrar no existe' 
 
             elif(frecuencia=='mes'):
                 if(veces>11):
@@ -481,8 +481,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                    if(exist_Job1(job)):
 	                        Snips.scheduler1.remove_job(job)
                     else:
-                        Error('Evento a crear ya existe')
-                        msg='Evento a crear ya existe'  	                       
+                        Error('Evento a borrar no existe')
+                        msg='Evento a borrar no existe'  	                       
             elif(frecuencia=='semana'):
                 if(veces>30):
                     msg="No se puede borrar un evento repetitivo con cant mayor a 30 semanas."
@@ -500,8 +500,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                    if(exist_Job1(job)):
 	                        Snips.scheduler1.remove_job(job)
                     else:
-                        Error('Evento a crear ya existe')
-                        msg='Evento a crear ya existe'     
+                        Error('Evento a borrar no existe')
+                        msg='Evento a borrar no existe'     
 
             elif(frecuencia=='hora'):
                 if(veces>23):
@@ -520,8 +520,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                    if(exist_Job1(job)):
 	                        Snips.scheduler1.remove_job(job)
                     else:
-                        Error('Evento a crear ya existe')
-                        msg='Evento a crear ya existe' 
+                        Error('Evento a borrar no existe')
+                        msg='Evento a borrar no existe' 
 				            
             elif(frecuencia=='desayuno'):#HORA-1
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en el desayuno'
@@ -537,8 +537,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job) 
                 else:
-                    Error('Evento a crear ya existe')
-                    msg='Evento a crear ya existe'      
+                    Error('Evento a borrar no existe')
+                    msg='Evento a borrar no existe'      
 
             elif(frecuencia=='comida'):#HORA-1
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la comida'
@@ -554,8 +554,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job)
                 else:
-                    Error('Evento a crear ya existe')
-                    msg='Evento a crear ya existe' 
+                    Error('Evento a borrar no existe')
+                    msg='Evento a borrar no existe' 
 
             elif(frecuencia=='cena'): #HORA-1
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la cena'
@@ -571,8 +571,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job)
                 else:
-                    Error('Evento a crear ya existe')
-                    msg='Evento a crear ya existe'       
+                    Error('Evento a borrar no existe')
+                    msg='Evento a borrar no existe'       
             else:
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' '+frecuencia+' empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,str(veces)+' '+frecuencia)
@@ -587,8 +587,8 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job)
                 else:
-                    Error('Evento a crear ya existe')
-                    msg='Evento a crear ya existe' 
+                    Error('Evento a borrar no existe')
+                    msg='Evento a borrar no existe' 
 
         hermes.publish_end_session(intentMessage.session_id, msg)
 
