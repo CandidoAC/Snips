@@ -49,7 +49,7 @@ class Database(object):
             s+=row
         return s
     def IDUser(self,name):
-      return ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(name,)).fetchone()[0])
+      return int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(name,)).fetchone()[0])
 
     def eventActives(self):
        LEvents=[]
