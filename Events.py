@@ -35,6 +35,7 @@ class Snips(object):
                 else:
                     fecha=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     date=datetime.strptime(fecha,"%Y-%m-%d %H:%M:%S")
+                    e.fecha=date
 
                 if(Repeticion=='dia'):
                     if(not self.exist_Job('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
