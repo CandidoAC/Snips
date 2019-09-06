@@ -135,7 +135,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
 	            t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
 	            t.start()"""
 	        e=Event(med,date,Snips.usr,False,'')
-	        if(not ExistsEvent(e)):
+	        if(not Snips.ExistsEvent(e)):
 	       	    e.IncrementarVeces()
 	       	    Snips.addEvent(e)
 	            add_Reminder(e)
@@ -168,7 +168,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             if(frecuencia=='diariamente'):
                 msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,'1 dia')
-                if(not ExistsEvent(e)):
+                if(not Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion diaria,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/1',hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])
 	                Snips.addEvent(e)
@@ -182,7 +182,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
                 else:
                     msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' dia')
-                    if(not ExistsEvent(e)):
+                    if(not Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True])             
 	                    Snips.addEvent(e)
@@ -196,7 +196,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
                 else:
                     msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' mes')
-                    if(not ExistsEvent(e)):
+                    if(not Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr,year=date.year,month=str(date.month)+'/'+str(veces),day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
 	                    Snips.addEvent(e)
@@ -210,7 +210,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
                 else:
                     msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' semana')
-                    if(not ExistsEvent(e)):
+                    if(not Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr,year=date.year,month=date.month,day=str(date.day)+'/'+str(7*veces),hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
 	                    Snips.addEvent(e)
@@ -224,7 +224,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
                 else:
                     msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' hora')
-                    if(not ExistsEvent(e)):
+                    if(not Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces() 
 	                    Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour=str(date.hour)+'/'+str(veces),minute=date.minute, replace_existing=True, args=['default',e,True]) 
 	                    Snips.addEvent(e)
@@ -235,7 +235,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             elif(frecuencia=='desayuno'):#HORA-1
                 msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en el desayuno'
                 e=Event(med,date,Snips.usr,True,'Desayuno')
-                if(not ExistsEvent(e)):
+                if(not Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Desayuno'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='8/1',minute=0, replace_existing=True, args=['default',e,True]) 
 	                Snips.addEvent(e)
@@ -246,7 +246,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             elif(frecuencia=='comida'):#HORA-1
                 msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la comida'
                 e=Event(med,date,Snips.usr,True,'Comida')
-                if(not ExistsEvent(e)):
+                if(not Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Comida'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='13/1',minute=0, replace_existing=True, args=['default',e,True]) 
 	                Snips.addEvent(e)
@@ -257,7 +257,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             elif(frecuencia=='cena'): #HORA-1
                 msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' en la cena'
                 e=Event(med,date,Snips.usr,True,'Cena')
-                if(not ExistsEvent(e)):
+                if(not Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion Cena'+','+med+','+Snips.usr,year=date.year,month=date.month,day=date.day,hour='20/1',minute=0, replace_existing=True, args=['default',e,True]) 
 	                Snips.addEvent(e)
@@ -268,7 +268,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
             else:
                 msg=Snips.usr+" está añadiendo un recordatorio para tomar "+med+' cada '+str(veces)+' '+frecuencia+' empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,str(veces)+' '+frecuencia)
-                if(not ExistsEvent(e)):
+                if(not Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                Snips.scheduler.add_job(recordatorio, 'cron',id='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr,day_of_week=Snips.dia_sem(frecuencia),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
 	                Snips.addEvent(e)
@@ -388,7 +388,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	            t = Timer((date - now).total_seconds(), recordatorio,['default',med,fecha])
 	            t.start()"""
 	        e=Event(med,date,Snips.usr,False,'')
-	        if(ExistsEvent(e)):
+	        if(Snips.ExistsEvent(e)):
 		        e.IncrementarVeces()
 		        print('Evento a borrar: tomar '+str(e))
 		        Snips.borrarEvento(e)
@@ -429,7 +429,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             if(frecuencia=='diariamente'):
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,'1 dias')
-                if(not ExistsEvent(e)):
+                if(Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                job='Repeticion diaria,'+med+','+Snips.usr
 	                Snips.borrarEvento(e)
@@ -450,7 +450,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' dias')
-                    if(not ExistsEvent(e)):
+                    if(Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    job='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr        
 	                    delete_Reminder(e)
@@ -470,7 +470,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' meses')
-                    if(not ExistsEvent(e)):
+                    if(Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    job='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr
 	                    delete_Reminder(e)
@@ -489,7 +489,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' semanas')
-                    if(not ExistsEvent(e)):
+                    if(Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    job='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr
 	                    delete_Reminder(e)
@@ -509,7 +509,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
                     e=Event(med,date,Snips.usr,True,str(veces)+' horas')
-                    if(not ExistsEvent(e)):
+                    if(Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces() 
 	                    job='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr
 	                    delete_Reminder(e)
@@ -526,7 +526,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             elif(frecuencia=='desayuno'):#HORA-1
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en el desayuno'
                 e=Event(med,date,Snips.usr,True,'Desayuno')
-                if(not ExistsEvent(e)):
+                if(Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                job='Repeticion Desayuno'+','+med+','+Snips.usr
 	                delete_Reminder(e)
@@ -543,7 +543,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             elif(frecuencia=='comida'):#HORA-1
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la comida'
                 e=Event(med,date,Snips.usr,True,'Comida')
-                if(not ExistsEvent(e)):
+                if(Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                job='Repeticion Comida'+','+med+','+Snips.usr
 	                delete_Reminder(e)
@@ -560,7 +560,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             elif(frecuencia=='cena'): #HORA-1
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' en la cena'
                 e=Event(med,date,Snips.usr,True,'Cena')
-                if(not ExistsEvent(e)):
+                if(Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                job='Repeticion Cena'+','+med+','+Snips.usr
 	                delete_Reminder(e)
@@ -576,7 +576,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             else:
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' '+frecuencia+' empezando '+str(fecha)
                 e=Event(med,date,Snips.usr,True,str(veces)+' '+frecuencia)
-                if(not ExistsEvent(e)):
+                if(Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                job='Repeticion semanal cada '+frecuencia+','+med+','+Snips.usr
 	                delete_Reminder(e)
