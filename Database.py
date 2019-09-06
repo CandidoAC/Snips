@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import sqlite3
+from datetime import datetime
 from Evento import Event
 
 class Database(object):
@@ -62,7 +63,7 @@ class Database(object):
            user=s
            rep=bool(x[4])
            if(rep):
-               fecha=x[6]
+               fecha=datetime.strptime(x[6],"%Y-%m-%d %H:%M:%S")
                when=str(x[8])+' '+x[7]
            else:
                fecha=x[6]
