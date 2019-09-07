@@ -27,6 +27,7 @@ def minutes(i):
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
+fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Modo de aceptar','Error_output']
 
 def t():
     global idFile
@@ -37,52 +38,68 @@ def global_variables():
     Snips=Snips()
 
 def add_Reminder(e):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if(e.rep):
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
-    else:
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
-    t()
+    with open('/home/pi/prueba.csv', 'a+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if(e.rep):
+            writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
+        else:
+            writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
+        t()
 def delete_Reminder(e):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if(e.rep):
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
-    else:
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
-    t()
+    with open('/home/pi/prueba.csv', 'a+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if(e.rep):
+            writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
+        else:
+            writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Borrar_Evento','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
+        t()
 
 def Change_User(user):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Modo de aceptar':'','Error_output':''})
-    t()
+    with open('/home/pi/prueba.csv', 'a+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Cambio_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Modo de aceptar':'','Error_output':''})
+        t()
 
 def Add_User(user):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Modo de aceptar':'','Error_output':''})
-    t()
+    with open('/home/pi/prueba.csv', 'a+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Añadir_Usuario','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':user,'Modo de aceptar':'','Error_output':''})
+        t()
 
 def Reminder(e):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    if(e.rep):
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
-    else:
-        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
-    t()
+    with open('/home/pi/prueba.csv', 'a+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if(e.rep):
+            writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'Si','Recordatorio':e.when,'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
+        else:
+            writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Recordatorio','¿Repetitivo?':'No','Recordatorio':str(e.fecha),'Medicamento':e.med,'Nombre_Usuario':e.user,'Modo de aceptar':'','Error_output':''})
+        t()
 
 def AceptedReminder(Modo):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Modo de aceptar':Modo,'Error_output':''})
-    t()
+    with open('/home/pi/prueba.csv', 'a+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Modo de aceptar':Modo,'Error_output':''})
+        t()
 
 def NotAceptedReminder():
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Modo de aceptar':'','Error_output':''})
-    t()
+    with open('/home/pi/prueba.csv', 'a+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Evento no aceptado','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':Snips.usr,'Modo de aceptar':'','Error_output':''})
+        t()
 
 def Error(mensaje):
-    date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Modo de aceptar':'','Error_output':mensaje})
-    t()
+    with open('/home/pi/prueba.csv', 'a+') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        date=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        writer.writerow({'timestamp':date,'id': str(idFile),'Tipo':'Error','¿Repetitivo?':'','Recordatorio':'','Medicamento':'','Nombre_Usuario':'','Modo de aceptar':'','Error_output':mensaje})
+        t()
 
 def lastEventReminder():
         aux=None
@@ -686,11 +703,12 @@ if __name__ == '__main__':
     global_variables()
     thread1 = button()
     thread1.start()
-
-    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient,open('/home/pi/prueba.csv', 'a+') as csvfile:
-        fieldnames = ['timestamp','id','Tipo', '¿Repetitivo?','Recordatorio','Medicamento','Nombre_Usuario','Modo de aceptar','Error_output']
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
+    if(not os.path.exists('/home/pi/prueba.csv')):
+        with open('/home/pi/prueba.csv', 'a+') as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+        
+    with Hermes(mqtt_options=mqtt_opts) as h,Hermes(mqtt_options=mqtt_opts) as mqttClient:
         h\
         .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
         .subscribe_intent("caguilary:user", subscribe_user_callback) \
