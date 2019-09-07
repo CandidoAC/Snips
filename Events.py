@@ -86,7 +86,7 @@ class Snips(object):
                     if(not self.exist_Job1('recordando tomar '+e.med+' a '+e.user)):
                         self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
     
-    def exist_Job(self,job):
+    def exist_Job1(self,job):
         enc=False
         if(self.scheduler1.get_jobs()):
             for x in self.scheduler1.get_jobs():
@@ -94,7 +94,7 @@ class Snips(object):
                     return True
         return enc 
 
-    def exist_Job1(self,job):
+    def exist_Job(self,job):
         enc=False
         if(self.scheduler.get_jobs()):
             for x in self.scheduler.get_jobs():
