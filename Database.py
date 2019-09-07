@@ -63,7 +63,8 @@ class Database(object):
            user=s
            rep=bool(x[4])
            if(rep):
-               fecha=datetime.datetime.strptime(x[6],"%Y-%m-%d %H:%M:%S")
+               print(str(x[6]))
+               fecha=datetime.strptime(x[6],"%Y-%m-%d %H:%M:%S")
                when=str(x[8])+' '+x[7]
            else:
                fecha=x[6]
