@@ -602,7 +602,11 @@ def recordatorio(intentMessage,e,Repetitivo):
     if(e.user==Snips.usr):
         say(intentMessage,e.user+' te toca tomarte '+e.med)
         Reminder(e)
-        Snips.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='recordando tomar '+e.med+' a '+e.user,args=[e,intentMessage])
+        if(e.rep):
+        	Snips.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when,fargs=[e,intentMessage])
+        else:
+            Snips.scheduler1.add_job(recordatorioTomar, 'interval', seconds=20,id='Evento no repetitivo:recordando tomar '+e.med+' a '+e.user,args=[e,intentMessage])
+
    
 
 def recordatorioTomar(e,intentMessage):

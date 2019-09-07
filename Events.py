@@ -66,7 +66,7 @@ class Snips(object):
                 #print(str(ahora)+" y "+fechaE)
                 if(ahora<fechaE):  
                     if(not self.exist_Job1('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
-                        self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='fecha evento:'+e.fecha+'recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
+                        self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when,args=[e,'default'])
             else:
                 if(not e.fecha is None):
                     date=e.fecha
@@ -84,7 +84,7 @@ class Snips(object):
                         self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
                 else:
                     if(not self.exist_Job1('recordando tomar '+e.med+' a '+e.user)):
-                        self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
+                        self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='Evento no repetitivo:recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
     
     def exist_Job1(self,job):
         enc=False
@@ -124,7 +124,7 @@ class Snips(object):
         return self.Database.ExistsUser(user)
 
     def ExistsEvent(self,event):
-        return self.Database.ExistsEvent(event,IDUser(Snips.usr))
+        return self.Database.ExistsEvent(event,self.Database.IDUser(Snips.usr))
 
     def Incrementar(self,event):
         self.Database.IncrementarVeces(event)
