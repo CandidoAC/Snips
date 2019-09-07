@@ -139,7 +139,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
 	       	    e.IncrementarVeces()
 	       	    Snips.addEvent(e)
 	            add_Reminder(e)
-	            Snips.scheduler.add_job(recordatorio, 'date', run_date=date,id=fecha+','+e.med+','+e.user,args=['default',e,False])
+	            Snips.scheduler.add_job(recordatorio, 'date', run_date=date,id=str(e.fecha)+','+e.med+','+e.user,args=['default',e,False])
 	        else:
 		        Error('Evento a crear ya existe')
 		        msg='Evento a crear ya existe'
@@ -397,7 +397,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 		        if(exist_Job(job)):
 		            Snips.scheduler.remove_job(job)
 
-		        job='recordando tomar '+e.med+' a '+e.user
+		        job=str(e.fecha)+','+e.med+','+e.user
 		        if(exist_Job1(job)):
 		            Snips.scheduler1.remove_job(job)
 	        else:

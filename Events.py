@@ -61,7 +61,7 @@ class Snips(object):
                 fechaE=e.fecha
                 #print(str(ahora)+" y "+fechaE)
                 if(ahora<fechaE):  
-                    if(not self.exist_Job1('Repeticion cada '+str(veces)+' dias,'+e.med+','+e.user)):
+                    if(not self.exist_Job1('Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when)):
                         self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when,args=[e,'default'])
             else:
                 if(not e.fecha is None):
@@ -71,10 +71,10 @@ class Snips(object):
                 fechaE=e.fecha
                 #print(str(ahora)+" y "+fechaE)
                 if(ahora<fechaE):    
-                    if(not self.exist_Job(e.fecha+','+e.med+','+e.user)):
-                        self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=e.fecha+','+e.med+','+e.user,args=['default',e,False])
+                    if(not self.exist_Job(str(e.fecha)+','+e.med+','+e.user)):
+                        self.scheduler.add_job(file.recordatorio, 'date', run_date=date,id=str(e.fecha)+','+e.med+','+e.user,args=['default',e,False])
                 else:
-                    if(not self.exist_Job1('recordando tomar '+e.med+' a '+e.user)):
+                    if(not self.exist_Job1('Evento no repetitivo:recordando tomar '+e.med+' a '+e.user)):
                         self.scheduler1.add_job(file.recordatorioTomar, 'interval', seconds=20,id='Evento no repetitivo:recordando tomar '+e.med+' a '+e.user,args=[e,'default'])
     
     def exist_Job1(self,job):
