@@ -162,7 +162,7 @@ def action_wrapper_Anadir(hermes, intentMessage,conf):
         else:
             veces= int(intentMessage.slots.cantidad.first().value)
         if (veces==0):
-            msg='No se puede crear un evento repetitivo con cant  igual a 0.'
+            msg='No se puede crear un evento repetitivo con cantidad  igual a 0.'
         else:
             frecuencia=intentMessage.slots.Repeticion.first().value
             if(frecuencia=='diariamente'):
@@ -423,12 +423,12 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
             veces= int(intentMessage.slots.cantidad.first().value)
 
         if (veces==0):
-            msg='No se puede borrar un evento repetitivo con cant  igual a 0.'
+            msg='No se puede borrar un evento repetitivo con cantidad igual a 0.'
         else:
             frecuencia=intentMessage.slots.Repeticion.first().value
             if(frecuencia=='diariamente'):
                 msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' todos los dias empezando '+str(fecha)
-                e=Event(med,date,Snips.usr,True,'1 dias')
+                e=Event(med,date,Snips.usr,True,'1 dia')
                 if(Snips.ExistsEvent(e)):
 	                e.IncrementarVeces()
 	                job='Repeticion diaria,'+med+','+Snips.usr
@@ -437,7 +437,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job(job)):
 	                    Snips.scheduler.remove_job(job)
 
-	                job='recordando tomar '+e.med+' a '+e.user
+	                job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job)
                 else:
@@ -449,7 +449,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                     msg="No se puede borrar un evento repetitivo con cant mayor a 30 días."
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' dias empezando '+str(fecha)
-                    e=Event(med,date,Snips.usr,True,str(veces)+' dias')
+                    e=Event(med,date,Snips.usr,True,str(veces)+' dia')
                     if(Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    job='Repeticion cada '+str(veces)+' dias,'+med+','+Snips.usr        
@@ -457,7 +457,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                    if(exist_Job(job)):
 	                        Snips.scheduler.remove_job(job)
 
-	                    job='recordando tomar '+e.med+' a '+e.user
+	                    job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                    if(exist_Job1(job)):
 	                        Snips.scheduler1.remove_job(job) 
                     else:
@@ -469,7 +469,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                     msg="No se puede borrar un evento repetitivo con cant igual o mayor que 11 meses"
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' meses empezando '+str(fecha)
-                    e=Event(med,date,Snips.usr,True,str(veces)+' meses')
+                    e=Event(med,date,Snips.usr,True,str(veces)+' mes')
                     if(Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    job='Repeticion '+str(veces)+' meses ,'+med+','+Snips.usr
@@ -477,7 +477,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                    if(exist_Job(job)):
 	                        Snips.scheduler.remove_job(job)
 
-	                    job='recordando tomar '+e.med+' a '+e.user
+	                    job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                    if(exist_Job1(job)):
 	                        Snips.scheduler1.remove_job(job)
                     else:
@@ -488,7 +488,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                     msg="No se puede borrar un evento repetitivo con cant mayor a 30 semanas."
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' semanas empezando '+str(fecha)
-                    e=Event(med,date,Snips.usr,True,str(veces)+' semanas')
+                    e=Event(med,date,Snips.usr,True,str(veces)+' semana')
                     if(Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces()
 	                    job='Repeticion' +str(veces)+' semanas,'+med+','+Snips.usr
@@ -496,7 +496,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                    if(exist_Job(job)):
 	                        Snips.scheduler.remove_job(job)
 
-	                    job='recordando tomar '+e.med+' a '+e.user
+	                    job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                    if(exist_Job1(job)):
 	                        Snips.scheduler1.remove_job(job)
                     else:
@@ -508,7 +508,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
                     msg="No se puede borrar un evento repetitivo con cant sea 23 horas o más."
                 else:
                     msg=Snips.usr+" está borrando un recordatorio para tomar "+med+' cada '+str(veces)+' horas empezando '+str(fecha)
-                    e=Event(med,date,Snips.usr,True,str(veces)+' horas')
+                    e=Event(med,date,Snips.usr,True,str(veces)+' hora')
                     if(Snips.ExistsEvent(e)):
 	                    e.IncrementarVeces() 
 	                    job='Repeticion '+str(veces)+' horas,'+med+','+Snips.usr
@@ -516,7 +516,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                    if(exist_Job(job)):
 	                        Snips.scheduler.remove_job(job)
 
-	                    job='recordando tomar '+e.med+' a '+e.user
+	                    job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                    if(exist_Job1(job)):
 	                        Snips.scheduler1.remove_job(job)
                     else:
@@ -533,7 +533,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job(job)):
 	                    Snips.scheduler.remove_job(job)
 
-	                job='recordando tomar '+e.med+' a '+e.user
+	                job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job) 
                 else:
@@ -550,7 +550,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job(job)):
 	                    Snips.scheduler.remove_job(job)
 
-	                job='recordando tomar '+e.med+' a '+e.user
+	                job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job)
                 else:
@@ -567,7 +567,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job(job)):
 	                    Snips.scheduler.remove_job(job)
 
-	                job='recordando tomar '+e.med+' a '+e.user
+	                job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job)
                 else:
@@ -583,7 +583,7 @@ def action_wrapper_Borrar(hermes, intentMessage,conf):
 	                if(exist_Job(job)):
 	                    Snips.scheduler.remove_job(job)
 
-	                job='recordando tomar '+e.med+' a '+e.user
+	                job='Evento repetitivo: recordando tomar '+e.med+' a '+e.user+' cada '+e.when
 	                if(exist_Job1(job)):
 	                    Snips.scheduler1.remove_job(job)
                 else:
