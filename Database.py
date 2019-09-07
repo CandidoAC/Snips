@@ -91,7 +91,8 @@ class Database(object):
                rep=bool(x[4])
                if(rep):
                    fecha=datetime.strptime(x[6],"%Y-%m-%d %H:%M:%S")
-                   if(str(x[8]!='')):
+                   print(str[8]+'\n')
+                   if(str(x[8]!="")):
                      when=str(x[8])+' '+x[7]
                    else:
                      when=x[7]
