@@ -64,7 +64,10 @@ class Database(object):
            rep=bool(x[4])
            if(rep):
                fecha=datetime.strptime(x[6],"%Y-%m-%d %H:%M:%S")
-               when=str(x[8])+' '+x[7]
+               if(str(x[8]!='')):
+                when=str(x[8])+' '+x[7]
+               else:
+                when=x[7]
            else:
                fecha=datetime.strptime(x[6],"%Y-%m-%d %H:%M:%S")
                when=None
@@ -87,11 +90,14 @@ class Database(object):
                user=s
                rep=bool(x[4])
                if(rep):
-                   fecha=None
-                   when=str(x[8])+' '+x[7]
+                   fecha=datetime.strptime(x[6],"%Y-%m-%d %H:%M:%S")
+                   if(str(x[8]!='')):
+                     when=str(x[8])+' '+x[7]
+                   else:
+                     when=x[7]
                else:
                    fecha=x[6]
-                   when=''
+                   when=None
                 
                e=Event(med,fecha,user,rep,when)
                e.veces=x[5]
