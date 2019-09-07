@@ -60,7 +60,7 @@ class Snips(object):
                 ahora=datetime.now().strftime("%d/%m/%Y %H:%M:%S")
                 print(ahora)
                 print(type(ahora))
-                fechaE=date
+                fechaE=e.fecha
                 print(fechaE)
                 print(type(fechaE))
                 #print(str(ahora)+" y "+fechaE)
@@ -71,9 +71,11 @@ class Snips(object):
                 if(not e.fecha is None):
                     date=e.fecha
 
-                ahora=datetime.now().time()
+                ahora=datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                print(ahora)
                 print(type(ahora))
-                fechaE=date
+                fechaE=e.fecha
+                print(fechaE)
                 print(type(fechaE))
                 #print(str(ahora)+" y "+fechaE)
                 if(ahora<fechaE):    
