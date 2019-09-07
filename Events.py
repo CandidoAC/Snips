@@ -57,9 +57,11 @@ class Snips(object):
                 else:
                     if(not self.exist_Job('Repeticion semanal cada '+Repeticion+','+e.med+','+e.user)):
                         self.scheduler.add_job(file.recordatorio, 'cron',id='Repeticion semanal cada '+Repeticion+','+e.med+','+e.user,day_of_week=self.dia_sem(Repeticion),year=date.year,month=date.month,day=date.day,hour=date.hour,minute=date.minute, replace_existing=True, args=['default',e,True]) 
-                ahora=datetime.now().time()
+                ahora=datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                print(ahora)
                 print(type(ahora))
                 fechaE=date
+                print(fechaE)
                 print(type(fechaE))
                 #print(str(ahora)+" y "+fechaE)
                 if(ahora<fechaE):  
