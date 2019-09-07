@@ -77,7 +77,6 @@ class Database(object):
     def eventByUser(self,user):
         if(self.ExistsUser(user)):
            ID=int(self.cursor.execute('SELECT ID FROM Users where Name LIKE ?',(user,)).fetchone()[0])
-           print(ID)
            result=self.cursor.execute('SELECT * FROM Eventos WHERE user=?',(ID,))
            LEvents=[]
            for x in result.fetchall():
@@ -92,7 +91,7 @@ class Database(object):
                    when=str(x[8])+' '+x[7]
                else:
                    fecha=x[6]
-                   when=None
+                   when=''
                 
                e=Event(med,fecha,user,rep,when)
                e.veces=x[5]
@@ -103,6 +102,7 @@ class Database(object):
         if(not e.rep):
             result=self.cursor.execute('SELECT ID FROM Eventos WHERE user == ? and med LIKE ? and Repeticion=? and FechaEvento=? and Tipo_rep IS NULL and cant_rep IS NULL',(userID,e.med,e.rep,e.fecha))
         else:
+          print(userID)
           if(' 'in e.when):
             result=self.cursor.execute('SELECT ID FROM Eventos WHERE user == ? and med LIKE ? and Repeticion=? and FechaEvento=? and Tipo_rep LIKE ? and cant_rep == ?',(userID,e.med,e.rep,e.fecha,e.when[e.when.index(' ')+1:],int(e.when[:e.when.index(' ')])))
           else:

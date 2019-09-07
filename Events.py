@@ -24,6 +24,7 @@ class Snips(object):
         LEvent=self.Database.eventActives()
         for e in LEvent:
             if(e.rep):
+                print(e.when)
                 if(' 'in e.when):
                     Repeticion=e.when[e.when.index(' ')+1:]
                     veces=int(e.when[:e.when.index(' ')])
