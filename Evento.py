@@ -23,6 +23,13 @@ class Event(object):
          
     def __str__(self):
         if(self.rep):
-            return 'Evento :'+self.med+',,'+str(self.veces)+','+self.user+','+str(self.rep)+','+self.when+','+str(self.activo)
+                if(' 'in self.when.strip()):##Se hace el strip para borrar el blanco a la derecha en las comidas
+                    Repeticion=self.when[self.when.index(' ')+1:]
+                    veces=int(self.when[:self.when.index(' ')])
+                    #print(Repeticion)
+                    return 'Evento repetitivo para ' +self.user+' tomar '+self.med+' cada '+str(veces)+' '+Repeticion+' empezando el '+str(self.fecha)
+                else:
+                    Repeticion=self.when
+                    return 'Evento repetitivo para ' +self.user+' tomar '+self.med+' cada '+Repeticion
         else:
-            return 'Evento :'+self.med+','+str(self.fecha)+','+str(self.veces)+','+self.user+','+str(self.rep)+',,'+str(self.activo)
+            return 'Evento para '+self.user+' tomar '+self.med+' el '+str(self.fecha)
