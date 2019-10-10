@@ -681,11 +681,11 @@ if __name__ == '__main__':
         
     with Hermes(mqtt_options=mqtt_opts) as h:
         h\
-        .subscribe_intent("caguilary:Anadir", subscribe_Anadir_callback) \
-        .subscribe_intent("caguilary:user", subscribe_user_callback) \
+        .subscribe_intent("caguilary:Anadir_Evento", subscribe_Anadir_callback) \
+        .subscribe_intent("caguilary:Cambiar_Usuario", subscribe_user_callback) \
         .subscribe_intent("caguilary:Confirmar", subscribe_confirmar_callback) \
         .subscribe_intent("caguilary:Negar", subscribe_Negar_callback) \
         .subscribe_intent("caguilary:Anadir_usuario", subscribe_AnadirUsuario_callback) \
-        .subscribe_intent("caguilary:userActivo", subscribe_CheckUsuario_callback) \
+        .subscribe_intent("caguilary:usuario_Activo", subscribe_CheckUsuario_callback) \
         .subscribe_intent("caguilary:Borrar_Evento", subscribe_Borrar_callback) \
         .start()
