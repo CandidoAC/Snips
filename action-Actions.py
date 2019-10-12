@@ -27,7 +27,7 @@ class boton(threading.Thread):
     GPIO.setup(BOTON, GPIO.IN)
 
     def __init__(self):
-        with Hermes(opciones_mqtt=MqttOptions()) as h:
+        with Hermes(mqtt_options=MqttOptions()) as h:
             threading.Thread.__init__(self)
 
     def say(MensajeIntent, texto):
