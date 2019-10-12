@@ -3,8 +3,11 @@
 import io
 import configparser
 
-CONFIGURATION_ENCODING_FORMAT = "utf-8"
+"""
+Clase con las herrmientas de Snips, dada por la misma empresa
+"""
 
+CONFIGURATION_ENCODING_FORMAT = "utf-8"
 class SnipsConfigParser(configparser.SafeConfigParser):
     def to_dict(self):
         return {section: {option_name : option for option_name, \

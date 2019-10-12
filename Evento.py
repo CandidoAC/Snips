@@ -1,5 +1,5 @@
 class Evento(object):
-    
+
     def __init__(self, med, fecha, usuario, rep, cuando):
         self.med = med
         self.fecha = fecha
@@ -8,19 +8,19 @@ class Evento(object):
         self.rep=rep
         self.cuando=cuando
         self.activo=True
-        
+
     def IncrementarVeces(self):
         self.veces += 1
 
     def NoActivo(self):
-        self.activo=
+        self.activo=False
 
     def __eq__(self, other):
          return (
                  self.__class__ == other.__class__ and
                  self.med == other.med and self.fecha == other.fecha and self.usuario == other.user
          )
-         
+
     def __str__(self):
         if(self.rep):
                 if(' 'in self.cuando.strip()):##Se hace el strip para borrar el blanco a la derecha en las comidas

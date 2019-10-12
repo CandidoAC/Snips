@@ -34,19 +34,19 @@ class Snips(object):
         self.crearRecordatorios(self.fichero)
         ActHilos=self.sincronizarEventos(self)
         ActHilos.start()
-    
+
+    def existe_Trabajo(self, job):
+        enc = False
+        if (self.planificador.get_jobs()):
+            for x in self.planificador.get_jobs():
+                if (x.__eq__(job)):
+                    return True
+        return enc
+
     def existe_Trabajo1(self, job):
         enc=False
         if(self.planificador1.get_jobs()):
             for x in self.planificador1.get_jobs():
-                if(x.__eq__(job)):
-                    return True
-        return enc 
-
-    def existe_Trabajo(self, job):
-        enc=False
-        if(self.planificador.get_jobs()):
-            for x in self.planificador.get_jobs():
                 if(x.__eq__(job)):
                     return True
         return enc
