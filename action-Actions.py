@@ -607,7 +607,7 @@ def ultimoEventoRecordatorioPorUsuario():
 
 
 def say(MensajeIntent, texto):
-    with Hermes(opciones_mqtt=MqttOptions()) as clienteMQTT:
+    with Hermes(mqtt_options=MqttOptions()) as clienteMQTT:
         clienteMQTT.publish_start_session_notification(MensajeIntent, texto, None)
         
 def recordatorio(MensajeIntent, e, Repetitivo, Snips):
@@ -625,7 +625,7 @@ def recordatorio(MensajeIntent, e, Repetitivo, Snips):
 def recordatorioTomar(e,intentMessage,Snips):
     if(Snips.EventoActivo(e)):
         if(e.usuario==Snips.usuario):
-            with Hermes(opciones_mqtt=MqttOptions()) as clienteMQTT:
+            with Hermes(mqtt_options=MqttOptions()) as clienteMQTT:
                 if(e.veces<6):
                     Snips.log(e,Snips.usuario,'','Recordatorio','')
                     clienteMQTT.publish_start_session_action(site_id=intentMessage,
@@ -672,7 +672,7 @@ if __name__ == '__main__':
     HiloBoton.start()
 
         
-    with Hermes(opciones_mqtt=opciones_MQTT) as h:
+    with Hermes(mqtt_options=opciones_MQTT) as h:
         h\
         .subscribe_intent("caguilary:Anadir_Evento", subscribir_Anadir_llamada) \
         .subscribe_intent("caguilary:Cambiar_Usuario", subscribir_Cambiar_usuario_llamada) \
