@@ -35,19 +35,19 @@ class Snips(object):
         ActHilos=self.sincronizarEventos(self)
         ActHilos.start()
 
-    def existe_Trabajo(self, job):
+    def existe_Trabajo(self, trabajo):
         enc = False
         if (self.planificador.get_jobs()):
             for x in self.planificador.get_jobs():
-                if (x.__eq__(job)):
+                if (x.id.__eq__(trabajo)):
                     return True
         return enc
 
-    def existe_Trabajo1(self, job):
+    def existe_Trabajo1(self, trabajo):
         enc=False
         if(self.planificador1.get_jobs()):
             for x in self.planificador1.get_jobs():
-                if(x.__eq__(job)):
+                if(x.id.__eq__(trabajo)):
                     return True
         return enc
 
@@ -62,11 +62,11 @@ class Snips(object):
             'Domingo':6
             }
         return switcher.get(i,str(i))
-                
+
     def t(self):
         self.idFichero+=1
-        
-        
+
+
     def log(self, e, usuario, Modo, Tipo, mensage):
         with open('/home/pi/Reporte.csv', 'a+') as csvfile:
             escritor = csv.DictWriter(csvfile, fieldnames=self.nombreCampos)
@@ -104,8 +104,9 @@ class Snips(object):
 
     def NingunaVez(self,e):
         self.BaseDeDatos.NingunaVeces(e)
-    
-    def UsusarioActivo(self):
+        self.BaseDeDatos.IncrementarVeces(e)
+
+    def UsuarioActivo(self):
         return self.BaseDeDatos.usuarioActivo()
 
     def EventoActivo(self, e):
@@ -128,45 +129,45 @@ class Snips(object):
     def crearRecordatorios(self, fichero):
         LEventos=self.BaseDeDatos.eventosActivos()
         for e in LEventos:
+            print(e)
             if(e.rep):
                 if(' 'in e.cuando.strip()):##Se hace el strip para borrar el blanco a la derecha en las comidas
                     Repeticion=e.cuando[e.cuando.index(' ')+1:]
                     veces=int(e.cuando[:e.cuando.index(' ')])
-                    #print(Repeticion)
                 else:
-                    Repeticion=e.cuando
+                    Repeticion=e.cuando.strip()
 
                 if(not e.fecha is None):
                     fecha=e.fecha
-
+                print(Repeticion)
                 if(Repeticion=='dia'):
-                    if(not self.existe_Trabajo('Repeticion cada ' + str(veces) + ' dias,' + e.med + ',' + e.usuario)):
-                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion cada ' + str(veces) + ' dias,' + e.med + ',' + e.usuario, year=fecha.year, month=fecha.month, day=str(fecha.day) + '/' + str(veces), hour=fecha.hour, minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
+                    if(not self.existe_Trabajo('Repeticion cada ' + str(veces) + ' dias,' + e.med + ',' + e.usuario+','+str(e.fecha))):
+                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion cada ' + str(veces) + ' dias,' + e.med + ',' + e.usuario+','+str(e.fecha), year=fecha.year, month=fecha.month, day=str(fecha.day) + '/' + str(veces), hour=fecha.hour, minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
                 elif(Repeticion=='mes'):
-                    if(not self.existe_Trabajo('Repeticion ' + str(veces) + ' meses ,' + e.med + ',' + e.usuario)):
-                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion ' + str(veces) + ' meses ,' + e.med + ',' + e.usuario, year=fecha.year, month=str(fecha.month) + '/' + str(veces), day=fecha.day, hour=fecha.hour, minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
+                    if(not self.existe_Trabajo('Repeticion ' + str(veces) + ' meses ,' + e.med + ',' + e.usuario+','+str(e.fecha))):
+                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion ' + str(veces) + ' meses ,' + e.med + ',' + e.usuario+','+str(e.fecha), year=fecha.year, month=str(fecha.month) + '/' + str(veces), day=fecha.day, hour=fecha.hour, minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
                 elif(Repeticion=='semana'):
-                    if(not self.existe_Trabajo('Repeticion cada ' + str(veces) + ' dias,' + e.med + ',' + e.usuario)):
-                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion' + str(veces) + ' semanas,' + e.med + ',' + e.usuario, year=fecha.year, month=fecha.month, day=str(fecha.day) + '/' + str(7 * veces), hour=fecha.hour, minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
+                    if(not self.existe_Trabajo('Repeticion cada ' + str(veces) + ' dias,' + e.med + ',' + e.usuario+','+str(e.fecha))):
+                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion' + str(veces) + ' semanas,' + e.med + ',' + e.usuario+','+str(e.fecha), year=fecha.year, month=fecha.month, day=str(fecha.day) + '/' + str(7 * veces), hour=fecha.hour, minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
                 elif(Repeticion=='hora'):
-                    if(not self.existe_Trabajo('Repeticion ' + str(veces) + ' horas,' + e.med + ',' + e.usuario)):
-                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion ' + str(veces) + ' horas,' + e.med + ',' + e.usuario, year=fecha.year, month=fecha.month, day=fecha.day, hour=str(fecha.hour) + '/' + str(veces), minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
+                    if(not self.existe_Trabajo('Repeticion ' + str(veces) + ' horas,' + e.med + ',' + e.usuario+','+str(e.fecha))):
+                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion ' + str(veces) + ' horas,' + e.med + ',' + e.usuario+','+str(e.fecha), year=fecha.year, month=fecha.month, day=fecha.day, hour=str(fecha.hour) + '/' + str(veces), minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
                 elif(Repeticion=='desayuno'):#HORA-1
-                    if(not self.existe_Trabajo('Repeticion Desayuno' + ',' + e.med + ',' + e.usuario)):
-                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion Desayuno' + ',' + e.med + ',' + e.usuario, year=fecha.year, month=fecha.month, day=fecha.day, hour='8/1', minute=0, replace_existing=True, args=['default', e, True, self])
+                    if(not self.existe_Trabajo('Repeticion Desayuno' + ',' + e.med + ',' + e.usuario+','+str(e.fecha))):
+                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion Desayuno' + ',' + e.med + ',' + e.usuario+','+str(e.fecha), year=fecha.year, month=fecha.month, day=fecha.day, hour='8/1', minute=0, replace_existing=True, args=['default', e, True, self])
                 elif(Repeticion=='comida'):#HORA-1
-                    if(not self.existe_Trabajo('Repeticion Comida' + ',' + e.med + ',' + e.usuario)):
-                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion Comida' + ',' + e.med + ',' + e.usuario, year=fecha.year, month=fecha.month, day=fecha.day, hour='13/1', minute=0, replace_existing=True, args=['default', e, True, self])
+                    if(not self.existe_Trabajo('Repeticion Comida' + ',' + e.med + ',' + e.usuario+','+str(e.fecha))):
+                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion Comida' + ',' + e.med + ',' + e.usuario+','+str(e.fecha), year=fecha.year, month=fecha.month, day=fecha.day, hour='13/1', minute=0, replace_existing=True, args=['default', e, True, self])
                 elif(Repeticion=='cena'): #HORA-1
-                    if(not self.existe_Trabajo('Repeticion Desayuno' + ',' + e.med + ',' + e.usuario)):
-                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion Cena' + ',' + e.med + ',' + e.usuario, year=fecha.year, month=fecha.month, day=fecha.day, hour='20/1', minute=0, replace_existing=True, args=['default', e, True, self])
+                    if(not self.existe_Trabajo('Repeticion Desayuno' + ',' + e.med + ',' + e.usuario+','+str(e.fecha))):
+                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion Cena' + ',' + e.med + ',' + e.usuario+','+str(e.fecha), year=fecha.year, month=fecha.month, day=fecha.day, hour='20/1', minute=0, replace_existing=True, args=['default', e, True, self])
                 else:
-                    if(not self.existe_Trabajo('Repeticion semanal cada ' + Repeticion + ',' + e.med + ',' + e.usuario)):
-                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion semanal cada ' + Repeticion + ',' + e.med + ',' + e.usuario, day_of_week=self.dia_sem(Repeticion), year=fecha.year, month=fecha.month, day=fecha.day, hour=fecha.hour, minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
+                    if(not self.existe_Trabajo('Repeticion semanal cada ' + Repeticion + ',' + e.med + ',' + e.usuario+','+str(e.fecha))):
+                        self.planificador.add_job(fichero.recordatorio, 'cron', id='Repeticion semanal cada ' + Repeticion + ',' + e.med + ',' + e.usuario+','+str(e.fecha), day_of_week=self.dia_sem(Repeticion), year=fecha.year, month=fecha.month, day=fecha.day, hour=fecha.hour, minute=fecha.minute, replace_existing=True, args=['default', e, True, self])
                 ahora=datetime.now()
                 fechaE=e.fecha
                 #print(str(ahora)+" y "+fechaE)
-                if(ahora<fechaE):  
+                if(ahora<fechaE and e.veces>1):
                     if(not self.existe_Trabajo1('Evento repetitivo: recordando tomar ' + e.med + ' a ' + e.usuario + ' cada ' + e.cuando)):
                         self.planificador1.add_job(fichero.recordatorioTomar, 'interval', seconds=20, id='Evento repetitivo: recordando tomar ' + e.med + ' a ' + e.usuario + ' cada ' + e.cuando, args=[e, 'default', self])
             else:
@@ -176,19 +177,22 @@ class Snips(object):
                 ahora=datetime.now()
                 fechaE=e.fecha
                 #print(str(ahora)+" y "+fechaE)
-                if(ahora<fechaE):    
+                if(ahora<fechaE):
                     if(not self.existe_Trabajo(str(e.fecha) + ',' + e.med + ',' + e.usuario)):
                         self.planificador.add_job(fichero.recordatorio, 'date', run_date=fecha, id=str(e.fecha) + ',' + e.med + ',' + e.usuario, args=['default', e, False, self])
                 else:
                     if(not self.existe_Trabajo1('Evento no repetitivo:recordando tomar ' + e.med + ' a ' + e.usuario)):
                         self.planificador1.add_job(fichero.recordatorioTomar, 'interval', seconds=20, id='Evento no repetitivo: recordando tomar ' + e.med + ' a ' + e.usuario, args=[e, 'default', self])
-
+        print('planificador')
+        self.planificador.print_jobs()
+        print('planificador1')
+        self.planificador1.print_jobs()
     class sincronizarEventos(threading.Thread):
         def __init__(self,Snips):
             threading.Thread.__init__(self)
             self.usuario=Snips.usuario
             self.Snips=Snips
-        
+
         def run(self):
             while True:
                 if(self.Snips.BaseDeDatos.HayActualizados()):
